@@ -1,0 +1,4 @@
+FROM alpine
+RUN apk add postgres
+EXPOSE 5432
+CMD ["postgresql"]
