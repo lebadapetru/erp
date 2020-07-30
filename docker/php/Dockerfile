@@ -27,9 +27,9 @@ EXPOSE 9000
 COPY ./docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 COPY ./docker/php/php.ini /usr/local/etc/php/conf.d/php.ini
 
-#this line was needed for composer to find composer.json, if im not installing it theres no need to copy the project, we can rely on volumes in docker-compose
+#this line was needed for composer to find composer.json, if im not installing it theres no need to copy the project, we can rely on volumes in docker-compose?
 COPY ./ /var/www/erp
-
+#move this line right after building from fpm image
 WORKDIR /var/www/erp
 
 #RUN composer install
