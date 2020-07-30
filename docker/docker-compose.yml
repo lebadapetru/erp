@@ -15,7 +15,7 @@ services:
     build:
       context: ../
       dockerfile: ./docker/php/Dockerfile
-    restart: always
+    restart: always #change with unless-stopped
     volumes:
       - ../:/var/www/erp
     depends_on:
