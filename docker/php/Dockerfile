@@ -1,46 +1,67 @@
-# ./docker/php/Dockerfile
-FROM php:7.4-fpm-alpine
+####################
+#PHP FPM target
+####################
+FROM php:7.4-fpm-alpine as base
 
-RUN apk update && apk add build-base
-
-RUN apk add postgresql postgresql-dev \
-    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install pdo pdo_pgsql pgsql \
-    && docker-php-ext-install opcache \
-    && docker-php-ext-enable opcache
-
-RUN apk add libzip-dev zlib-dev git zip \
-  && docker-php-ext-install zip
-
-RUN apk add bash
-
-RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
-&& curl -o /tmp/composer-setup.sig https://composer.github.io/installer.sig \
-# Make sure we're installing what we think we're installing!
-&& php -r "if (hash('SHA384', file_get_contents('/tmp/composer-setup.php')) !== trim(file_get_contents('/tmp/composer-setup.sig'))) { unlink('/tmp/composer-setup.php'); echo 'Invalid installer' . PHP_EOL; exit(1); }" \
-&& php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filename=composer --snapshot \
-&& rm -f /tmp/composer-setup.*
-
-EXPOSE 9000
-
-
-COPY ./docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
-COPY ./docker/php/php.ini /usr/local/etc/php/conf.d/php.ini
-
-COPY ./ /var/www/erp
+#COPY ./ /var/www/erp
 
 WORKDIR /var/www/erp
 
-#RUN composer install
-
+#enable repository packages
+#RUN echo http://dl-cdn.alpinelinux.org/alpine/v$(cat /etc/alpine-release | cut -d'.' -f1,2)/community >> /etc/apk/repositories
 #install usermod
-#RUN echo http://dl-2.alpinelinux.org/alpine/edge/community/ >> /etc/apk/repositories
-#RUN apk --no-cache add shadow && usermod -u 1000 www-data
+RUN apk --no-cache add shadow && usermod -u 1000 www-data
+RUN chown -R www-data:www-data /var/cache
+RUN chown -R www-data:www-data /var/log
 
-#RUN composer install
-
-#ENV PATH="~/.composer/vendor/bin:./vendor/bin:${PATH}"
-
+#COPY ./ /var/www/erp
 #RUN usermod -u 1000 www-data
 #RUN chown -R www-data:www-data /var/cache
 #RUN chown -R www-data:www-data /var/log
+
+RUN apk update && apk add build-base
+
+RUN apk add --no-cache \
+    postgresql \
+    postgresql-dev \
+    libzip-dev \
+    zlib-dev \
+    git \
+    zip \
+    g++ \
+    gettext \
+    gettext-dev \
+    icu-dev\
+    php7-intl \
+    nodejs \
+    nodejs-npm \
+&& docker-php-ext-install \
+    pdo_pgsql \
+    pgsql \
+    gettext \
+    intl \
+    opcache \
+    zip \
+&& docker-php-ext-configure intl \
+&& docker-php-ext-configure gettext \
+&& docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+&& docker-php-ext-enable opcache
+
+COPY ./docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY ./docker/php/php.ini /usr/local/etc/php/conf.d/php.ini
+COPY ./docker/php/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
+COPY ./docker/php/php-fpm.conf /usr/local/etc/php-fpm.conf
+
+# Install Composer
+COPY --from=composer:1.10.9 /usr/bin/composer /usr/bin/composer
+# Install composer parallel download plugin, greatly speeds up composer install
+RUN composer global require --no-ansi --no-interaction hirak/prestissimo
+
+
+####################
+#Composer targer
+####################
+FROM base as composer
+
+WORKDIR /var/www/erp/
+

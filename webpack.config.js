@@ -13,11 +13,11 @@ Encore
     .setPublicPath('/build')
     // only needed for CDN's or sub-directory deploy
     //.setManifestKeyPrefix('build/')
-    .copyFiles({
-        from: './assets/img',
-        to: 'img/[path][name].[ext]',
-        pattern: /\.(png|jpg|jpeg|svg)$/
-    })
+    // .copyFiles({
+    //     from: './assets/img',
+    //     to: 'img/[path][name].[ext]',
+    //     pattern: /\.(png|jpg|jpeg|svg)$/
+    // })
     /*.copyFiles({
         from: './assets/fonts',
         to: 'fonts/[path][name].[ext]',
@@ -32,7 +32,7 @@ Encore
      * Each entry will result in one JavaScript file (e.g. main.js)
      * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
      */
-    .addEntry('main', './assets/js/main.js')
+    .addEntry('main', './resources/main.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
