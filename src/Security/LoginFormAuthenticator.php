@@ -24,7 +24,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
     private $urlGenerator;
     private $csrfTokenManager;
 

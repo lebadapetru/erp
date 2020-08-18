@@ -62,6 +62,3 @@ RUN composer global require --no-ansi --no-interaction hirak/prestissimo
 #Composer targer
 ####################
 FROM base as composer
-
-WORKDIR /var/www/erp/
-
