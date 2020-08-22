@@ -1,5 +1,4 @@
 security:
-    enable_authenticator_manager: true
     encoders:
         # use your user class name here
         App\Entity\User:
@@ -7,23 +6,22 @@ security:
             # This value auto-selects the best possible hashing algorithm
             # (i.e. Sodium when available).
             algorithm: auto
+
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        users_in_memory: { memory: null }
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            # allow authentication using a form or HTTP basic
-            form_login: ~
-            http_basic: ~
-
-            # configure the form authentication as the entry point for unauthenticated users
-            entry_point: form_login
             anonymous: true
             lazy: true
-            provider: users_in_memory
+            provider: app_user_provider
             guard:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
@@ -45,6 +43,6 @@ security:
         - { path: ^/login, roles: PUBLIC_ACCESS }
 
         # but require authentication for all other routes
-        - { path: ^/, roles: ROLE_USER }
+        - { path: ^/, roles: ROLE_ADMIN }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

@@ -81,11 +81,28 @@ class User implements UserInterface
     }
 
     /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    /**
      * @inheritDoc
      */
-    public function getUsername()
+    public function getUsername(): string
     {
-        return $this->username;
+        return (string) $this->username;
     }
 
     public function setUsername(string $username): self
@@ -110,9 +127,9 @@ class User implements UserInterface
     /**
      * @inheritDoc
      */
-    public function getPassword()
+    public function getPassword(): string
     {
-        // TODO: Implement getPassword() method.
+        return (string) $this->password;
     }
 
     public function setPassword(string $password): self
@@ -161,9 +178,11 @@ class User implements UserInterface
     /**
      * @return Collection|Role[]
      */
-    public function getRoles(): Collection
+    public function getRoles()
     {
-        return $this->roles;
+        return $this->roles->map(function ($role) {
+            return $role->getSlug();
+        })->toArray();
     }
 
     public function addRoles(Role $roles): self
@@ -182,23 +201,6 @@ class User implements UserInterface
         }
 
         return $this;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getSalt()
-    {
-        // not needed when using the "bcrypt" algorithm in security.yaml
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials()
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
     }
 
     /**

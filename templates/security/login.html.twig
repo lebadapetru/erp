@@ -1,66 +1,91 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="app flex-row align-items-center">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card-group">
-                    <div class="card p-4">
-                        <div class="card-body">
-                            <form method="post">
-                                {% if error %}
-                                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                                {% endif %}
+    <div class="c-app flex-row align-items-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card-group">
+                        <div class="card p-4">
+                            <div class="card-body">
+                                <form method="POST">
+                                    {% if error %}
+                                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                                    {% endif %}
+                                    <h1>Login</h1>
+                                    <p class="text-muted">Sign In to your account</p>
+                                    <div role="group" class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                 <span class="input-group-text">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img"
+                                         class="c-icon">
+                                       <path fill="var(--ci-primary-color, currentColor)"
+                                             d="M411.6,343.656l-72.823-47.334,27.455-50.334A80.23,80.23,0,0,0,376,207.681V128a112,112,0,0,0-224,0v79.681a80.236,80.236,0,0,0,9.768,38.308l27.455,50.333L116.4,343.656A79.725,79.725,0,0,0,80,410.732V496H448V410.732A79.727,79.727,0,0,0,411.6,343.656ZM416,464H112V410.732a47.836,47.836,0,0,1,21.841-40.246l97.66-63.479-41.64-76.341A48.146,48.146,0,0,1,184,207.681V128a80,80,0,0,1,160,0v79.681a48.146,48.146,0,0,1-5.861,22.985L296.5,307.007l97.662,63.479h0A47.836,47.836,0,0,1,416,410.732Z"
+                                             class="ci-primary"></path>
+                                    </svg>
+                                 </span>
+                                            </div>
+                                            <input id="uid-m91eoozjhi" type="text" placeholder="Email"
+                                                   autocomplete="username email" name="email" value="{{ last_username }}"
+                                                   class="form-control"><!----><!----><!----><!---->
+                                        </div>
+                                    </div>
+                                    <div role="group" class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                 <span class="input-group-text">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img"
+                                         class="c-icon">
+                                       <path fill="var(--ci-primary-color, currentColor)"
+                                             d="M384,200V144a128,128,0,0,0-256,0v56H88V328c0,92.635,75.364,168,168,168s168-75.365,168-168V200ZM160,144a96,96,0,0,1,192,0v56H160ZM392,328c0,74.99-61.01,136-136,136s-136-61.01-136-136V232H392Z"
+                                             class="ci-primary"></path>
+                                    </svg>
+                                 </span>
+                                            </div>
+                                            <input id="uid-jloki1qtvsd" type="password" placeholder="Password"
+                                                   autocomplete="curent-password" name="password" class="form-control"><!----><!---->
+                                            <!----><!---->
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="hidden" name="_csrf_token"
+                                               value="{{ csrf_token('authenticate') }}"
+                                        >
 
-                                {#{% if app.user %}
-                                    <div class="mb-3">
-                                        You are logged in as {{ app.user.username }}, <a
-                                                href="{{ path('app_logout') }}">Logout</a>
+                                        <div class="checkbox mb-3">
+                                            <label>
+                                                <input type="checkbox" name="_remember_me"> Remember me
+                                            </label>
+                                        </div>
                                     </div>
-                                {% endif %}#}
-                                <h1>Login</h1>
-                                <p class="text-muted">Sign In to your account</p>
-                                <div role="group" class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text"><i class="icon-user"></i></div>
+                                    <div class="row">
+                                        <div class="text-left col-6">
+                                            <button type="submit" class="btn px-4 btn-primary">Login</button>
+                                        </div>
+                                        <div class="text-right col-6">
+                                            <button type="button" class="btn px-0 btn-link">Forgot password?</button>
+                                            <button type="button" class="btn d-lg-none btn-link">Register now!</button>
+                                        </div>
                                     </div>
-                                    <input type="email" placeholder="Email" value="{{ last_username }}" name="email"
-                                           id="__BVID__881"
-                                           class="form-control form-control" required autofocus>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card text-center py-5 d-md-down-none bg-primary text-white">
+                            <div class="card-body">
+                                <div class="card-body">
+                                    <h2>Sign up</h2>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                        incididunt ut labore et dolore magna aliqua.</p>
+                                    <button type="button" class="btn btn-outline-light btn-lg">
+                                        Register Now!
+                                    </button>
                                 </div>
-                                <div role="group" class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text"><i class="icon-lock"></i></div>
-                                    </div>
-                                    <input type="password" placeholder="Password" name="password"
-                                           class="form-control form-control" id="__BVID__882" required>
-                                </div>
-                                <div class="input-group mb-4">
-                                    <input type="hidden" name="_csrf_token"
-                                           value="{{ csrf_token('authenticate') }}"
-                                    >
-
-                                    <div class="checkbox mb-3">
-                                        <label>
-                                            <input type="checkbox" name="_remember_me"> Remember me
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <button type="submit" class="btn px-4 btn-primary">Login</button>
-                                    </div>
-                                    <div class="text-right col-6">
-                                        <button type="button" class="btn px-0 btn-link">Forgot password?</button>
-                                    </div>
-                                </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
