@@ -12,6 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass=RoleRepository::class)
+ * @ORM\Table(name="`roles`")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
  */
 class Role
@@ -60,10 +61,16 @@ class Role
      */
     private $permissions;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Group::class, inversedBy="group")
+     */
+    private $groups;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->permissions = new ArrayCollection();
+        $this->groups = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -180,6 +187,32 @@ class Role
     {
         if ($this->permissions->contains($permission)) {
             $this->permissions->removeElement($permission);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Permission[]
+     */
+    public function getGroups(): Collection
+    {
+        return $this->groups;
+    }
+
+    public function addGroup(Group $group): self
+    {
+        if (!$this->groups->contains($group)) {
+            $this->groups[] = $group;
+        }
+
+        return $this;
+    }
+
+    public function removeGroup(Group $group): self
+    {
+        if ($this->groups->contains($group)) {
+            $this->groups->removeElement($group);
         }
 
         return $this;

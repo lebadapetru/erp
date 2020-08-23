@@ -336,6 +336,11 @@ function configRoutes () {
           component: Register
         }
       ]
+    },
+    {
+      path: '*',
+      name: 'Page404',
+      component: Page404
     }
   ]
 }

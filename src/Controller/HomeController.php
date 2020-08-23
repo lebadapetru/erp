@@ -10,7 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     /**
-     * @Route("/")
+     * @Route("/", methods={"GET"})
+     * @Route("/{route}", name="vue_pages", requirements={"route"="^(?!.*api|_wdt|_profiler|login|logout|favicon|build).+"}, methods={"GET"})
      */
     public function homepage()
     {

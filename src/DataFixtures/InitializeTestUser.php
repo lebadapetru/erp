@@ -28,9 +28,25 @@ class InitializeTestUser extends Fixture
             'delete' => 'Delete',
         ];
 
-        $role = new Role();
+        $role = new Role(); //Admin
         $role->setName('Administrator');
         $role->setSlug('ROLE_ADMIN');
+
+        foreach ($permissions as $slug => $name) {
+            $permission = new Permission();
+            $permission->setName($name);
+            $permission->setSlug($slug);
+            $manager->persist($permission);
+
+            $role->addPermission($permission);
+        }
+        $manager->persist($role);
+
+        //TODO simulate the generate of permissions per services/features eg PERMISSION_{SERVICE}_{FEATURE}_{VIEW,EDIT,CREATE,DELETE,ADD,REMOVE???}
+        //TODO Create a second role with minimum permissions and add it to the test group
+        $role = new Role(); //User
+        $role->setName('User');
+        $role->setSlug('ROLE_USER');
 
         foreach ($permissions as $slug => $name) {
             $permission = new Permission();
@@ -56,6 +72,7 @@ class InitializeTestUser extends Fixture
         $group->setName('TestGroup');
         $group->setSlug('test_group');
         $group->addUser($user);
+        $group->addRole();
         $manager->persist($group);
 
         $manager->flush();

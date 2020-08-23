@@ -12,6 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass=PermissionRepository::class)
+ * @ORM\Table(name="`permissions`")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
  */
 class Permission
