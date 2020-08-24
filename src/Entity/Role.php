@@ -30,9 +30,9 @@ class Role
     private string $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
-    private string $slug;
+    private string $label;
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
@@ -90,14 +90,14 @@ class Role
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getLabel(): ?string
     {
-        return $this->slug;
+        return $this->label;
     }
 
-    public function setSlug(string $slug): self
+    public function setLabel(string $label): self
     {
-        $this->slug = $slug;
+        $this->label = $label;
 
         return $this;
     }

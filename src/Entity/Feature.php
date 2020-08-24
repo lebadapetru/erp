@@ -2,20 +2,18 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\PermissionRepository;
+use App\Repository\FeatureRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ApiResource()
- * @ORM\Entity(repositoryClass=PermissionRepository::class)
- * @ORM\Table(name="`permissions`")
+ * @ORM\Entity(repositoryClass=FeatureRepository::class)
+ * @ORM\Table("`features`")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
  */
-class Permission
+class Feature
 {
     /**
      * @ORM\Id()
@@ -30,9 +28,21 @@ class Permission
     private string $name;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255)
      */
     private string $label;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Feature::class, inversedBy="children")
+     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\JoinColumn(name="parent", referencedColumnName="id")
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Feature::class, mappedBy="parent")
+     */
+    private $children;
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
@@ -40,25 +50,23 @@ class Permission
     private \DateTimeInterface $deletedAt;
 
     /**
-     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
     private \DateTimeInterface $updatedAt;
 
     /**
-     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
     private \DateTimeInterface $createdAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Role::class, mappedBy="permissions")
+     * @ORM\ManyToOne(targetEntity=Service::class, inversedBy="features")
      */
-    private $roles;
+    private $service;
 
     public function __construct()
     {
-        $this->roles = new ArrayCollection();
+        $this->children = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -90,12 +98,55 @@ class Permission
         return $this;
     }
 
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getChildren(): Collection
+    {
+        return $this->children;
+    }
+
+    public function addChildren(self $children): self
+    {
+        if (!$this->children->contains($children)) {
+            $this->children[] = $children;
+            $children->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChildren(self $children): self
+    {
+        if ($this->children->contains($children)) {
+            $this->children->removeElement($children);
+            // set the owning side to null (unless already changed)
+            if ($children->getParent() === $this) {
+                $children->setParent(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getDeletedAt(): ?\DateTimeInterface
     {
         return $this->deletedAt;
     }
 
-    public function setDeletedAt(\DateTimeInterface $deletedAt): self
+    public function setDeletedAt(?\DateTimeInterface $deletedAt): self
     {
         $this->deletedAt = $deletedAt;
 
@@ -126,30 +177,14 @@ class Permission
         return $this;
     }
 
-    /**
-     * @return Collection|Role[]
-     */
-    public function getRoles(): Collection
+    public function getService(): ?Service
     {
-        return $this->roles;
+        return $this->service;
     }
 
-    public function addRole(Role $role): self
+    public function setService(?Service $service): self
     {
-        if (!$this->roles->contains($role)) {
-            $this->roles[] = $role;
-            $role->addPermission($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRole(Role $role): self
-    {
-        if ($this->roles->contains($role)) {
-            $this->roles->removeElement($role);
-            $role->removePermission($this);
-        }
+        $this->service = $service;
 
         return $this;
     }

@@ -30,12 +30,12 @@ class InitializeTestUser extends Fixture
 
         $role = new Role(); //Admin
         $role->setName('Administrator');
-        $role->setSlug('ROLE_ADMIN');
+        $role->setLabel('ROLE_ADMIN');
 
         foreach ($permissions as $slug => $name) {
             $permission = new Permission();
             $permission->setName($name);
-            $permission->setSlug($slug);
+            $permission->setLabel($slug);
             $manager->persist($permission);
 
             $role->addPermission($permission);
@@ -46,12 +46,12 @@ class InitializeTestUser extends Fixture
         //TODO Create a second role with minimum permissions and add it to the test group
         $role = new Role(); //User
         $role->setName('User');
-        $role->setSlug('ROLE_USER');
+        $role->setLabel('ROLE_USER');
 
         foreach ($permissions as $slug => $name) {
             $permission = new Permission();
             $permission->setName($name);
-            $permission->setSlug($slug);
+            $permission->setLabel($slug);
             $manager->persist($permission);
 
             $role->addPermission($permission);
@@ -59,18 +59,18 @@ class InitializeTestUser extends Fixture
         $manager->persist($role);
 
         $user = new User();
-        $user->setUsername('test');
-        $user->setEmail('test@test.com');
+        $user->setUsername('admin');
+        $user->setEmail('admin@admin.com');
         $user->setPassword($this->passwordEncoder->encodePassword(
          $user,
-        'test'
+        'admin'
         ));
         $user->addRoles($role);
         $manager->persist($user);
 
         $group = new Group();
         $group->setName('TestGroup');
-        $group->setSlug('test_group');
+        $group->setLabel('test_group');
         $group->addUser($user);
         $group->addRole();
         $manager->persist($group);

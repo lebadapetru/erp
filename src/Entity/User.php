@@ -181,7 +181,7 @@ class User implements UserInterface
     public function getRoles()
     {
         return $this->roles->map(function ($role) {
-            return $role->getSlug();
+            return $role->getLabel();
         })->toArray();
     }
 

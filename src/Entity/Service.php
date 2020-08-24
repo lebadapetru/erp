@@ -2,20 +2,18 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\GroupRepository;
+use App\Repository\ServiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ApiResource()
- * @ORM\Entity(repositoryClass=GroupRepository::class)
- * @ORM\Table(name="`groups`")
+ * @ORM\Entity(repositoryClass=ServiceRepository::class)
+ * @ORM\Table("`services`")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
  */
-class Group
+class Service
 {
     /**
      * @ORM\Id()
@@ -40,31 +38,23 @@ class Group
     private \DateTimeInterface $deletedAt;
 
     /**
-     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
     private \DateTimeInterface $updatedAt;
 
     /**
-     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
     private \DateTimeInterface $createdAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="groups")
+     * @ORM\OneToMany(targetEntity=Feature::class, mappedBy="service")
      */
-    private $users;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Role::class, inversedBy="roles")
-     */
-    private $roles;
+    private $features;
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
-        $this->roles = new ArrayCollection();
+        $this->features = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -133,52 +123,31 @@ class Group
     }
 
     /**
-     * @return Collection|User[]
+     * @return Collection|Feature[]
      */
-    public function getUsers(): Collection
+    public function getFeatures(): Collection
     {
-        return $this->users;
+        return $this->features;
     }
 
-    public function addUser(User $user): self
+    public function addFeature(Feature $feature): self
     {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
+        if (!$this->features->contains($feature)) {
+            $this->features[] = $feature;
+            $feature->setService($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): self
+    public function removeFeature(Feature $feature): self
     {
-        if ($this->users->contains($user)) {
-            $this->users->removeElement($user);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|User[]
-     */
-    public function getRoles(): Collection
-    {
-        return $this->roles;
-    }
-
-    public function addRole(Role $role): self
-    {
-        if (!$this->roles->contains($role)) {
-            $this->roles[] = $role;
-        }
-
-        return $this;
-    }
-
-    public function removeRole(Role $role): self
-    {
-        if ($this->roles->contains($role)) {
-            $this->roles->removeElement($role);
+        if ($this->features->contains($feature)) {
+            $this->features->removeElement($feature);
+            // set the owning side to null (unless already changed)
+            if ($feature->getService() === $this) {
+                $feature->setService(null);
+            }
         }
 
         return $this;
