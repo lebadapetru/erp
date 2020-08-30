@@ -33,16 +33,23 @@ class Service
     private string $label;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active;
+
+    /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
      */
     private \DateTimeInterface $deletedAt;
 
     /**
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
     private \DateTimeInterface $updatedAt;
 
     /**
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
     private \DateTimeInterface $createdAt;
@@ -82,6 +89,18 @@ class Service
     public function setLabel(string $label): self
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setIsActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

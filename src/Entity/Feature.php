@@ -28,7 +28,7 @@ class Feature
     private string $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private string $label;
 
@@ -50,11 +50,13 @@ class Feature
     private \DateTimeInterface $deletedAt;
 
     /**
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
     private \DateTimeInterface $updatedAt;
 
     /**
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
     private \DateTimeInterface $createdAt;

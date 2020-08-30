@@ -57,7 +57,7 @@ class Group
     private $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Role::class, inversedBy="roles")
+     * @ORM\ManyToMany(targetEntity=Role::class, inversedBy="groups")
      */
     private $roles;
 

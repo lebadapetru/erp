@@ -62,7 +62,7 @@ class Role
     private $permissions;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Group::class, inversedBy="group")
+     * @ORM\ManyToMany(targetEntity=Group::class, mappedBy="roles")
      */
     private $groups;
 

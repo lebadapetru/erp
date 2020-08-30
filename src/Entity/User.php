@@ -180,6 +180,13 @@ class User implements UserInterface
      */
     public function getRoles()
     {
+        //add roles of the user's group to the roles of the user
+        foreach ($this->groups as $group) {
+            foreach ($group->getRoles() as $role) {
+                $this->addRoles($role);
+            }
+        }
+
         return $this->roles->map(function ($role) {
             return $role->getLabel();
         })->toArray();
