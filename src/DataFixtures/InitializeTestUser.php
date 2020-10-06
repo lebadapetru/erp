@@ -27,7 +27,7 @@ class InitializeTestUser extends Fixture
             'purchased_at' => '#', //timestamp when subs was bought for this service
             'endpoint' => '#', //endpoint to call for the configuring process to start
             'stage' => 'alpha', //in case some services can be released even if the work isnt finished, take additional cautions
-            //the services&features and thier properties micro service should be developed in the early phase
+            //the services&features and their properties micro service should be developed in the early phase
             //to unblock the work needed on other sections of the app
             'features' => [
                 //at first it wont be needed a subs system on feature level,

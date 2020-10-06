@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: nginx
+        tier: backend
+    spec:
+      volumes:
+        - name: erp
+          hostPath:
+            path: /var/www/erp
+      containers:
+        - name: nginx
+          image: lebadapetru/erp_nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: erp
+              mountPath: /var/www/erp

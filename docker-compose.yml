@@ -1,5 +1,4 @@
 #this is for local development
-#remove volume binding in prod and non prod env
 version: '3.8'
 volumes:
   pgdata:
@@ -33,10 +32,10 @@ services:
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
-    volumes:
-      - ./:/var/www/erp
     ports:
       - ${NGINX_PORT}:80
+    volumes:
+      - ./:/var/www/erp
     depends_on:
       - php
     restart: unless-stopped
@@ -45,7 +44,7 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
       target: composer
-    command: ['php', '-d', ' memory_limit=-1', '/usr/bin/composer', 'install']
+    command: [ 'php', '-d', ' memory_limit=-1', '/usr/bin/composer', 'install' ]
     volumes:
       - ./:/var/www/erp
 #  node:

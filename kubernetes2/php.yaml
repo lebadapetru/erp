@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php
+  labels:
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: php
+        tier: backend
+    spec:
+      volumes:
+        - name: erp
+          hostPath:
+            path: /var/www/erp
+      containers:
+        - name: php
+          image: lebadapetru/erp_php:latest
+          volumeMounts:
+            - name: erp
+              mountPath: /var/www/erp

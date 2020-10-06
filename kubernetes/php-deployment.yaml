@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php
+  labels:
+    app: php
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: php
+        tier: backend
+    spec:
+      volumes: null
+      containers:
+      - image: lebadapetru/erp_php:latest
+        name: php
+        ports:
+        - containerPort: 9000
+      restartPolicy: Always

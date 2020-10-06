@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+    tier: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: database
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgres
+        tier: database
+    spec:
+      volumes:
+        - name: pgdata
+          persistentVolumeClaim:
+            claimName: pgdata
+        - name: secrets
+          secret:
+            secretName: secrets
+      containers:
+      - env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: postgres-db
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: postgres-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: secrets
+              key: postgres-password
+        image: lebadapetru/erp_postgres:latest
+        name: postgres
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: pgdata
+        - mountPath: ./secrets
+          name: secrets
+      restartPolicy: Always
