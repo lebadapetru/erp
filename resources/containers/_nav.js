@@ -3,6 +3,22 @@ export default [
     _name: 'CSidebarNav',
     _children: [
       {
+        _name: 'CSidebarNavDropdown',
+        name: 'Products & Services',
+        route: '/products-and-services',
+        icon: 'cil-tags',
+        items: [
+          {
+            name: 'Products',
+            to: '/products-and-services/products'
+          },
+          {
+            name: 'Categories',
+            to: '/products-and-services/categories'
+          },
+        ]
+      },
+      {
         _name: 'CSidebarNavItem',
         name: 'Dashboard',
         to: '/dashboard',
@@ -49,7 +65,7 @@ export default [
           {
             name: 'Carousels',
             to: '/base/carousels'
-          }, 
+          },
           {
             name: 'Collapses',
             to: '/base/collapses'
@@ -220,22 +236,6 @@ export default [
             to: '/pages/500'
           }
         ]
-      },
-      {
-        _name: 'CSidebarNavItem',
-        name: 'Download CoreUI',
-        href: 'http://coreui.io/vue/',
-        icon: { name: 'cil-cloud-download', class: 'text-white' },
-        _class: 'bg-success text-white',
-        target: '_blank'
-      },
-      {
-        _name: 'CSidebarNavItem',
-        name: 'Try CoreUI PRO',
-        href: 'http://coreui.io/pro/vue/',
-        icon: { name: 'cil-layers', class: 'text-white' },
-        _class: 'bg-danger text-white',
-        target: '_blank'
       }
     ]
   }

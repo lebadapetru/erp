@@ -6,7 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-pdo": "*",
-        "api-platform/core": "^2.1",
+        "api-platform/core": "^2.5",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^1.6 || ^2.0",
         "doctrine/doctrine-migrations-bundle": "*",

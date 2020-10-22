@@ -57,6 +57,10 @@ const Register = () => import('../views/pages/Register')
 const Users = () => import('../views/users/Users')
 const User = () => import('../views/users/User')
 
+// Products
+const Products = () => import('../views/products/Products')
+const Categories = () => import('../views/products/Categories')
+
 Vue.use(Router)
 
 export default new Router({
@@ -74,6 +78,26 @@ function configRoutes () {
       name: 'Home',
       component: TheContainer,
       children: [
+        {
+          path: 'products-and-services',
+          name: 'Products & Services',
+          redirect: '/products-and-services/products',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'products',
+              name: 'Products',
+              component: Products
+            },
+            {
+              path: 'categories',
+              name: 'Categories',
+              component: Categories
+            },
+          ]
+        },
         {
           path: 'dashboard',
           name: 'Dashboard',
