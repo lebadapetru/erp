@@ -13,16 +13,16 @@ Encore
     .setPublicPath('/build')
     // only needed for CDN's or sub-directory deploy
     //.setManifestKeyPrefix('build/')
+    .copyFiles({
+        from: './resources/media',
+        to: 'media/[path][name].[ext]',
+        pattern: /\.(png|jpg|jpeg|svg)$/
+    })
     // .copyFiles({
-    //     from: './assets/img',
-    //     to: 'img/[path][name].[ext]',
-    //     pattern: /\.(png|jpg|jpeg|svg)$/
+    //     from: './assets/fonts',
+    //     to: 'fonts/[path][name].[ext]',
+    //     pattern: /\.(ttf)$/
     // })
-    /*.copyFiles({
-        from: './assets/fonts',
-        to: 'fonts/[path][name].[ext]',
-        pattern: /\.(ttf)$/
-    })*/
     /*
      * ENTRY CONFIG
      *
@@ -66,7 +66,10 @@ Encore
     .enableSassLoader()
 
     // enables Vue support
-    .enableVueLoader()
+    .enableVueLoader(() => {}, {
+      version: 3,
+      runtimeCompilerBuild: false //if using only single file components, this is not needed (https://symfony.com/doc/current/frontend/encore/vuejs.html#runtime-compiler-build)
+    })
 
 // uncomment if you use TypeScript
 //.enableTypeScriptLoader()
