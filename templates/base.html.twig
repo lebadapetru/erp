@@ -16,7 +16,7 @@
         <meta name="theme-color" content="#ffffff">
 
     </head>
-    <body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable">
+    <body id="kt_body" class="{% block body_class %}header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable{% endblock %}">
         {% block body %}{% endblock %}
         {% block javascripts %}
             {{ encore_entry_script_tags('main') }}

@@ -58,6 +58,5 @@ export default {
 
 <style lang="scss">
 // Import Main styles for this application
-@import "sass/init";
 @import "sass/style";
 </style>
