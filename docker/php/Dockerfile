@@ -53,10 +53,7 @@ COPY ./docker/php/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 COPY ./docker/php/php-fpm.conf /usr/local/etc/php-fpm.conf
 
 # Install Composer
-COPY --from=composer:1.10.9 /usr/bin/composer /usr/bin/composer
-# Install composer parallel download plugin, greatly speeds up composer install
-RUN composer global require --no-ansi --no-interaction hirak/prestissimo
-
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 ####################
 #Composer targer

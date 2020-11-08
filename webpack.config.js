@@ -1,4 +1,6 @@
 var Encore = require('@symfony/webpack-encore');
+const path = require('path');
+const webpack = require('webpack');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -33,7 +35,7 @@ Encore
      * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
      */
     .addEntry('main', './resources/main.js')
-    .addEntry('login', './resources/login.js')
+    .addEntry('login', './resources/pages/login/login.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
@@ -70,7 +72,20 @@ Encore
     .enableVueLoader(() => {}, {
       version: 3,
       runtimeCompilerBuild: false //if using only single file components, this is not needed (https://symfony.com/doc/current/frontend/encore/vuejs.html#runtime-compiler-build)
+
     })
+
+    .addAliases({
+      'resources': path.resolve('./resources')
+    })
+
+  .addPlugin(
+    new webpack.DefinePlugin({
+      // Drop Options API from bundle
+      __VUE_OPTIONS_API__: false,
+      __VUE_PROD_DEVTOOLS__: false
+    })
+  )
 
 // uncomment if you use TypeScript
 //.enableTypeScriptLoader()

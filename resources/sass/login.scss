@@ -8,6 +8,7 @@
 @import "resources/sass/init";
 
 .login.login-5 {
+    background-color: get($layout-themes, dark);
     // Form modes
     .login-signin,
     .login-signup,
