@@ -1,4 +1,4 @@
-var Encore = require('@symfony/webpack-encore');
+const Encore = require('@symfony/webpack-encore');
 const path = require('path');
 const webpack = require('webpack');
 
@@ -20,11 +20,11 @@ Encore
         to: 'media/[path][name].[ext]',
         pattern: /\.(png|jpg|jpeg|svg)$/
     })
-    // .copyFiles({
-    //     from: './assets/fonts',
-    //     to: 'fonts/[path][name].[ext]',
-    //     pattern: /\.(ttf)$/
-    // })
+    .copyFiles({
+        from: './resources/fonts',
+        to: 'fonts/[path][name].[ext]',
+        pattern: /\.(ttf)$/
+    })
     /*
      * ENTRY CONFIG
      *

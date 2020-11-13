@@ -1,6 +1,6 @@
 <template>
   <input
-      type="text"
+      type="password"
       :class="styleClasses"
       :name="name"
       :id="name"
@@ -10,16 +10,16 @@
       @input="handleChange"
       @blur="handleBlur"
   />
-  <div class="error-message" v-if="errorMessage">
+  <p class="error-message" v-if="errorMessage">
     {{ errorMessage }}
-  </div>
+  </p>
 </template>
 
 <script>
-import { useField } from 'vee-validate'
+import { useField } from "vee-validate";
 
 export default {
-  name: "EmailInput",
+  name: "PasswordInput",
   props: {
     styleClasses: {
       type: String,
@@ -27,11 +27,11 @@ export default {
     },
     placeholder: {
       type: String,
-      default: 'Email'
+      default: 'Password'
     },
     autocomplete: {
       type: String,
-      default: 'email'
+      default: 'password'
     },
     value: {
       type: String,
@@ -39,7 +39,7 @@ export default {
     },
     name: {
       type: String,
-      default: 'email',
+      default: 'password',
     },
     successMessage: {
       type: String,

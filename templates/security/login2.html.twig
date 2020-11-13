@@ -5,10 +5,11 @@
     {{ encore_entry_link_tags('login') }}
 {% endblock %}
 
-{% block body_class %}{{ parent() }} page-loading{% endblock %}
+{% block body_class %}header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable{% endblock %}
 
 {% block body %}
-    <div id="login"></div>
+    <div id="login" class="d-flex flex-column flex-root"></div>
+    <div id="error-bag"></div>
 {% endblock %}
 
 {% block javascripts %}
