@@ -4,11 +4,14 @@ namespace App\Security;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
@@ -46,6 +49,17 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function getCredentials(Request $request)
     {
+        dump($request->getContent());
+        $data = \json_decode($request->getContent(), true);
+
+        if (\json_last_error() !== \JSON_ERROR_NONE) {
+            return false;
+        }
+
+        dump($request->getContent());
+        $request->request->replace(is_array($data) ? $data : array());
+        dump($request->getContent());
+        dump($request->request->get('email'));
         $credentials = [
             'email' => $request->request->get('email'),
             'password' => $request->request->get('password'),
@@ -55,7 +69,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             Security::LAST_USERNAME,
             $credentials['email']
         );
-
+        dd($credentials);
         return $credentials;
     }
 
@@ -81,8 +95,24 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    {
+        $data = [
+            // you may want to customize or obfuscate the message first
+            'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
+
+            // or to translate this message
+            // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
+        ];
+
+        dd($data);
+
+        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
+    }
+
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+        dd('success');
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }

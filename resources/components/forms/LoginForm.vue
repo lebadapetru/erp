@@ -48,11 +48,15 @@ export default {
   setup() {
     const schema = object().shape({
       email: string().required().email('invalid email'),
-      password: string().required().min(8),
+      password: string().required().min(5),
     });
     function onSubmit(values) {
       console.log('yolo')
       console.log(values)
+      values._csrf_token = csrf_token
+      axios.post('http://erp.local/login', values).then((response) => {
+        console.log(response)
+      })
     }
 
     return {

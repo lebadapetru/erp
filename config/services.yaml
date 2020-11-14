@@ -4,6 +4,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    app.encryption_key: '%env(ENCRYPTION_KEY)%'
+    app.private_key_path: '%kernel.project_dir%/oauth2/private.key'
+    app.key_permission_check: '%env(KEY_PERMISSION_CHECK)%'
 
 services:
     # default configuration for services in *this* file
