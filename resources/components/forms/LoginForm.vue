@@ -53,9 +53,8 @@ export default {
     function onSubmit(values) {
       console.log('yolo')
       console.log(values)
-      values._csrf_token = csrf_token
-      axios.post('http://erp.local/login', values).then((response) => {
-        console.log(response)
+      httpClient.post('/login', values).then((response) => {
+        window.location.href = '/';
       })
     }
 

@@ -49,27 +49,16 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function getCredentials(Request $request)
     {
-        dump($request->getContent());
-        $data = \json_decode($request->getContent(), true);
-
-        if (\json_last_error() !== \JSON_ERROR_NONE) {
-            return false;
-        }
-
-        dump($request->getContent());
-        $request->request->replace(is_array($data) ? $data : array());
-        dump($request->getContent());
-        dump($request->request->get('email'));
         $credentials = [
             'email' => $request->request->get('email'),
             'password' => $request->request->get('password'),
-            'csrf_token' => $request->request->get('_csrf_token'),
+            'csrf_token' => $request->headers->get('X-CSRF-TOKEN'),
         ];
         $request->getSession()->set(
             Security::LAST_USERNAME,
             $credentials['email']
         );
-        dd($credentials);
+
         return $credentials;
     }
 
@@ -99,20 +88,21 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         $data = [
             // you may want to customize or obfuscate the message first
-            'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
+            //'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
+            'message' => 'Sorry, your email and/or password are incorrect.'
 
             // or to translate this message
             // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
         ];
-
-        dd($data);
 
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        dd('success');
+        return new JsonResponse([
+            'Authenticated'
+        ], Response::HTTP_OK);
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
