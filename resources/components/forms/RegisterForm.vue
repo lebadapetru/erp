@@ -1,0 +1,132 @@
+<template>
+  <Form
+      class="form text-center"
+      id="kt_login_signup_form"
+      @submit="onSubmit"
+      :validation-schema="schema"
+  >
+    <div class="form-group">
+      <TextInput
+          style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+          placeholder="Full name"
+          name="fullName"
+          autocomplete="name"
+      />
+    </div>
+    <div class="form-group">
+      <EmailInput
+          style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+      />
+    </div>
+    <div class="form-group">
+      <PasswordInput
+          style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+      />
+    </div>
+    <div class="form-group">
+      <PasswordInput
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+      />
+    </div>
+    <div class="form-group px-8">
+      <div class="checkbox-inline justify-content-center">
+        <label class="checkbox checkbox-outline checkbox-white opacity-60 text-white m-0">
+          <Field type="checkbox" name="agree" value="true" />
+          <span></span>I agree with the
+          <a href="#" @click="openTermsAndConditions" class="text-white font-weight-bold ml-1">terms and conditions</a>.</label>
+        <ErrorMessage class="error-message" as="p" name="agree" />
+      </div>
+      <div class="form-text text-muted text-center"></div>
+    </div>
+    <div class="form-group">
+      <button id="kt_login_signup_submit" class="btn btn-pill btn-primary opacity-90 px-15 py-3 m-2">Sign Up</button>
+      <a @click="showLoginSection" id="kt_login_signup_cancel" class="btn btn-pill btn-outline-white opacity-70 px-15 py-3 m-2">Cancel
+      </a>
+    </div>
+  </Form>
+</template>
+
+<script>
+import { Form, Field, ErrorMessage } from 'vee-validate'
+import EmailInput from "./inputs/EmailInput";
+import PasswordInput from "./inputs/PasswordInput";
+import TextInput from "./inputs/TextInput";
+import { object, string, ref } from 'yup'
+import Swal from 'sweetalert2'
+import { LoremIpsum } from "lorem-ipsum";
+import { useStore } from "vuex";
+
+export default {
+  name: "RegisterForm",
+  components: {
+    Form,
+    Field,
+    ErrorMessage,
+    EmailInput,
+    PasswordInput,
+    TextInput
+  },
+  setup() {
+    const store = useStore()
+
+    const schema = object().shape({
+      fullName: string().required('Full name is required'),
+      password: string().required('Password is required').min(8), /*TODO implement strong password validation*/
+      confirmPassword: string().required('Password confirmation is required').oneOf([ref("password")], 'Passwords do not match'),
+      agree: string().defined('You must accept the terms and conditions').oneOf(["true"], 'You must accept the terms and conditions')
+    });
+
+    function openTermsAndConditions() {
+      const lorem = new LoremIpsum({
+        sentencesPerParagraph: {
+          max: 8,
+          min: 4
+        },
+        wordsPerSentence: {
+          max: 16,
+          min: 4
+        }
+      });
+      Swal.fire({
+        text: lorem.generateParagraphs(7),
+        icon: "info",
+        buttonsStyling: false,
+        confirmButtonText: "Ok, got it!",
+        customClass: {
+          confirmButton: "btn font-weight-bold btn-light-primary"
+        },
+        heightAuto: false
+      })
+    }
+
+    function onSubmit(values) {
+      httpClient.post('/register', values).then((response) => {
+        console.log(response)
+        Swal.fire({
+          text: 'Your registration was successful',
+          icon: "success",
+          buttonsStyling: false,
+          confirmButtonText: "Ok, got it!",
+          customClass: {
+            confirmButton: "btn font-weight-bold btn-light-primary"
+          },
+          heightAuto: false
+        })
+      })
+    }
+
+    return {
+      schema,
+      openTermsAndConditions,
+      onSubmit,
+      showLoginSection: () => store.commit('setActiveSection', 'login')
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

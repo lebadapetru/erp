@@ -1,12 +1,12 @@
 import axios from 'axios'
-import NProgress from 'nprogress' /*TODO vue3 progress bar.. remove this*/
+//import NProgress from 'nprogress' /*TODO vue3 progress bar.. remove this*/
 import Swal from 'sweetalert2'
 
 let token = document.head.querySelector('meta[name="csrf-token"]')
 
 const httpClient = axios.create({
   baseURL: `http://erp.local:80`,
-  withCredentials: true, // This is the default
+  withCredentials: true,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -15,7 +15,7 @@ const httpClient = axios.create({
 })
 
 httpClient.interceptors.request.use(function (config) {
-  NProgress.start()
+  //NProgress.start()
   console.log(config)
 
   return config;
@@ -26,12 +26,12 @@ httpClient.interceptors.request.use(function (config) {
 });
 
 httpClient.interceptors.response.use(function (response) {
-  NProgress.done()
+  //NProgress.done()
   //handleResponse(response)
 
   return response;
 }, function (error) {
-  NProgress.done()
+  //NProgress.done()
   handleResponse(error.response)
 
   return Promise.reject(error);
@@ -57,14 +57,6 @@ function handleResponse(response){
   })
 
   return true;
-}
-
-function slugify(string){
-  return string.toString().toLowerCase().trim()
-    .replace(/\s+/g, '-')           // Replace spaces with -
-    .replace(/&/g, '-and-')         // Replace & with 'and'
-    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-    .replace(/\-\-+/g, '-');
 }
 
 function statusCodes(){
@@ -139,4 +131,4 @@ function statusCodes(){
   };
 }
 
-export default httpClient
+window.httpClient = httpClient

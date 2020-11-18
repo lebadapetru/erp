@@ -219,7 +219,7 @@ class InitializeTestUser extends Fixture
         $userEntity->setEmail('admin@admin.com');
         $userEntity->setPassword($this->passwordEncoder->encodePassword(
             $userEntity,
-            'admin'
+            'admin123'
         ));
         $userEntity->addRoles($roleEntity);
         $manager->persist($userEntity);
@@ -248,7 +248,7 @@ class InitializeTestUser extends Fixture
         $userEntity->setEmail('user@user.com');
         $userEntity->setPassword($this->passwordEncoder->encodePassword(
             $userEntity,
-            'user'
+            'user123'
         ));
         $userEntity->addRoles($userRoleEntity);
         $manager->persist($userEntity);

@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { Form, Field, ErrorMessage } from 'vee-validate'
+import { Form, Field} from 'vee-validate'
 import EmailInput from "./inputs/EmailInput";
 import PasswordInput from "./inputs/PasswordInput";
 import { object, string } from 'yup'
@@ -41,19 +41,16 @@ export default {
   components: {
     Form,
     Field,
-    ErrorMessage,
     EmailInput,
     PasswordInput
   },
   setup() {
     const schema = object().shape({
-      email: string().required().email('invalid email'),
-      password: string().required().min(5),
+      email: string().required('Email address is required').email('Email address is invalid'),
+      password: string().required('Password is required').min(8),
     });
     function onSubmit(values) {
-      console.log('yolo')
-      console.log(values)
-      httpClient.post('/login', values).then((response) => {
+      httpClient.post('/login', values).then(() => {
         window.location.href = '/';
       })
     }

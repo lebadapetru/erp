@@ -1,6 +1,6 @@
 <template>
   <input
-      type="password"
+      type="text"
       :class="styleClasses"
       :name="name"
       :id="name"
@@ -10,17 +10,17 @@
       @input="handleChange"
       @blur="handleBlur"
   />
-  <p class="error-message" v-if="errorMessage">
+  <div class="error-message" v-if="errorMessage">
     {{ capitalize(errorMessage) }}
-  </p>
+  </div>
 </template>
 
 <script>
-import { useField } from "vee-validate";
+import { useField } from 'vee-validate'
 import { capitalize } from 'lodash'
 
 export default {
-  name: "PasswordInput",
+  name: "FullNameInput",
   props: {
     styleClasses: {
       type: String,
@@ -28,11 +28,11 @@ export default {
     },
     placeholder: {
       type: String,
-      default: 'Password'
+      default: 'Text'
     },
     autocomplete: {
       type: String,
-      default: 'password'
+      default: 'on'
     },
     value: {
       type: String,
@@ -40,7 +40,7 @@ export default {
     },
     name: {
       type: String,
-      default: 'password',
+      default: 'text',
     },
     successMessage: {
       type: String,
@@ -58,13 +58,10 @@ export default {
       initialValue: props.value,
     });
 
-
-    console.log(errorMessage)
-
     return {
       handleChange,
-      errorMessage,
       handleBlur,
+      errorMessage,
       inputValue,
       meta,
       capitalize

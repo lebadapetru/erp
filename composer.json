@@ -42,8 +42,7 @@
         "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "5.1.*",
         "webonyx/graphql-php": "^14.2",
-        "ext-json": "*",
-        "ext-http": "*"
+        "ext-json": "*"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.3",

@@ -6,23 +6,12 @@
         <!--begin::Login Header-->
         <div class="d-flex flex-center mb-15">
           <a href="#">
-            <img src="build/media/logos/logo-letter-13.png" class="max-h-75px" alt=""/>
+            <img src="build/media/logos/logo-letter-13.png" class="max-h-75px" alt="" />
           </a>
         </div>
         <!--end::Login Header-->
-        <!--begin::Login Sign in form-->
-        <div class="login-signin">
-          <div class="mb-20">
-            <h3 class="opacity-40 font-weight-normal">Sign In To Admin</h3>
-            <p class="opacity-40">Enter your details to login to your account:</p>
-          </div>
-          <LoginForm/>
-          <div class="mt-10">
-            <span class="opacity-40 mr-4">Don't have an account yet?</span>
-            <a href="javascript:;" id="kt_login_signup" class="text-white opacity-30 font-weight-normal">Sign Up</a>
-          </div>
-        </div>
-        <!--end::Login Sign in form-->
+      <LoginSection />
+      <RegisterSection />
       </div>
     </div>
   </div>
@@ -30,12 +19,14 @@
 </template>
 
 <script>
-import LoginForm from "resources/components/forms/LoginForm";
+import LoginSection from "resources/pages/login/LoginSection";
+import RegisterSection from "resources/pages/login/RegisterSection";
 
 export default {
   name: "LoginPage",
   components: {
-    LoginForm
+    LoginSection,
+    RegisterSection
   }
 }
 </script>
