@@ -216,6 +216,8 @@ class InitializeTestUser extends Fixture
 
         $userEntity = new User();
         $userEntity->setUsername('Administrator');
+        $userEntity->setFirstName('Admin');
+        $userEntity->setLastName('Administrator');
         $userEntity->setEmail('admin@admin.com');
         $userEntity->setPassword($this->passwordEncoder->encodePassword(
             $userEntity,
@@ -245,6 +247,8 @@ class InitializeTestUser extends Fixture
 
         $userEntity = new User(); //User can only login and have limited permissions based on roles and groups
         $userEntity->setUsername('User');
+        $userEntity->setFirstName('John');
+        $userEntity->setLastName('Doe');
         $userEntity->setEmail('user@user.com');
         $userEntity->setPassword($this->passwordEncoder->encodePassword(
             $userEntity,

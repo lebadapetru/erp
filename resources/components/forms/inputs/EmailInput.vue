@@ -11,12 +11,13 @@
       @blur="handleBlur"
   />
   <div class="error-message" v-if="errorMessage">
-    {{ errorMessage }}
+    {{ capitalize(errorMessage) }}
   </div>
 </template>
 
 <script>
 import { useField } from 'vee-validate'
+import { capitalize } from 'lodash'
 
 export default {
   name: "EmailInput",
@@ -63,6 +64,7 @@ export default {
       errorMessage,
       inputValue,
       meta,
+      capitalize
     };
   },
 }

@@ -5,13 +5,27 @@
       @submit="onSubmit"
       :validation-schema="schema"
   >
-    <div class="form-group">
-      <TextInput
-          style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
-          placeholder="Full name"
-          name="fullName"
-          autocomplete="name"
-      />
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <TextInput
+              style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+              placeholder="First name"
+              name="firstName"
+              autocomplete="given-name"
+          />
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <TextInput
+              style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+              placeholder="Last name"
+              name="lastName"
+              autocomplete="family-name"
+          />
+        </div>
+      </div>
     </div>
     <div class="form-group">
       <EmailInput
@@ -33,7 +47,7 @@
     <div class="form-group px-8">
       <div class="checkbox-inline justify-content-center">
         <label class="checkbox checkbox-outline checkbox-white opacity-60 text-white m-0">
-          <Field type="checkbox" name="agree" value="true" />
+          <Field type="checkbox" name="agreeTermsAndConditions" value="true" />
           <span></span>I agree with the
           <a href="#" @click="openTermsAndConditions" class="text-white font-weight-bold ml-1">terms and conditions</a>.</label>
         <ErrorMessage class="error-message" as="p" name="agree" />
@@ -42,7 +56,8 @@
     </div>
     <div class="form-group">
       <button id="kt_login_signup_submit" class="btn btn-pill btn-primary opacity-90 px-15 py-3 m-2">Sign Up</button>
-      <a @click="showLoginSection" id="kt_login_signup_cancel" class="btn btn-pill btn-outline-white opacity-70 px-15 py-3 m-2">Cancel
+      <a @click="showLoginSection" id="kt_login_signup_cancel"
+         class="btn btn-pill btn-outline-white opacity-70 px-15 py-3 m-2">Cancel
       </a>
     </div>
   </Form>
@@ -72,10 +87,12 @@ export default {
     const store = useStore()
 
     const schema = object().shape({
-      fullName: string().required('Full name is required'),
+      firstName: string().required('First name is required'),
+      lastName: string().required('Last name is required'),
+      email: string().required('Email address is required').email(),
       password: string().required('Password is required').min(8), /*TODO implement strong password validation*/
       confirmPassword: string().required('Password confirmation is required').oneOf([ref("password")], 'Passwords do not match'),
-      agree: string().defined('You must accept the terms and conditions').oneOf(["true"], 'You must accept the terms and conditions')
+      agreeTermsAndConditions: string().defined('You must accept the terms and conditions').oneOf(["true"], 'You must accept the terms and conditions')
     });
 
     function openTermsAndConditions() {
@@ -102,9 +119,9 @@ export default {
     }
 
     function onSubmit(values) {
-      httpClient.post('/register', values).then((response) => {
+      httpClient.post('/register', values).then(async (response) => {
         console.log(response)
-        Swal.fire({
+        await Swal.fire({
           text: 'Your registration was successful',
           icon: "success",
           buttonsStyling: false,
