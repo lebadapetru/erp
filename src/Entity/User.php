@@ -11,7 +11,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table("`users`")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
@@ -26,12 +25,12 @@ class User implements UserInterface
     protected int $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private string $username;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\Email()
      */
     private string $email;
@@ -52,6 +51,16 @@ class User implements UserInterface
      * @Assert\Length(min=8)
      */
     private string $password;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $active = false;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private ?\DateTimeInterface$verified_at;
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
@@ -178,6 +187,18 @@ class User implements UserInterface
         return $this;
     }
 
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
     public function getDeletedAt(): ?\DateTimeInterface
     {
         return $this->deletedAt;
@@ -186,6 +207,18 @@ class User implements UserInterface
     public function setDeletedAt(\DateTimeInterface $deletedAt): self
     {
         $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    public function getVerifiedAt(): ?\DateTimeInterface
+    {
+        return $this->verified_at;
+    }
+
+    public function setVerifiedAt(?\DateTimeInterface $verified_at): self
+    {
+        $this->verified_at = $verified_at;
 
         return $this;
     }

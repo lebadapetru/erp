@@ -43,6 +43,8 @@ class RequestTransformerListener
     {
         $data = \json_decode($request->getContent(), true);
 
+        $data = array_map('trim', $data);
+
         if (\json_last_error() !== \JSON_ERROR_NONE) {
             return false;
         }

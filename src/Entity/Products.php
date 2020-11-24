@@ -22,38 +22,38 @@ class Products
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $description;
+    private ?string $description;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $publish = true;
+    private bool $public = true;
 
     /**
      * TODO oneToOne relation to a diff table
      * @ORM\Column(type="integer")
      */
-    private $status;
+    private int $status;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $sku;
+    private ?string $sku;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $stock = 0;
+    private int $stock = 0;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
@@ -63,24 +63,24 @@ class Products
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
      */
-    private $deletedAt;
+    private ?\DateTimeInterface $deletedAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private ?\DateTimeInterface $createdAt;
 
     /**
      * @ORM\ManyToMany(targetEntity=Media::class, inversedBy="products")
      */
-    private $media;
+    private $media; /*TODO wait for stable php 8 and symfony to use union type hinting*/
 
     public function __construct()
     {
@@ -116,14 +116,14 @@ class Products
         return $this;
     }
 
-    public function getPublish(): ?bool
+    public function isPublic(): ?bool
     {
-        return $this->publish;
+        return $this->public;
     }
 
-    public function setPublish(bool $publish): self
+    public function setPublic(bool $public): self
     {
-        $this->publish = $publish;
+        $this->public = $public;
 
         return $this;
     }
@@ -220,19 +220,19 @@ class Products
         return $this->media;
     }
 
-    public function addMedium(Media $medium): self
+    public function addMedia(Media $media): self
     {
-        if (!$this->media->contains($medium)) {
-            $this->media[] = $medium;
+        if (!$this->media->contains($media)) {
+            $this->media[] = $media;
         }
 
         return $this;
     }
 
-    public function removeMedium(Media $medium): self
+    public function removeMedia(Media $media): self
     {
-        if ($this->media->contains($medium)) {
-            $this->media->removeElement($medium);
+        if ($this->media->contains($media)) {
+            $this->media->removeElement($media);
         }
 
         return $this;

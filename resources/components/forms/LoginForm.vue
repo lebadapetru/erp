@@ -47,7 +47,7 @@ export default {
   setup() {
     const schema = object().shape({
       email: string().required('Email address is required').email('Email address is invalid'),
-      password: string().required('Password is required').min(8),
+      password: string().required('Password is required').min(8).max(128),
     });
     function onSubmit(values) {
       httpClient.post('/login', values).then(() => {

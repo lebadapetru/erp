@@ -20,39 +20,39 @@ class Categories
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $description;
+    private ?string $description;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $publish = true;
+    private bool $public = true;
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
      */
-    private $deletedAt;
+    private ?\DateTimeInterface $deletedAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private ?\DateTimeInterface $createdAt;
 
     public function getId(): ?int
     {
@@ -83,14 +83,14 @@ class Categories
         return $this;
     }
 
-    public function getPublish(): ?bool
+    public function isPublic(): ?bool
     {
-        return $this->publish;
+        return $this->public;
     }
 
-    public function setPublish(bool $publish): self
+    public function setPublic(bool $public): self
     {
-        $this->publish = $publish;
+        $this->public = $public;
 
         return $this;
     }

@@ -50,7 +50,7 @@
           <Field type="checkbox" name="agreeTermsAndConditions" value="true" />
           <span></span>I agree with the
           <a href="#" @click="openTermsAndConditions" class="text-white font-weight-bold ml-1">terms and conditions</a>.</label>
-        <ErrorMessage class="error-message" as="p" name="agree" />
+        <ErrorMessage class="error-message" as="p" name="agreeTermsAndConditions" />
       </div>
       <div class="form-text text-muted text-center"></div>
     </div>
@@ -87,12 +87,12 @@ export default {
     const store = useStore()
 
     const schema = object().shape({
-      firstName: string().required('First name is required'),
-      lastName: string().required('Last name is required'),
+      firstName: string().trim().required('First name is required'),
+      lastName: string().trim().required('Last name is required'),
       email: string().required('Email address is required').email(),
-      password: string().required('Password is required').min(8), /*TODO implement strong password validation*/
+      password: string().trim().required('Password is required').min(8).max(128), /*TODO implement strong password validation*/
       confirmPassword: string().required('Password confirmation is required').oneOf([ref("password")], 'Passwords do not match'),
-      agreeTermsAndConditions: string().defined('You must accept the terms and conditions').oneOf(["true"], 'You must accept the terms and conditions')
+      agreeTermsAndConditions: string().required('You must accept the terms and conditions')
     });
 
     function openTermsAndConditions() {

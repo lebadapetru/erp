@@ -223,7 +223,7 @@ class Media
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
-            $product->addMedium($this);
+            $product->addMedia($this);
         }
 
         return $this;
@@ -233,7 +233,7 @@ class Media
     {
         if ($this->products->contains($product)) {
             $this->products->removeElement($product);
-            $product->removeMedium($this);
+            $product->removeMedia($this);
         }
 
         return $this;

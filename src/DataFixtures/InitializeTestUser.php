@@ -219,6 +219,8 @@ class InitializeTestUser extends Fixture
         $userEntity->setFirstName('Admin');
         $userEntity->setLastName('Administrator');
         $userEntity->setEmail('admin@admin.com');
+        $userEntity->setActive(true);
+        $userEntity->setVerifiedAt(new \DateTime()); /*TODO add carbon or some DT lib*/
         $userEntity->setPassword($this->passwordEncoder->encodePassword(
             $userEntity,
             'admin123'
@@ -250,6 +252,8 @@ class InitializeTestUser extends Fixture
         $userEntity->setFirstName('John');
         $userEntity->setLastName('Doe');
         $userEntity->setEmail('user@user.com');
+        $userEntity->setActive(true);
+        $userEntity->setVerifiedAt(new \DateTime());
         $userEntity->setPassword($this->passwordEncoder->encodePassword(
             $userEntity,
             'user123'
