@@ -16,17 +16,46 @@ class RegisterController extends AbstractController
     /**
      * @Route ("/register", methods={"POST"})
      * @param Request $request
+     * @param RegisterService $registerService
+     * @return JsonResponse
+     */
+    public function create(RegisterService $registerService)
+    {
+        $registerService
+            ->validateRequest()
+            ->createAccount();
+
+        $registerService->sendVerificationEmail();
+
+        return new JsonResponse('Your registration was successful', Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Route ("/resend-verification-email", methods={"GET"})
+     * @param RegisterService $registerService
+     * @return JsonResponse
+     */
+    public function resendVerificationEmail(RegisterService $registerService)
+    {
+        $registerService->sendVerificationEmail();
+
+        return new JsonResponse('The verification email has been sent', Response::HTTP_OK);
+    }
+
+    /**
+     * @Route ("/verify/{id}/{token}", methods={"GET"})
+     * @param Request $request
      * @param RegisterService $register
      * @return JsonResponse
      */
-    public function store(Request $request, RegisterService $register)
+    public function verify(Request $request, RegisterService $register)
     {
-        $register->validate($request);
-        $register->save($request);
-        $register->sendVerificationEmail($request->request->get('email'));
+        $routeParams = $request->attributes->get('_route_params');
+        $register->verifyEmail(
+            $routeParams['id'],
+            $routeParams['token'],
+        );
 
-        return new JsonResponse([
-            'Your registration was successful'
-        ], Response::HTTP_CREATED);
+        return new JsonResponse('The email verification was successful', Response::HTTP_OK);
     }
 }

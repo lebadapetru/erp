@@ -55,7 +55,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="boolean")
      */
-    private bool $active = false;
+    private bool $isActive = false;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -189,12 +189,12 @@ class User implements UserInterface
 
     public function isActive(): ?bool
     {
-        return $this->active;
+        return $this->isActive;
     }
 
-    public function setActive(bool $active): self
+    public function setActive(bool $isActive): self
     {
-        $this->active = $active;
+        $this->isActive = $isActive;
 
         return $this;
     }

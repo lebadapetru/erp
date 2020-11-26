@@ -7,6 +7,7 @@ parameters:
     app.encryption_key: '%env(ENCRYPTION_KEY)%'
     app.private_key_path: '%kernel.project_dir%/oauth2/private.key'
     app.key_permission_check: '%env(KEY_PERMISSION_CHECK)%'
+    app.url: '%env(APP_URL)%'
 
 services:
     # default configuration for services in *this* file

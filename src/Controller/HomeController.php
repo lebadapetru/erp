@@ -11,7 +11,7 @@ class HomeController extends AbstractController
 {
     /**
      * @Route("/", methods={"GET"})
-     * @Route("/{route}", name="vue_pages", requirements={"route"="^(?!.*api|_wdt|_profiler|login|logout|favicon|build).+"}, methods={"GET"})
+     * @Route("/{route}", name="vue_pages", requirements={"route"="^(?!.*api|_wdt|_profiler|login|logout|register|forgot-password|verify|favicon|build).+"}, methods={"GET"})
      */
     public function homepage()
     {
