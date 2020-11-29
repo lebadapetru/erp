@@ -7,55 +7,39 @@ namespace App\Controller;
 use App\Service\RegisterService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/register")
+ */
 class RegisterController extends AbstractController
 {
     /**
-     * @Route ("/register", methods={"POST"})
+     * @Route ("", methods={"POST"})
      * @param Request $request
-     * @param RegisterService $registerService
+     * @param RegisterService $service
      * @return JsonResponse
      */
-    public function create(RegisterService $registerService)
+    public function create(Request $request, RegisterService $service)
     {
-        $registerService
-            ->validateRequest()
-            ->createAccount();
-
-        $registerService->sendVerificationEmail();
+        $service->register($request);
 
         return new JsonResponse('Your registration was successful', Response::HTTP_CREATED);
     }
 
     /**
-     * @Route ("/resend-verification-email", methods={"GET"})
-     * @param RegisterService $registerService
-     * @return JsonResponse
-     */
-    public function resendVerificationEmail(RegisterService $registerService)
-    {
-        $registerService->sendVerificationEmail();
-
-        return new JsonResponse('The verification email has been sent', Response::HTTP_OK);
-    }
-
-    /**
-     * @Route ("/verify/{id}/{token}", methods={"GET"})
+     * @Route ("/{id}/verify/{token}", methods={"GET"})
      * @param Request $request
-     * @param RegisterService $register
-     * @return JsonResponse
+     * @param RegisterService $service
+     * @return RedirectResponse
      */
-    public function verify(Request $request, RegisterService $register)
+    public function verify(Request $request, RegisterService $service)
     {
-        $routeParams = $request->attributes->get('_route_params');
-        $register->verifyEmail(
-            $routeParams['id'],
-            $routeParams['token'],
-        );
+        $service->verifyEmail($request);
 
-        return new JsonResponse('The email verification was successful', Response::HTTP_OK);
+        return new RedirectResponse('/');
     }
 }

@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Entity\User;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 /**
@@ -23,19 +24,23 @@ class UserHelper
      * @var GuardAuthenticatorHandler
      */
     private GuardAuthenticatorHandler $guardAuthenticatorHandler;
+    private Security $security;
 
     /**
      * UserHelper constructor.
      * @param LoginFormAuthenticator $loginFormAuthenticator
      * @param GuardAuthenticatorHandler $guardAuthenticatorHandler
+     * @param Security $security
      */
     public function __construct(
         LoginFormAuthenticator $loginFormAuthenticator,
-        GuardAuthenticatorHandler $guardAuthenticatorHandler
+        GuardAuthenticatorHandler $guardAuthenticatorHandler,
+        Security $security
     )
     {
         $this->loginFormAuthenticator = $loginFormAuthenticator;
         $this->guardAuthenticatorHandler = $guardAuthenticatorHandler;
+        $this->security = $security;
     }
 
     /**
@@ -45,6 +50,10 @@ class UserHelper
      */
     public function authenticateUser(User $user, Request $request, string $providerKey = 'main'): void
     {
+        if ($this->security->getUser()) {
+            return;
+        }
+
         $this->guardAuthenticatorHandler->authenticateUserAndHandleSuccess(
             $user,
             $request,

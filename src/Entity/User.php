@@ -60,7 +60,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private ?\DateTimeInterface$verified_at;
+    private ?\DateTimeInterface $verified_at;
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
@@ -192,7 +192,7 @@ class User implements UserInterface
         return $this->isActive;
     }
 
-    public function setActive(bool $isActive): self
+    public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
 
