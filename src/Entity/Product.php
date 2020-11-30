@@ -15,7 +15,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table("`products`")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
  */
-class Products
+class Product
 {
     /**
      * @ORM\Id

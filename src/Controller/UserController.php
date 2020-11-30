@@ -15,11 +15,11 @@ class UserController
 {
 
     /**
-     * @Route ("/{id}/resend-verification-email", methods={"GET"})
+     * @Route ("/{id}/send-verification-email", methods={"GET"})
      * @param RegisterService $service
      * @return JsonResponse
      */
-    public function resendVerificationEmail(RegisterService $service)
+    public function sendVerificationEmail(RegisterService $service)
     {
         $service->sendVerificationEmail();
 

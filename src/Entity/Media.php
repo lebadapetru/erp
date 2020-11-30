@@ -77,7 +77,7 @@ class Media
     private $createdAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Products::class, mappedBy="media")
+     * @ORM\ManyToMany(targetEntity=Product::class, mappedBy="media")
      */
     private $products;
 
@@ -212,14 +212,14 @@ class Media
     }
 
     /**
-     * @return Collection|Products[]
+     * @return Collection|Product[]
      */
     public function getProducts(): Collection
     {
         return $this->products;
     }
 
-    public function addProduct(Products $product): self
+    public function addProduct(Product $product): self
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
@@ -229,7 +229,7 @@ class Media
         return $this;
     }
 
-    public function removeProduct(Products $product): self
+    public function removeProduct(Product $product): self
     {
         if ($this->products->contains($product)) {
             $this->products->removeElement($product);

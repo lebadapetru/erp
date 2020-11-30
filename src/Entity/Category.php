@@ -13,7 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table("`categories`")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
  */
-class Categories
+class Category
 {
     /**
      * @ORM\Id
