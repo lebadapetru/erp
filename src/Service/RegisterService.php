@@ -28,6 +28,7 @@ class RegisterService
     private ParameterBagInterface $parameterBag;
     private UserHelper $userHelper;
     private Security $security;
+    private EmailTokenService $emailTokenService;
 
     public function __construct(
         ValidatorInterface $validator,
@@ -36,7 +37,8 @@ class RegisterService
         ParameterBagInterface $parameterBag,
         MailerInterface $mailer,
         UserHelper $userHelper,
-        Security $security
+        Security $security,
+        EmailTokenService $emailTokenService
     )
     {
         $this->validator = $validator;
@@ -46,14 +48,24 @@ class RegisterService
         $this->mailer = $mailer;
         $this->userHelper = $userHelper;
         $this->security = $security;
+        $this->emailTokenService = $emailTokenService;
     }
 
     public function register(Request $request)
     {
-        $this->validateRequest($request);
-        $this->createAccount($request);
+        $this->entityManager->getConnection()->beginTransaction(); // suspend auto-commit
+        try {
+            $this->validateRequest($request);
+            $this->createAccount($request);
 
-        $this->sendVerificationEmail();
+            $this->sendVerificationEmail();
+
+            $this->entityManager->getConnection()->commit();
+        } catch (\Exception $e) {
+            $this->entityManager->getConnection()->rollBack();
+            throw $e;
+            /*TODO logs*/
+        }
     }
 
     public function validateRequest(Request $request)
@@ -153,8 +165,9 @@ class RegisterService
             throw new ConflictHttpException('The account was already verified');
         }
 
-        $token = $this->generateToken($user);
-        $url = $this->parameterBag->get('app.url') . 'register/' . $user->getId() . '/verify/' . $token;
+        $tokenEntity = $this->emailTokenService->generateToken($user);
+        $url = $this->parameterBag->get('app.url') . 'register/' . $user->getId() . '/verify/' . $tokenEntity->getToken();
+        /*TODO create mail templates*/
         $email = (new Email())
             ->from('hello@example.com')
             ->to($user->getEmail())
@@ -167,7 +180,6 @@ class RegisterService
             ->html('<a href="' . $url . '">See Twig integration for better HTML integration!</a>');
 
         $this->mailer->send($email);
-        dd($token);
     }
 
     public function verifyEmail(Request $request)
@@ -185,7 +197,7 @@ class RegisterService
             throw new ConflictHttpException('The account was already verified');
         }
 
-        if (!$this->isTokenValid($token, $user)) {
+        if (!$this->emailTokenService->isTokenValid($token, $user)) {
             throw new NotFoundHttpException();
         }
 
@@ -196,33 +208,5 @@ class RegisterService
         $this->entityManager->flush();
 
         $this->userHelper->authenticateUser($user, $request);
-    }
-
-    public function isTokenValid(string $token, User $user): bool
-    {
-        dump($token);
-        dump($this->generateToken($user));
-        dd($token === $this->generateToken($user));
-        if ($token !== $this->generateToken($user)) {
-            return false;
-        }
-
-        return false;
-    }
-
-    public function generateToken(User $user): string /*TODO upgrade to php8 and use typehint union for UserInterface*/
-    {
-        /*TODO too risky to do it like this, create a token independent of any sensitive data and store it in a table*/
-        $password = $user->getPassword();
-        $password = substr($password, strpos($password, ',p=') + 3, 15);
-        $email = $user->getEmail();
-
-        return str_replace(
-            '/',
-            '',
-            crypt(
-                substr($password, strpos($password, ',p=') + 3, 15) . $email
-            ),
-        );
     }
 }

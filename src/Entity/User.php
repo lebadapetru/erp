@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -89,10 +88,16 @@ class User implements UserInterface
      */
     private $groups;
 
+    /**
+     * @ORM\OneToMany(targetEntity=EmailToken::class, mappedBy="user")
+     */
+    private $emailTokens;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
         $this->groups = new ArrayCollection();
+        $this->emailTokens = new ArrayCollection();
     }
 
     /**
@@ -305,6 +310,36 @@ class User implements UserInterface
         if ($this->groups->contains($group)) {
             $this->groups->removeElement($group);
             $group->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|EmailToken[]
+     */
+    public function getEmailTokens(): Collection
+    {
+        return $this->emailTokens;
+    }
+
+    public function addEmailToken(EmailToken $emailTokens): self
+    {
+        if (!$this->emailTokens->contains($emailTokens)) {
+            $this->emailTokens[] = $emailTokens;
+            $emailTokens->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmailTokens(EmailToken $emailTokens): self
+    {
+        if ($this->emailTokens->removeElement($emailTokens)) {
+            // set the owning side to null (unless already changed)
+            if ($emailTokens->getUser() === $this) {
+                $emailTokens->setUser(null);
+            }
         }
 
         return $this;

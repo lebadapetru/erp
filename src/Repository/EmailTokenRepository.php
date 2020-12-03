@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\EmailToken;
+use Carbon\Carbon;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -20,7 +21,7 @@ class EmailTokenRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return EmailVerification[] Returns an array of EmailVerification objects
+    //  * @return EmailToken[] Returns an array of EmailToken objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +38,7 @@ class EmailTokenRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?EmailVerification
+    public function findOneBySomeField($value): ?EmailToken
     {
         return $this->createQueryBuilder('e')
             ->andWhere('e.exampleField = :val')
@@ -47,4 +48,17 @@ class EmailTokenRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getActiveToken(string $token, int $userId, int $expires = 600): ?EmailToken
+    {
+        $emailTokenEntity =  $this->createQueryBuilder('e')
+            ->andWhere('e.token = :token')
+            ->setParameters([
+                'token' => $token,
+            ])
+            ->getQuery()
+            ->getResult();
+
+        dd($emailTokenEntity->filter());
+    }
 }

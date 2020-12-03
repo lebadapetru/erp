@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\EmailTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=EmailTokenRepository::class)
@@ -20,9 +20,9 @@ class EmailToken
     private int $id;
 
     /**
-     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\Column(type="string", unique=true)
      */
-    private Uuid $token;
+    private string $token;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -30,9 +30,16 @@ class EmailToken
     private ?\DateTimeInterface $expiredAt;
 
     /**
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
     private \DateTimeInterface $createdAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="emailTokens")
+     * ! `user` is a reserved keyword and isn't allowed in relations
+     */
+    private $user;
 
     public function getId(): ?int
     {
@@ -44,7 +51,7 @@ class EmailToken
         return $this->token;
     }
 
-    public function setToken(Uuid $token): self
+    public function setToken(string $token): self
     {
         $this->token = $token;
 
@@ -71,6 +78,18 @@ class EmailToken
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
