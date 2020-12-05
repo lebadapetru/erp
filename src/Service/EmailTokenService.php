@@ -12,7 +12,7 @@ use Ramsey\Uuid\Uuid;
 class EmailTokenService
 {
     private EntityManagerInterface $entityManager;
-    private int $expire = 60;
+    private int $expire = 600;
 
     public function __construct(
         EntityManagerInterface $entityManager
@@ -36,9 +36,14 @@ class EmailTokenService
 
     public function isTokenValid(string $token, User $user): bool
     {
-        $tokenEntity = $user->getEmailTokens()->first();
+        $tokenEntity = $this->entityManager
+            ->getRepository(EmailToken::class)
+            ->getActiveToken($token, $user->getId());
 
-        dd($tokenEntity);
+        if  ($tokenEntity) {
+            return true;
+        }
+
         return false;
     }
 }

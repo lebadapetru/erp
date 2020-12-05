@@ -8,6 +8,7 @@ use App\Entity\User;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
@@ -208,5 +209,7 @@ class RegisterService
         $this->entityManager->flush();
 
         $this->userHelper->authenticateUser($user, $request);
+
+        return new RedirectResponse('/');
     }
 }

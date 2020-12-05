@@ -46,6 +46,10 @@ export default {
       type: String,
       default: '',
     },
+    rules: {
+      type: Object,
+      default: undefined
+    }
   },
   setup(props) {
     const {
@@ -54,7 +58,7 @@ export default {
       handleBlur,
       handleChange,
       meta,
-    } = useField(props.name, undefined, {
+    } = useField(props.name, props.rules, {
       initialValue: props.value,
     });
 

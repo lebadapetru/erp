@@ -17,16 +17,12 @@ const store = createStore({
   },
   mutations: {
     setActiveSection(state, form = 'login') {
-      console.log('set')
       state.activeSection = form
     }
   },
   strict: debug,
   plugins: debug ? [createLogger()] : []
 })
-
-console.log(store)
-console.log('init')
 
 createApp(LoginPage)
   //.use(httpClient)

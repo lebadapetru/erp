@@ -1,7 +1,8 @@
 <template>
   <!--begin::Login-->
   <div class="login login-5 login-signin-on d-flex flex-row-fluid" id="kt_login">
-    <div class="d-flex flex-center bgi-size-cover bgi-no-repeat flex-row-fluid" style="background-image: url(build/media/bg/bg-2.jpg);">
+    <div class="d-flex flex-center bgi-size-cover bgi-no-repeat flex-row-fluid"
+         style="background-image: url(build/media/bg/bg-2.jpg);">
       <div class="login-form text-center text-white p-7 position-relative overflow-hidden">
         <!--begin::Login Header-->
         <div class="d-flex flex-center mb-15">
@@ -10,8 +11,9 @@
           </a>
         </div>
         <!--end::Login Header-->
-      <LoginSection />
-      <RegisterSection />
+        <LoginSection />
+        <RegisterSection />
+        <ForgotPasswordSection />
       </div>
     </div>
   </div>
@@ -21,12 +23,14 @@
 <script>
 import LoginSection from "resources/pages/login/LoginSection";
 import RegisterSection from "resources/pages/login/RegisterSection";
+import ForgotPasswordSection from "resources/pages/login/ForgotPasswordSection";
 
 export default {
   name: "LoginPage",
   components: {
     LoginSection,
-    RegisterSection
+    RegisterSection,
+    ForgotPasswordSection
   }
 }
 </script>

@@ -21,7 +21,12 @@
           <Field type="checkbox" name="_remember_me" as="input" value="true"/>
           <span></span>Remember me</label>
       </div>
-      <a href="javascript:;" id="kt_login_forgot" class="text-white font-weight-bold">Forget Password ?</a>
+      <a
+        href="javascript:;"
+        id="kt_login_forgot"
+        class="text-white font-weight-bold"
+        @click="showForgotPasswordSection"
+      >Forgot Password ?</a>
     </div>
     <div class="form-group text-center mt-10">
       <button id="kt_login_signin_submit" class="btn btn-pill btn-primary opacity-90 px-15 py-3" type="submit">Sign In
@@ -35,6 +40,7 @@ import { Form, Field} from 'vee-validate'
 import EmailInput from "./inputs/EmailInput";
 import PasswordInput from "./inputs/PasswordInput";
 import { object, string } from 'yup'
+import { useStore } from "vuex";
 
 export default {
   name: "LoginForm",
@@ -45,6 +51,8 @@ export default {
     PasswordInput
   },
   setup() {
+    const store = useStore()
+
     const schema = object().shape({
       email: string().required('Email address is required').email('Email address is invalid'),
       password: string().required('Password is required').min(8).max(128),
@@ -57,7 +65,8 @@ export default {
 
     return {
       schema,
-      onSubmit
+      onSubmit,
+      showForgotPasswordSection: () => store.commit('setActiveSection', 'forgot-password')
     }
   }
 }

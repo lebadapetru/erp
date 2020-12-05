@@ -1,8 +1,8 @@
 <template>
   <!--begin::Login Sign in form-->
   <div
-      v-if="activeSection === 'login'"
-      class="login-signin"
+    v-if="activeSection === 'login'"
+    class="login-signin"
   >
     <div class="mb-20">
       <h3 class="opacity-40 font-weight-normal">Sign In To Admin</h3>
@@ -11,8 +11,12 @@
     <LoginForm />
     <div class="mt-10">
       <span class="opacity-40 mr-4">Don't have an account yet?</span>
-      <a href="javascript:;" @click="showRegisterSection" id="kt_login_signup"
-         class="text-white opacity-30 font-weight-normal">Sign Up</a>
+      <a
+        href="javascript:;"
+        @click="showRegisterSection"
+        id="kt_login_signup"
+        class="text-white opacity-30 font-weight-normal"
+      >Sign Up</a>
     </div>
   </div>
   <!--end::Login Sign in form-->

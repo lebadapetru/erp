@@ -49,16 +49,25 @@ class EmailTokenRepository extends ServiceEntityRepository
     }
     */
 
-    public function getActiveToken(string $token, int $userId, int $expires = 600): ?EmailToken
+    public function getActiveToken(string $token, int $userId, int $expires = 600): string
     {
-        $emailTokenEntity =  $this->createQueryBuilder('e')
-            ->andWhere('e.token = :token')
-            ->setParameters([
-                'token' => $token,
-            ])
-            ->getQuery()
-            ->getResult();
+        $conn = $this->getEntityManager()
+            ->getConnection();
 
-        dd($emailTokenEntity->filter());
+        $sql = '
+            SELECT token 
+            FROM email_tokens 
+            WHERE token = :token 
+            AND user_id = :userId
+            AND created_at < (created_at + INTERVAL \'' . round($expires / 60) . ' minutes\')
+            ';
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            'token' => $token,
+            'userId' => $userId,
+        ]);
+
+        return $stmt->fetchOne();
     }
 }

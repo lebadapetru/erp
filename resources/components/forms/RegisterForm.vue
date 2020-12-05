@@ -1,47 +1,47 @@
 <template>
   <Form
-      class="form text-center"
-      id="kt_login_signup_form"
-      @submit="onSubmit"
-      :validation-schema="schema"
+    class="form text-center"
+    id="kt_login_signup_form"
+    @submit="onSubmit"
+    :validation-schema="schema"
   >
     <div class="row">
       <div class="col">
         <div class="form-group">
           <TextInput
-              style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
-              placeholder="First name"
-              name="firstName"
-              autocomplete="given-name"
+            style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+            placeholder="First name"
+            name="firstName"
+            autocomplete="given-name"
           />
         </div>
       </div>
       <div class="col">
         <div class="form-group">
           <TextInput
-              style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
-              placeholder="Last name"
-              name="lastName"
-              autocomplete="family-name"
+            style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+            placeholder="Last name"
+            name="lastName"
+            autocomplete="family-name"
           />
         </div>
       </div>
     </div>
     <div class="form-group">
       <EmailInput
-          style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+        style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
       />
     </div>
     <div class="form-group">
       <PasswordInput
-          style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+        style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
       />
     </div>
     <div class="form-group">
       <PasswordInput
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+        name="confirmPassword"
+        placeholder="Confirm Password"
+        style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
       />
     </div>
     <div class="form-group px-8">
@@ -56,9 +56,11 @@
     </div>
     <div class="form-group">
       <button id="kt_login_signup_submit" class="btn btn-pill btn-primary opacity-90 px-15 py-3 m-2">Sign Up</button>
-      <a @click="showLoginSection" id="kt_login_signup_cancel"
-         class="btn btn-pill btn-outline-white opacity-70 px-15 py-3 m-2">Cancel
-      </a>
+      <a
+        @click="showLoginSection"
+        id="kt_login_signup_cancel"
+        class="btn btn-pill btn-outline-white opacity-70 px-15 py-3 m-2"
+      >Cancel</a>
     </div>
   </Form>
 </template>
