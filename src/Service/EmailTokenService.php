@@ -6,19 +6,23 @@ namespace App\Service;
 
 use App\Entity\EmailToken;
 use App\Entity\User;
+use App\Repository\EmailTokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 
 class EmailTokenService
 {
     private EntityManagerInterface $entityManager;
+    private EmailTokenRepository $emailTokenRepository;
     private int $expire = 600;
 
     public function __construct(
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        EmailTokenRepository $emailTokenRepository
     )
     {
         $this->entityManager = $entityManager;
+        $this->emailTokenRepository = $emailTokenRepository;
     }
 
     /*TODO upgrade to php8 and use typehint union for UserInterface*/
@@ -32,18 +36,5 @@ class EmailTokenService
         $this->entityManager->flush();
 
         return $token;
-    }
-
-    public function isTokenValid(string $token, User $user): bool
-    {
-        $tokenEntity = $this->entityManager
-            ->getRepository(EmailToken::class)
-            ->getActiveToken($token, $user->getId());
-
-        if  ($tokenEntity) {
-            return true;
-        }
-
-        return false;
     }
 }

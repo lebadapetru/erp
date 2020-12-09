@@ -124,7 +124,7 @@ export default {
       httpClient.post('/register', values).then(async (response) => {
         console.log(response)
         await Swal.fire({
-          text: 'Your registration was successful',
+          text: response.data,
           icon: "success",
           buttonsStyling: false,
           confirmButtonText: "Ok, got it!",
@@ -132,6 +132,8 @@ export default {
             confirmButton: "btn font-weight-bold btn-light-primary"
           },
           heightAuto: false
+        }).then(() => {
+          window.location = '/'
         })
       })
     }

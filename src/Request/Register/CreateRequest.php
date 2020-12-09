@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Request\User;
+namespace App\Request\Register;
 
 
 use App\Request\BaseRequest;
@@ -41,7 +41,7 @@ class CreateRequest extends BaseRequest
             'confirmPassword' => [
                 new Assert\NotBlank(),
                 new Assert\IdenticalTo([
-                    'value' => $this->request->request->get('password'),
+                    'value' => $this->getRequest()->request->get('password'),
                     'message' => 'Passwords do not match.'
                 ])
             ],

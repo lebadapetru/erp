@@ -13,8 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 abstract class BaseRequest
 {
-    protected ?Request $request;
-    protected ValidatorInterface $validator;
+    private ?Request $request;
+    private ValidatorInterface $validator;
 
     public function __construct(
         RequestStack $requestStack,
@@ -55,13 +55,18 @@ abstract class BaseRequest
         );
     }
 
-    protected function getData()
+    protected function getData(): array
     {
         return $this->request->request->all();
     }
 
-    protected function getRules()
+    protected function getRules(): array
     {
         return $this->rules();
+    }
+
+    public function getRequest(): ?Request
+    {
+        return $this->request;
     }
 }
