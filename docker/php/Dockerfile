@@ -7,6 +7,13 @@ FROM php:7.4-fpm-alpine as base
 
 WORKDIR /var/www/erp
 
+RUN apk update && apk add build-base
+
+#configure timezone
+RUN apk --no-cache add tzdata
+RUN cp /usr/share/zoneinfo/Europe/Athens /etc/localtime
+RUN echo "Europe/Athens" > /etc/timezone
+
 #enable repository packages
 #RUN echo http://dl-cdn.alpinelinux.org/alpine/v$(cat /etc/alpine-release | cut -d'.' -f1,2)/community >> /etc/apk/repositories
 #install usermod

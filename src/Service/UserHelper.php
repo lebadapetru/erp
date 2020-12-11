@@ -126,9 +126,9 @@ class UserHelper
 
             //remove email verification token after success
             $this->entityManager->remove($token);
+            $this->entityManager->flush();
 
             $this->authenticateUser($user, $request);
-
 
             $this->entityManager->getConnection()->commit();
         } catch (\Exception $e) {
