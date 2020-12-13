@@ -54,7 +54,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="boolean")
      */
-    private bool $isActive = false;
+    private bool $isActive = true;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)

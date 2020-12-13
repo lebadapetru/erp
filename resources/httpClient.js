@@ -1,5 +1,6 @@
 import axios from 'axios'
-//import NProgress from 'nprogress' /*TODO vue3 progress bar.. remove this*/
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 import Swal from 'sweetalert2'
 
 let token = document.head.querySelector('meta[name="csrf-token"]')
@@ -15,7 +16,7 @@ const httpClient = axios.create({
 })
 
 httpClient.interceptors.request.use(function (config) {
-  //NProgress.start()
+  NProgress.start()
   console.log(config)
 
   return config;
@@ -26,12 +27,14 @@ httpClient.interceptors.request.use(function (config) {
 });
 
 httpClient.interceptors.response.use(function (response) {
-  //NProgress.done()
+  NProgress.done()
   //handleResponse(response)
+  console.log(response)
 
   return response;
 }, function (error) {
-  //NProgress.done()
+  NProgress.done()
+  console.log(error.response)
   handleResponse(error.response)
 
   return Promise.reject(error);
@@ -46,7 +49,7 @@ function handleResponse(response){
   }
 
   Swal.fire({
-    text: response.data.message,
+    text: response.data.detail,
     icon: "error",
     buttonsStyling: false,
     confirmButtonText: "Ok, got it!",

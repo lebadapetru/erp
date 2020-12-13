@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     /**
-     * @Route("/", name="app_base", methods={"GET"})
+     * @Route("/", name="app_main", methods={"GET"})
      * @Route(
      *     "/{route}",
      *     name="vue_pages",

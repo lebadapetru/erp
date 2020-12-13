@@ -25,11 +25,6 @@ class EmailToken
     private string $token;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private ?\DateTimeInterface $expiredAt;
-
-    /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
@@ -54,18 +49,6 @@ class EmailToken
     public function setToken(string $token): self
     {
         $this->token = $token;
-
-        return $this;
-    }
-
-    public function getExpiredAt(): ?\DateTimeInterface
-    {
-        return $this->expiredAt;
-    }
-
-    public function setExpiredAt(?\DateTimeInterface $expiredAt): self
-    {
-        $this->expiredAt = $expiredAt;
 
         return $this;
     }

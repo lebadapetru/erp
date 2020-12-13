@@ -117,8 +117,6 @@ class UserHelper
                 throw new NotFoundHttpException(); //TODO maybe a token has expired exception?
             }
 
-            //activate user
-            $user->setIsActive(true);
             $user->setVerifiedAt(Carbon::now());
 
             $this->entityManager->persist($user);

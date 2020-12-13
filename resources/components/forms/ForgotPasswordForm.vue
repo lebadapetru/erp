@@ -40,9 +40,9 @@ export default {
     const store = useStore()
 
     function onSubmit(values) {
-      httpClient.post('/forgot-password', values).then(async (response) => {
+      httpClient.post('/forgot-password', values).then((response) => {
         console.log(response)
-        await Swal.fire({
+        Swal.fire({
           text: 'An email containing the password reset link has been sent to you',
           icon: "info",
           buttonsStyling: false,

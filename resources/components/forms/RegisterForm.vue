@@ -121,9 +121,8 @@ export default {
     }
 
     function onSubmit(values) {
-      httpClient.post('/register', values).then(async (response) => {
-        console.log(response)
-        await Swal.fire({
+      httpClient.post('/register', values).then((response) => {
+        Swal.fire({
           text: response.data,
           icon: "success",
           buttonsStyling: false,

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Request\Register;
+namespace App\Request\User;
 
 
 use App\Request\BaseRequest;

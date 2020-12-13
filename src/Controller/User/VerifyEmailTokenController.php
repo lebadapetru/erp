@@ -4,7 +4,7 @@
 namespace App\Controller\User;
 
 
-use App\Request\Register\VerifyRequest;
+use App\Request\User\VerifyRequest;
 use App\Service\UserHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -17,6 +17,7 @@ class VerifyEmailTokenController extends AbstractController
      * @param VerifyRequest $request
      * @param UserHelper $userHelper
      * @return RedirectResponse
+     * @throws \Exception
      */
     public function execute(VerifyRequest $request, UserHelper $userHelper): RedirectResponse
     {

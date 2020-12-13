@@ -4,9 +4,8 @@
 namespace App\Controller\User;
 
 
-use App\Request\Register\CreateRequest;
+use App\Request\User\RegisterRequest;
 use App\Service\RegisterService;
-use App\Service\UserHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,12 +16,12 @@ class RegisterController extends AbstractController
 {
     /**
      * @Route ("/register", methods={"POST"})
-     * @param CreateRequest $request
+     * @param RegisterRequest $request
      * @param RegisterService $service
      * @return JsonResponse
      * @throws \Exception
      */
-    public function execute(CreateRequest $request, RegisterService $service): JsonResponse
+    public function execute(RegisterRequest $request, RegisterService $service): JsonResponse
     {
         $service->register(
             $request->getRequest()

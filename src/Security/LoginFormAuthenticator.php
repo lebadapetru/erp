@@ -42,13 +42,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    public function supports(Request $request)
+    public function supports(Request $request): bool
     {
         return self::LOGIN_ROUTE === $request->attributes->get('_route')
             && $request->isMethod('POST');
     }
 
-    public function getCredentials(Request $request)
+    public function getCredentials(Request $request): array
     {
         $credentials = [
             'email' => $request->request->get('email'),
@@ -63,9 +63,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         return $credentials;
     }
 
-    public function getUser($credentials, UserProviderInterface $userProvider)
+    public function getUser($credentials, UserProviderInterface $userProvider): User
     {
-        dd('wtf2');
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
@@ -78,20 +77,20 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
                 'email' => $credentials['email']
             ]);
 
-        if (!$user || !$user->isActive()) {
+        if (!$user) {
             // fail authentication with a custom error
-            //throw new NotFoundHttpException('User could not be found.');
+            throw new NotFoundHttpException('User could not be found.');
         }
-        dd($user);
+
         return $user;
     }
 
-    public function checkCredentials($credentials, UserInterface $user)
+    public function checkCredentials($credentials, UserInterface $user): bool
     {
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): JsonResponse
     {
         $data = [
             // you may want to customize or obfuscate the message first
@@ -105,10 +104,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): JsonResponse
     {
         return new JsonResponse([
-            'Authenticated'
+            'detail' => 'Authenticated'
         ], Response::HTTP_OK);
 
         /*if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
@@ -119,7 +118,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
-    protected function getLoginUrl()
+    protected function getLoginUrl(): string
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }

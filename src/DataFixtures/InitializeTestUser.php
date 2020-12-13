@@ -8,6 +8,7 @@ use App\Entity\Permission;
 use App\Entity\Role;
 use App\Entity\Service;
 use App\Entity\User;
+use Carbon\Carbon;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -220,7 +221,7 @@ class InitializeTestUser extends Fixture
         $userEntity->setLastName('Administrator');
         $userEntity->setEmail('admin@admin.com');
         $userEntity->setIsActive(true);
-        $userEntity->setVerifiedAt(new \DateTime()); /*TODO add carbon or some DT lib*/
+        $userEntity->setVerifiedAt(Carbon::now()); /*TODO add carbon or some DT lib*/
         $userEntity->setPassword($this->passwordEncoder->encodePassword(
             $userEntity,
             'admin123'
@@ -253,7 +254,7 @@ class InitializeTestUser extends Fixture
         $userEntity->setLastName('Doe');
         $userEntity->setEmail('user@user.com');
         $userEntity->setIsActive(true);
-        $userEntity->setVerifiedAt(new \DateTime());
+        $userEntity->setVerifiedAt(Carbon::now());
         $userEntity->setPassword($this->passwordEncoder->encodePassword(
             $userEntity,
             'user123'

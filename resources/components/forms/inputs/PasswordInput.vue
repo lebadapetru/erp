@@ -58,9 +58,6 @@ export default {
       initialValue: props.value,
     });
 
-
-    console.log(errorMessage)
-
     return {
       handleChange,
       errorMessage,

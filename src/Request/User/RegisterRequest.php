@@ -1,13 +1,13 @@
 <?php
 
 
-namespace App\Request\Register;
+namespace App\Request\User;
 
 
 use App\Request\BaseRequest;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CreateRequest extends BaseRequest
+class RegisterRequest extends BaseRequest
 {
     public function rules(): array
     {

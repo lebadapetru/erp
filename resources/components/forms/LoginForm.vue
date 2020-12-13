@@ -18,14 +18,14 @@
     <div class="form-group d-flex flex-wrap justify-content-between align-items-center px-8 opacity-60">
       <div class="checkbox-inline">
         <label class="checkbox checkbox-outline checkbox-white text-white m-0">
-          <Field type="checkbox" name="_remember_me" as="input" value="true"/>
+          <Field type="checkbox" name="_remember_me" as="input" value="true" />
           <span></span>Remember me</label>
       </div>
       <a
-        href="javascript:;"
-        id="kt_login_forgot"
-        class="text-white font-weight-bold"
-        @click="showForgotPasswordSection"
+          href="javascript:;"
+          id="kt_login_forgot"
+          class="text-white font-weight-bold"
+          @click="showForgotPasswordSection"
       >Forgot Password ?</a>
     </div>
     <div class="form-group text-center mt-10">
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { Form, Field} from 'vee-validate'
+import { Form, Field } from 'vee-validate'
 import EmailInput from "./inputs/EmailInput";
 import PasswordInput from "./inputs/PasswordInput";
 import { object, string } from 'yup'
@@ -57,9 +57,10 @@ export default {
       email: string().required('Email address is required').email('Email address is invalid'),
       password: string().required('Password is required').min(8).max(128),
     });
+
     function onSubmit(values) {
       httpClient.post('/login', values).then(() => {
-        window.location.href = '/';
+         window.location.href = '/';
       })
     }
 
