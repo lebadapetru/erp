@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App\Controller\User;
+namespace App\Controller\Security;
 
 
 use App\Request\User\RegisterRequest;
-use App\Service\RegisterService;
+use App\Security\RegisterService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

@@ -1,12 +1,11 @@
 <?php
 
 
-namespace App\Service;
+namespace App\Security;
 
 
 use App\Entity\EmailToken;
 use App\Entity\User;
-use App\Security\LoginFormAuthenticator;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -15,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
@@ -23,7 +22,7 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
  * Class UserHelper
  * @package App\Service
  */
-class UserHelper
+class SecurityHelper
 {
     /**
      * @var LoginFormAuthenticator
@@ -37,7 +36,7 @@ class UserHelper
     private EntityManagerInterface $entityManager;
     private ParameterBagInterface $parameterBag;
     private MailerInterface $mailer;
-    private EmailTokenService $emailTokenService;
+    private UserPasswordEncoderInterface $passwordEncoder;
 
     /**
      * UserHelper constructor.
@@ -47,7 +46,7 @@ class UserHelper
      * @param EntityManagerInterface $entityManager
      * @param ParameterBagInterface $parameterBag
      * @param MailerInterface $mailer
-     * @param EmailTokenService $emailTokenService
+     * @param UserPasswordEncoderInterface $passwordEncoder
      */
     public function __construct(
         LoginFormAuthenticator $loginFormAuthenticator,
@@ -56,7 +55,7 @@ class UserHelper
         EntityManagerInterface $entityManager,
         ParameterBagInterface $parameterBag,
         MailerInterface $mailer,
-        EmailTokenService $emailTokenService
+        UserPasswordEncoderInterface $passwordEncoder
     )
     {
         $this->loginFormAuthenticator = $loginFormAuthenticator;
@@ -65,7 +64,7 @@ class UserHelper
         $this->entityManager = $entityManager;
         $this->parameterBag = $parameterBag;
         $this->mailer = $mailer;
-        $this->emailTokenService = $emailTokenService;
+        $this->passwordEncoder = $passwordEncoder;
     }
 
     /**
@@ -92,7 +91,7 @@ class UserHelper
     {
         $this->entityManager->getConnection()->beginTransaction();
         try {
-
+            /** @var $user User */
             $user = $this->entityManager
                 ->getRepository(User::class)
                 ->find(
@@ -102,7 +101,7 @@ class UserHelper
             if (!$user) {
                 throw new NotFoundHttpException();
             }
-            if ($user->isActive()) {
+            if ($user->isVerified()) {
                 throw new ConflictHttpException('The account was already verified');
             }
 
@@ -119,11 +118,10 @@ class UserHelper
 
             $user->setVerifiedAt(Carbon::now());
 
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
+            //remove all user's tokens after success
+            $user->getEmailTokens()->clear();
 
-            //remove email verification token after success
-            $this->entityManager->remove($token);
+            $this->entityManager->persist($user);
             $this->entityManager->flush();
 
             $this->authenticateUser($user, $request);
@@ -138,28 +136,9 @@ class UserHelper
         return new RedirectResponse('/');
     }
 
-
-    public function sendVerificationEmail(): void
+    public function getUser(): \Symfony\Component\Security\Core\User\UserInterface
     {
-        $user = $this->security->getUser();
-        if (!$user || !($user instanceof User)) {
-            throw new NotFoundHttpException();
-        }
-
-        if ($user->isActive()) {
-            throw new ConflictHttpException('The account was already verified');
-        }
-
-        $tokenEntity = $this->emailTokenService->generateToken($user);
-        $url = $this->parameterBag->get('app.url') . 'register/' . $user->getId() . '/verify/' . $tokenEntity->getToken();
-        /*TODO create mail templates & dispatch an event*/
-        $email = (new Email())
-            ->from('hello@example.com')
-            ->to($user->getEmail())
-            ->subject('Time for Symfony Mailer!')
-            ->text('Sending emails is fun again! ')
-            ->html('<a href="' . $url . '">See Twig integration for better HTML integration!</a>');
-
-        $this->mailer->send($email);
+        return $this->security->getUser();
     }
+
 }

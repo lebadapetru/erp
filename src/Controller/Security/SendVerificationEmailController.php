@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\Controller\User;
+namespace App\Controller\Security;
 
 
-use App\Service\UserHelper;
+use App\Security\RegisterService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,12 +14,12 @@ class SendVerificationEmailController extends AbstractController
 {
     /**
      * @Route ("/send-verification-email", methods={"GET"})
-     * @param UserHelper $userHelper
+     * @param RegisterService $service
      * @return JsonResponse
      */
-    public function execute(UserHelper $userHelper): JsonResponse
+    public function execute(RegisterService $service): JsonResponse
     {
-        $userHelper->sendVerificationEmail();
+        $service->sendAccountVerificationEmail();
 
         return new JsonResponse('The verification email has been sent', Response::HTTP_OK);
     }

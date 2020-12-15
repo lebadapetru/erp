@@ -1,34 +1,29 @@
 <?php
 
 
-namespace App\Service;
+namespace App\Security;
 
 
-use App\Entity\EmailToken;
+use App\Entity\ForgotPasswordToken;
 use App\Entity\User;
-use App\Repository\EmailTokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 
-class EmailTokenService
+class ForgotPasswordService
 {
     private EntityManagerInterface $entityManager;
-    private EmailTokenRepository $emailTokenRepository;
-    private int $expire = 600;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
-        EmailTokenRepository $emailTokenRepository
+        EntityManagerInterface $entityManager
     )
     {
         $this->entityManager = $entityManager;
-        $this->emailTokenRepository = $emailTokenRepository;
     }
 
     /*TODO upgrade to php8 and use typehint union for UserInterface*/
-    public function generateToken(User $user): EmailToken
+    public function generateResetPasswordToken(User $user): ForgotPasswordToken
     {
-        $token = new EmailToken();
+        $token = new ForgotPasswordToken();
         $token->setToken(Uuid::uuid4()->toString());
         $token->setUser($user);
 

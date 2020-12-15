@@ -2,27 +2,27 @@
 
 namespace App\Entity;
 
-use App\Repository\EmailTokenRepository;
+use App\Repository\ForgotPasswordTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity(repositoryClass=EmailTokenRepository::class)
- * @ORM\Table("`email_tokens`")
+ * @ORM\Entity(repositoryClass=ForgotPasswordTokenRepository::class)
+ * @ORM\Table("`forgot_password_tokens`")
  */
-class EmailToken
+class ForgotPasswordToken
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private int $id;
+    private $id;
 
     /**
      * @ORM\Column(type="string", unique=true)
      */
-    private string $token;
+    private $token;
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -31,9 +31,8 @@ class EmailToken
     private \DateTimeInterface $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="emailTokens")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="forgotPasswordTokens")
      * @ORM\JoinColumn(nullable=false)
-     * ! `user` is a reserved keyword and isn't allowed in relations
      */
     private $user;
 
@@ -47,7 +46,7 @@ class EmailToken
         return $this->token;
     }
 
-    public function setToken(string $token): self
+    public function setToken($token): self
     {
         $this->token = $token;
 

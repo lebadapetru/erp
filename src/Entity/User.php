@@ -89,15 +89,21 @@ class User implements UserInterface
     private $groups;
 
     /**
-     * @ORM\OneToMany(targetEntity=EmailToken::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=EmailToken::class, mappedBy="user", orphanRemoval=true)
      */
     private $emailTokens;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ForgotPasswordToken::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $forgotPasswordTokens;
 
     public function __construct()
     {
         $this->roles = new ArrayCollection();
         $this->groups = new ArrayCollection();
         $this->emailTokens = new ArrayCollection();
+        $this->forgotPasswordTokens = new ArrayCollection();
     }
 
     /**
@@ -343,5 +349,40 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|ForgotPasswordToken[]
+     */
+    public function getForgotPasswordTokens(): Collection
+    {
+        return $this->forgotPasswordTokens;
+    }
+
+    public function addForgotPasswordToken(ForgotPasswordToken $forgotPasswordToken): self
+    {
+        if (!$this->forgotPasswordTokens->contains($forgotPasswordToken)) {
+            $this->forgotPasswordTokens[] = $forgotPasswordToken;
+            $forgotPasswordToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeForgotPasswordToken(ForgotPasswordToken $forgotPasswordToken): self
+    {
+        if ($this->forgotPasswordTokens->removeElement($forgotPasswordToken)) {
+            // set the owning side to null (unless already changed)
+            if ($forgotPasswordToken->getUser() === $this) {
+                $forgotPasswordToken->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return isset($this->verified_at);
     }
 }

@@ -4,6 +4,7 @@
 namespace App\Controller\User;
 
 
+use App\Request\User\ForgotPasswordRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,8 +14,10 @@ class ForgotPasswordController extends AbstractController
 {
     /**
      * @Route ("/forgot-password", methods={"POST"})
+     * @param ForgotPasswordRequest $request
+     * @return JsonResponse
      */
-    public function execute(): JsonResponse
+    public function execute(ForgotPasswordRequest $request): JsonResponse
     {
 
 

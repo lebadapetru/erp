@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App\Controller\User;
+namespace App\Controller\Security;
 
 
 use App\Request\User\VerifyRequest;
-use App\Service\UserHelper;
+use App\Security\SecurityHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,13 +15,13 @@ class VerifyEmailTokenController extends AbstractController
     /**
      * @Route ("/register/{id}/verify/{token}", methods={"GET"})
      * @param VerifyRequest $request
-     * @param UserHelper $userHelper
+     * @param SecurityHelper $securityHelper
      * @return RedirectResponse
      * @throws \Exception
      */
-    public function execute(VerifyRequest $request, UserHelper $userHelper): RedirectResponse
+    public function execute(VerifyRequest $request, SecurityHelper $securityHelper): RedirectResponse
     {
-        $userHelper->verifyEmailToken(
+        $securityHelper->verifyEmailToken(
             $request->getRequest()
         );
 
