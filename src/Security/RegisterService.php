@@ -8,93 +8,59 @@ use App\Entity\EmailToken;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class RegisterService
 {
     private EntityManagerInterface $entityManager;
     private UserPasswordEncoderInterface $passwordEncoder;
     private SecurityHelper $securityHelper;
+    private EventDispatcherInterface $dispatcher;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         UserPasswordEncoderInterface $passwordEncoder,
         SecurityHelper $securityHelper,
+        EventDispatcherInterface $dispatcher
     )
     {
         $this->entityManager = $entityManager;
         $this->passwordEncoder = $passwordEncoder;
         $this->securityHelper = $securityHelper;
+        $this->dispatcher = $dispatcher;
     }
 
-    public function register(Request $request)
-    {
-        $this->entityManager->getConnection()->beginTransaction();
-        try {
-            $this->createAccount($request);
-
-            $this->sendAccountVerificationEmail();
-
-            $this->entityManager->getConnection()->commit();
-        } catch (\Exception $e) {
-            $this->entityManager->getConnection()->rollBack();
-            throw $e;
-            /*TODO logs*/
-        }
-    }
-
-    public function createAccount(Request $request): User
+    public function createAccount(array $request): User
     {
         if (
         $this->entityManager
             ->getRepository(User::class)
-            ->findOneBy(['email' => $request->get('email')])
+            ->findOneBy(['email' => $request['email']])
         ) {
             throw new ConflictHttpException('The email address is already in use');
         }
 
         $user = new User();
-        $user->setFirstName($request->request->get('firstName'));
-        $user->setLastName($request->request->get('lastName'));
-        $user->setEmail($request->request->get('email'));
-        $user->setUsername($request->request->get('email'));
+        $user->setFirstName($request['firstName']);
+        $user->setLastName($request['lastName']);
+        $user->setEmail($request['email']);
+        $user->setUsername($request['email']);
         $user->setPassword(
             $this->passwordEncoder->encodePassword(
                 $user,
-                $request->request->get('password')
+                $request['password']
             )
         );
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $this->securityHelper->authenticateUser($user, $request);
-
         /*TODO maybe a welcome email*/
 
         return $user;
     }
-
-    public function sendAccountVerificationEmail(): void
-    {
-        $user = $this->securityHelper->getUser();
-        if (!$user || !($user instanceof User)) {
-            throw new NotFoundHttpException();
-        }
-
-        if ($user->isVerified()) {
-            throw new ConflictHttpException('The account was already verified');
-        }
-
-        $tokenEntity = $this->generateAccountVerificationToken($user);
-
-        /*TODO subscribe to user email event, sent token*/
-    }
-
 
     /*TODO upgrade to php8 and use typehint union for UserInterface*/
     public function generateAccountVerificationToken(User $user): EmailToken

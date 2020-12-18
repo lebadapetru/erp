@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EmailTokenRepository;
+use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -76,5 +77,15 @@ class EmailToken
         $this->user = $user;
 
         return $this;
+    }
+
+    public function isActive(): bool
+    {
+        $endDate = Carbon::parse($this->createdAt)->addMinutes(10);
+        if (Carbon::now()->lessThan($endDate)) {
+            return true;
+        }
+
+        return false;
     }
 }

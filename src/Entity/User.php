@@ -94,16 +94,16 @@ class User implements UserInterface
     private $emailTokens;
 
     /**
-     * @ORM\OneToMany(targetEntity=ForgotPasswordToken::class, mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=ResetPasswordToken::class, mappedBy="user", orphanRemoval=true)
      */
-    private $forgotPasswordTokens;
+    private $resetPasswordTokens;
 
     public function __construct()
     {
         $this->roles = new ArrayCollection();
         $this->groups = new ArrayCollection();
         $this->emailTokens = new ArrayCollection();
-        $this->forgotPasswordTokens = new ArrayCollection();
+        $this->resetPasswordTokens = new ArrayCollection();
     }
 
     /**
@@ -352,29 +352,29 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|ForgotPasswordToken[]
+     * @return Collection|ResetPasswordToken[]
      */
-    public function getForgotPasswordTokens(): Collection
+    public function getResetPasswordTokens(): Collection
     {
-        return $this->forgotPasswordTokens;
+        return $this->resetPasswordTokens;
     }
 
-    public function addForgotPasswordToken(ForgotPasswordToken $forgotPasswordToken): self
+    public function addResetPasswordToken(ResetPasswordToken $resetPasswordToken): self
     {
-        if (!$this->forgotPasswordTokens->contains($forgotPasswordToken)) {
-            $this->forgotPasswordTokens[] = $forgotPasswordToken;
-            $forgotPasswordToken->setUser($this);
+        if (!$this->resetPasswordTokens->contains($resetPasswordToken)) {
+            $this->resetPasswordTokens[] = $resetPasswordToken;
+            $resetPasswordToken->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeForgotPasswordToken(ForgotPasswordToken $forgotPasswordToken): self
+    public function removeResetPasswordToken(ResetPasswordToken $resetPasswordToken): self
     {
-        if ($this->forgotPasswordTokens->removeElement($forgotPasswordToken)) {
+        if ($this->resetPasswordTokens->removeElement($resetPasswordToken)) {
             // set the owning side to null (unless already changed)
-            if ($forgotPasswordToken->getUser() === $this) {
-                $forgotPasswordToken->setUser(null);
+            if ($resetPasswordToken->getUser() === $this) {
+                $resetPasswordToken->setUser(null);
             }
         }
 
@@ -384,5 +384,12 @@ class User implements UserInterface
     public function isVerified(): bool
     {
         return isset($this->verified_at);
+    }
+
+    public function getActiveEmailToken(): EmailToken
+    {
+        return $this->emailTokens->filter(function ($emailToken) {
+            return $emailToken->isActive();
+        })->first();
     }
 }

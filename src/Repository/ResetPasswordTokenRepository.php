@@ -2,21 +2,21 @@
 
 namespace App\Repository;
 
-use App\Entity\ForgotPasswordToken;
+use App\Entity\ResetPasswordToken;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ForgotPasswordToken|null find($id, $lockMode = null, $lockVersion = null)
- * @method ForgotPasswordToken|null findOneBy(array $criteria, array $orderBy = null)
- * @method ForgotPasswordToken[]    findAll()
- * @method ForgotPasswordToken[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ResetPasswordToken|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ResetPasswordToken|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ResetPasswordToken[]    findAll()
+ * @method ResetPasswordToken[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ForgotPasswordTokenRepository extends ServiceEntityRepository
+class ResetPasswordTokenRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ForgotPasswordToken::class);
+        parent::__construct($registry, ResetPasswordToken::class);
     }
 
     // /**

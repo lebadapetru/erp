@@ -47,7 +47,6 @@ security:
         # allow unauthenticated users to access the login form
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY  }
         - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY  }
-        - { path: ^/verify, roles: IS_AUTHENTICATED_ANONYMOUSLY  }
         - { path: ^/forgot-password, roles: IS_AUTHENTICATED_ANONYMOUSLY  }
 
         # but require authentication for all other routes

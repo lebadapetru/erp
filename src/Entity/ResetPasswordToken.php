@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\ForgotPasswordTokenRepository;
+use App\Repository\ResetPasswordTokenRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity(repositoryClass=ForgotPasswordTokenRepository::class)
- * @ORM\Table("`forgot_password_tokens`")
+ * @ORM\Entity(repositoryClass=ResetPasswordTokenRepository::class)
+ * @ORM\Table("`reset_password_tokens`")
  */
-class ForgotPasswordToken
+class ResetPasswordToken
 {
     /**
      * @ORM\Id
@@ -31,7 +31,7 @@ class ForgotPasswordToken
     private \DateTimeInterface $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="forgotPasswordTokens")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="resetPasswordTokens")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
