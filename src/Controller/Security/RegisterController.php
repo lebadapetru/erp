@@ -5,7 +5,7 @@ namespace App\Controller\Security;
 
 
 use App\Event\AccountCreatedEvent;
-use App\Request\User\RegisterRequest;
+use App\Request\Security\RegisterRequest;
 use App\Security\RegisterService;
 use App\Security\SecurityHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,14 +42,13 @@ class RegisterController extends AbstractController
             $securityHelper->authenticateUser($user, $request->getRequest());
 
             $dispatcher->dispatch(
-                new AccountCreatedEvent($this->getUser()),
-                AccountCreatedEvent::NAME
+                new AccountCreatedEvent($this->getUser())
             );
 
             $entityManager->getConnection()->commit();
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $entityManager->getConnection()->rollBack();
-            throw $e;
+            throw $exception;
             /*TODO logs*/
         }
 

@@ -6,12 +6,11 @@ namespace App\Controller\Security;
 
 use App\Entity\EmailToken;
 use App\Entity\User;
-use App\Request\User\VerifyRequest;
+use App\Request\Security\VerifyRequest;
 use App\Security\SecurityHelper;
 use Carbon\Carbon;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -42,7 +41,7 @@ class VerifyEmailTokenController extends AbstractController
                 throw new NotFoundHttpException();
             }
             if ($user->isVerified()) {
-                throw new ConflictHttpException('The account was already verified');
+                return new RedirectResponse('/');
             }
 
             $token = $entityManager

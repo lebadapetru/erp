@@ -5,25 +5,30 @@ namespace App\Controller\Security;
 
 
 use App\Entity\User;
-use App\Request\User\ForgotPasswordRequest;
-use App\Security\ForgotPasswordService;
+use App\Event\PasswordResetEvent;
+use App\Request\Security\ForgotPasswordRequest;
+use App\Security\SecurityHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class ForgotPasswordController extends AbstractController
+class ResetPasswordController extends AbstractController
 {
     /**
-     * @Route ("/forgot-password", methods={"POST"})
+     * @Route ("/reset-password", methods={"POST"})
      * @param ForgotPasswordRequest $request
-     * @param ForgotPasswordService $service
+     * @param SecurityHelper $securityHelper
+     * @param EventDispatcherInterface $dispatcher
      * @return JsonResponse
+     * @throws \Exception
      */
     public function execute(
         ForgotPasswordRequest $request,
-        ForgotPasswordService $service
+        SecurityHelper $securityHelper,
+        EventDispatcherInterface $dispatcher
     ): JsonResponse
     {
         $data = $request->all();
@@ -37,10 +42,13 @@ class ForgotPasswordController extends AbstractController
             throw new NotFoundHttpException('User could not be found.');
         }
 
+        $randomString = $securityHelper->resetPassword($user);
+
+        $dispatcher->dispatch(new PasswordResetEvent($user, $randomString));
 
         return new JsonResponse(
             'An email containing the password reset link has been sent to you',
-            Response::HTTP_CREATED
+            Response::HTTP_OK
         );
     }
 }

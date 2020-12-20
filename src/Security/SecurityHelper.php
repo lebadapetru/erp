@@ -6,6 +6,8 @@ namespace App\Security;
 
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
@@ -25,6 +27,14 @@ class SecurityHelper
      */
     private GuardAuthenticatorHandler $guardAuthenticatorHandler;
     private Security $security;
+    /**
+     * @var UserPasswordEncoderInterface
+     */
+    private UserPasswordEncoderInterface $passwordEncoder;
+    /**
+     * @var MailerInterface
+     */
+    private MailerInterface $mailer;
 
 
     /**
@@ -32,16 +42,22 @@ class SecurityHelper
      * @param LoginFormAuthenticator $loginFormAuthenticator
      * @param GuardAuthenticatorHandler $guardAuthenticatorHandler
      * @param Security $security
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param MailerInterface $mailer
      */
     public function __construct(
         LoginFormAuthenticator $loginFormAuthenticator,
         GuardAuthenticatorHandler $guardAuthenticatorHandler,
-        Security $security
+        Security $security,
+        UserPasswordEncoderInterface $passwordEncoder,
+        MailerInterface $mailer
     )
     {
         $this->loginFormAuthenticator = $loginFormAuthenticator;
         $this->guardAuthenticatorHandler = $guardAuthenticatorHandler;
         $this->security = $security;
+        $this->passwordEncoder = $passwordEncoder;
+        $this->mailer = $mailer;
     }
 
     /**
@@ -68,4 +84,19 @@ class SecurityHelper
         return $this->security->getUser();
     }
 
+    public function resetPassword(User $user): string
+    {
+        $randomString = null;
+        try {
+            $randomString = bin2hex(random_bytes(10));
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                $randomString
+            ));
+        } catch (\Exception $exception) {
+            throw $exception;
+        }
+
+        return $randomString;
+    }
 }
