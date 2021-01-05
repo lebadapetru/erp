@@ -93,7 +93,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $data = [
             // you may want to customize or obfuscate the message first
             //'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
-            'message' => 'Sorry, your email and/or password are incorrect.'
+            'detail' => 'Sorry, your email and/or password are incorrect.'
 
             // or to translate this message
             // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())

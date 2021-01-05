@@ -41,9 +41,8 @@ export default {
 
     function onSubmit(values) {
       httpClient.post('/forgot-password', values).then((response) => {
-        console.log(response)
         Swal.fire({
-          text: 'An email containing the password reset link has been sent to you',
+          text: response.data,
           icon: "info",
           buttonsStyling: false,
           confirmButtonText: "Ok, got it!",
@@ -51,6 +50,8 @@ export default {
             confirmButton: "btn font-weight-bold btn-light-primary"
           },
           heightAuto: false
+        }).then(() => {
+          window.location = '/'
         })
       })
     }

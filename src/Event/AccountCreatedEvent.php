@@ -9,8 +9,6 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class AccountCreatedEvent extends Event
 {
-    public const NAME = 'account.created';
-
     protected UserInterface $user;
     /*TODO type union with php8*/
     public function __construct(UserInterface $user)

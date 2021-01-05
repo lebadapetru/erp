@@ -5,6 +5,7 @@ namespace App\Security;
 
 
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -35,6 +36,10 @@ class SecurityHelper
      * @var MailerInterface
      */
     private MailerInterface $mailer;
+    /**
+     * @var EntityManagerInterface
+     */
+    private EntityManagerInterface $entityManager;
 
 
     /**
@@ -44,13 +49,15 @@ class SecurityHelper
      * @param Security $security
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param MailerInterface $mailer
+     * @param EntityManagerInterface $entityManager
      */
     public function __construct(
         LoginFormAuthenticator $loginFormAuthenticator,
         GuardAuthenticatorHandler $guardAuthenticatorHandler,
         Security $security,
         UserPasswordEncoderInterface $passwordEncoder,
-        MailerInterface $mailer
+        MailerInterface $mailer,
+        EntityManagerInterface $entityManager
     )
     {
         $this->loginFormAuthenticator = $loginFormAuthenticator;
@@ -58,6 +65,7 @@ class SecurityHelper
         $this->security = $security;
         $this->passwordEncoder = $passwordEncoder;
         $this->mailer = $mailer;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -87,15 +95,14 @@ class SecurityHelper
     public function resetPassword(User $user): string
     {
         $randomString = null;
-        try {
-            $randomString = bin2hex(random_bytes(10));
-            $user->setPassword($this->passwordEncoder->encodePassword(
-                $user,
-                $randomString
-            ));
-        } catch (\Exception $exception) {
-            throw $exception;
-        }
+        $randomString = bin2hex(random_bytes(10));
+        $user->setPassword($this->passwordEncoder->encodePassword(
+            $user,
+            $randomString
+        ));
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
 
         return $randomString;
     }

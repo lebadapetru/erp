@@ -15,10 +15,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class ResetPasswordController extends AbstractController
+class ForgotPasswordController extends AbstractController
 {
     /**
-     * @Route ("/reset-password", methods={"POST"})
+     * @Route ("/forgot-password", methods={"POST"})
      * @param ForgotPasswordRequest $request
      * @param SecurityHelper $securityHelper
      * @param EventDispatcherInterface $dispatcher
@@ -31,23 +31,32 @@ class ResetPasswordController extends AbstractController
         EventDispatcherInterface $dispatcher
     ): JsonResponse
     {
-        $data = $request->all();
         $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->getConnection()->beginTransaction();
+        try {
+            $data = $request->all();
+            $entityManager = $this->getDoctrine()->getManager();
 
-        $user = $entityManager
-            ->getRepository(User::class)
-            ->findOneBy(['email' => $data['email']]);
+            $user = $entityManager
+                ->getRepository(User::class)
+                ->findOneBy(['email' => $data['email']]);
 
-        if (!$user) {
-            throw new NotFoundHttpException('User could not be found.');
+            if (!$user) {
+                throw new NotFoundHttpException('User could not be found.');
+            }
+
+            $randomString = $securityHelper->resetPassword($user);
+
+            $dispatcher->dispatch(new PasswordResetEvent($user, $randomString));
+            $entityManager->getConnection()->commit();
+        } catch (\Exception $exception) {
+            $entityManager->getConnection()->rollBack();
+            throw $exception;
+            /*TODO logs*/
         }
 
-        $randomString = $securityHelper->resetPassword($user);
-
-        $dispatcher->dispatch(new PasswordResetEvent($user, $randomString));
-
         return new JsonResponse(
-            'An email containing the password reset link has been sent to you',
+            'An email containing the temporary password has been sent to you',
             Response::HTTP_OK
         );
     }

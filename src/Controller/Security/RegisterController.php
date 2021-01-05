@@ -34,7 +34,6 @@ class RegisterController extends AbstractController
     ): JsonResponse
     {
         $entityManager = $this->getDoctrine()->getManager();
-
         $entityManager->getConnection()->beginTransaction();
         try {
             $user = $service->createAccount($request->all());

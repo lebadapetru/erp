@@ -57,7 +57,10 @@ abstract class BaseRequest
 
     protected function getData(): array
     {
-        return $this->request->request->all();
+        return array_merge(
+            $this->request->request->all(),
+            $this->request->attributes->get('_route_params')
+        );
     }
 
     protected function getRules(): array

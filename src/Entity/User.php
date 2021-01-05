@@ -389,6 +389,7 @@ class User implements UserInterface
     public function getActiveEmailToken(): EmailToken
     {
         return $this->emailTokens->filter(function ($emailToken) {
+            /** @var $emailToken EmailToken*/
             return $emailToken->isActive();
         })->first();
     }

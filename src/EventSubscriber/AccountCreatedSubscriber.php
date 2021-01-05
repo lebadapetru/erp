@@ -46,8 +46,8 @@ class AccountCreatedSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            AccountCreatedEvent::NAME => 'onAccountCreated',
-            VerificationEmailRequestedEvent::NAME => 'onEmailVerificationRequested',
+            AccountCreatedEvent::class => 'onAccountCreated',
+            VerificationEmailRequestedEvent::class => 'onEmailVerificationRequested',
         ];
     }
 

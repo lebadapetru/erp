@@ -11,6 +11,8 @@ use App\Security\SecurityHelper;
 use Carbon\Carbon;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -46,13 +48,13 @@ class VerifyEmailTokenController extends AbstractController
 
             $token = $entityManager
                 ->getRepository(EmailToken::class)
-                ->getActiveToken(
-                    $data['token'],
-                    $user->getId()
-                );
+                ->findOneBy([
+                    'user' => $user,
+                    'token' => $data['token'],
+                ]);
 
-            if (!$token) {
-                throw new NotFoundHttpException(); //TODO maybe a token has expired exception?
+            if (!$token->isActive()) {
+                throw new HttpException(Response::HTTP_GONE, 'Your token has expired.');
             }
 
             $user->setVerifiedAt(Carbon::now());
