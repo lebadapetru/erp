@@ -64,7 +64,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
      */
-    private \DateTimeInterface $deletedAt;
+    private ?\DateTimeInterface $deletedAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
@@ -136,7 +136,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     public function setUsername(string $username): self
@@ -188,7 +188,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -386,11 +386,17 @@ class User implements UserInterface
         return isset($this->verified_at);
     }
 
-    public function getActiveEmailToken(): EmailToken
+    public function getActiveEmailToken(): ?EmailToken
     {
-        return $this->emailTokens->filter(function ($emailToken) {
-            /** @var $emailToken EmailToken*/
+        $activeTokens = $this->emailTokens->filter(function ($emailToken) {
+            /** @var $emailToken EmailToken */
             return $emailToken->isActive();
-        })->first();
+        });
+
+        if ($activeTokens->isEmpty()) {
+            return null;
+        }
+
+        return $activeTokens->first();
     }
 }

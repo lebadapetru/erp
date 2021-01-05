@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f74ad080d917672bfdabf089093e2fb6",
+    "content-hash": "5b39490269171a90ba1092fb573e5085",
     "packages": [
         {
             "name": "api-platform/core",
@@ -7378,16 +7378,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v5.1.8",
+            "version": "v5.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "20d3c6c58c41344a427488c0d2902bfbfbe17ddb"
+                "reference": "01d9edecf22b05ad2fc0b0416626a4d2237cc4f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/20d3c6c58c41344a427488c0d2902bfbfbe17ddb",
-                "reference": "20d3c6c58c41344a427488c0d2902bfbfbe17ddb",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/01d9edecf22b05ad2fc0b0416626a4d2237cc4f1",
+                "reference": "01d9edecf22b05ad2fc0b0416626a4d2237cc4f1",
                 "shasum": ""
             },
             "require": {
@@ -7453,7 +7453,7 @@
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/serializer/tree/v5.1.8"
+                "source": "https://github.com/symfony/serializer/tree/v5.1.10"
             },
             "funding": [
                 {
@@ -7469,7 +7469,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-24T12:01:57+00:00"
+            "time": "2020-12-18T08:02:46+00:00"
         },
         {
             "name": "symfony/serializer-pack",
