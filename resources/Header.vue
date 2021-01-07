@@ -1,9 +1,9 @@
 <template>
   <!--begin::Container-->
   <div class="container-fluid d-flex align-items-stretch justify-content-between">
-    <HeaderMenu/>
+    <HeaderMenu />
 
-    <TopBar/>
+    <TopBar />
   </div>
   <!--end::Container-->
 </template>
