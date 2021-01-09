@@ -1,9 +1,13 @@
 const state = () => ({
-  userPanelDisplay: false
+  isUserPanelVisible: false,
+  isOverlayVisible: false
 })
 
 const mutations = {
-  toggleUserPanel: (state) => state.userPanelDisplay = !state.userPanelDisplay
+  showUserPanel: (state) => state.isUserPanelVisible = true,
+  showOverlay: (state) => state.isOverlayVisible = true,
+  closeUserPanel: (state) => state.isUserPanelVisible = false,
+  closeOverlay: (state) => state.isOverlayVisible = false,
 }
 
 export default {

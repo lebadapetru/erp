@@ -2,8 +2,8 @@
   <div
       id="kt_quick_user"
       class="offcanvas offcanvas-right p-10"
-      :class="{'offcanvas-on': userPanelDisplay}"
-      v-click-outside
+      :class="{'offcanvas-on': isUserPanelVisible}"
+      v-click-away="closeUserPanel"
   >
     <!--begin::Header-->
     <div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
@@ -15,7 +15,7 @@
     </div>
     <!--end::Header-->
     <!--begin::Content-->
-      <div class="offcanvas-content pr-5 mr-n5 scroll ps">
+      <div class="offcanvas-content pr-5 mr-n5 scroll ps" style="height: 831px; overflow: hidden;">
         <!--begin::Header-->
         <div class="d-flex align-items-center mt-5">
           <div class="symbol symbol-100 mr-5">
@@ -273,14 +273,37 @@ export default {
   name: "UserPanel",
   setup() {
     const store = useStore()
-
     onMounted(() => {
-      const ps = new PerfectScrollbar('.ps');
+      const ps = new PerfectScrollbar('.ps', {
+        wheelSpeed: 0.1,
+        swipeEasing: true,
+        wheelPropagation: false,
+        minScrollbarLength: 40,
+        maxScrollbarLength: 300,
+        suppressScrollX: true
+      });
     })
-    console.log(store)
+
+    const isUserPanelVisible = computed(() => store.state.globals.isUserPanelVisible)
+
+    const closeUserPanel = (vm) => {
+      const userPanelTrigger = vm.path.find((node) => node.id === 'kt_quick_user_toggle')
+      if (!isUserPanelVisible.value) {
+        return
+      }
+
+      if (userPanelTrigger) {
+        return
+      }
+
+      store.commit('globals/closeUserPanel')
+      store.commit('globals/closeOverlay')
+    }
+
+
     return {
-      userPanelDisplay: computed(() => store.state.globals.userPanelDisplay),
-      toggleUserPanel: () => store.commit('globals/toggleUserPanel')
+      isUserPanelVisible,
+      closeUserPanel
     }
   }
 }

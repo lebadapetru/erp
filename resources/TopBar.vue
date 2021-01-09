@@ -851,7 +851,7 @@
       <div
           class="btn btn-icon btn-icon-mobile w-auto btn-clean d-flex align-items-center btn-lg px-2"
           id="kt_quick_user_toggle"
-          @click="toggleUserPanel"
+          @click="openUserPanel"
       >
         <span class="text-muted font-weight-bold font-size-base d-none d-md-inline mr-1">Hi,</span>
         <span class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">{{ firstName }}</span>
@@ -874,12 +874,17 @@ export default {
   setup() {
     const store = useStore()
 
-    let firstName = computed(() => startCase(toLower(window.app.user.first_name)))
+    const firstName = computed(() => startCase(toLower(window.app.user.first_name)))
+
+    const openUserPanel = () => {
+      store.commit('globals/showUserPanel')
+      store.commit('globals/showOverlay')
+    }
 
     return {
-      firstName: firstName,
+      firstName,
       initials: firstName.value.match(/\b(\w)/g).join(''),
-      toggleUserPanel: () => store.commit('globals/toggleUserPanel')
+      openUserPanel
     }
   }
 }

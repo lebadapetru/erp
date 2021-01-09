@@ -38,7 +38,7 @@
   <UserPanel />
   <!-- end::User Panel-->
   <div
-      v-if="userPanelDisplay"
+      v-if="isOverlayVisible"
       class="offcanvas-overlay"
   ></div>
 </template>
@@ -67,7 +67,7 @@ export default {
     const store = useStore()
 
     return {
-      userPanelDisplay: computed(() => store.state.globals.userPanelDisplay)
+      isOverlayVisible: computed(() => store.state.globals.isOverlayVisible)
     }
   }
 }
