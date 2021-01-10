@@ -15,7 +15,7 @@
     </div>
     <!--end::Header-->
     <!--begin::Content-->
-      <div class="offcanvas-content pr-5 mr-n5 scroll ps" style="height: 831px; overflow: hidden;">
+    <vue-perfect-scrollbar class="offcanvas-content pr-5 mr-n5 scroll" style="height: 831px; overflow: hidden;">
         <!--begin::Header-->
         <div class="d-flex align-items-center mt-5">
           <div class="symbol symbol-100 mr-5">
@@ -259,31 +259,19 @@
           <!--end::Item-->
         </div>
         <!--end::Notifications-->
-      </div>
+    </vue-perfect-scrollbar>
     <!--end::Content-->
   </div>
 </template>
 
 <script>
-import PerfectScrollbar from 'perfect-scrollbar'
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
   name: "UserPanel",
   setup() {
     const store = useStore()
-    onMounted(() => {
-      const ps = new PerfectScrollbar('.ps', {
-        wheelSpeed: 0.1,
-        swipeEasing: true,
-        wheelPropagation: false,
-        minScrollbarLength: 40,
-        maxScrollbarLength: 300,
-        suppressScrollX: true
-      });
-    })
-
     const isUserPanelVisible = computed(() => store.state.globals.isUserPanelVisible)
 
     const closeUserPanel = (vm) => {

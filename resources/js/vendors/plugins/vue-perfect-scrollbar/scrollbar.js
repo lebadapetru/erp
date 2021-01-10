@@ -1,5 +1,14 @@
-import { h } from 'vue'
 import PerfectScrollbar from 'perfect-scrollbar'
+import { isEmpty } from 'lodash'
+import {
+  onMounted,
+  onUpdated,
+  onBeforeUnmount,
+  reactive,
+  ref,
+  nextTick,
+  h,
+} from 'vue'
 
 const eventNames = [
   'scroll',
@@ -21,7 +30,8 @@ export default {
     options: {
       type: Object,
       required: false,
-      default: () => {}
+      default: () => {
+      }
     },
     tag: {
       type: String,
@@ -35,70 +45,55 @@ export default {
     }
   },
   emits: eventNames,
-  data () {
-    return {
-      ps: null
-    }
-  },
-  watch: {
-    watchOptions (shouldWatch) {
-      if (!shouldWatch && this.watcher) {
-        this.watcher()
-      } else {
-        this.createWatcher()
-      }
-    }
-  },
-  mounted () {
-    this.create()
+  setup(props, {emit, slots}) {
+    const el = ref(null)
+    let ps = null
 
-    if (this.watchOptions) {
-      this.createWatcher()
-    }
-  },
-  updated () {
-    this.$nextTick(() => {
-      this.update()
+    onMounted(() => {
+      nextTick().then(() => {
+        create()
+      })
     })
-  },
-  beforeUnmount () {
-    this.destroy()
-  },
-  methods: {
-    create () {
-      if (!(this.ps && this.$isServer)) {
-        this.ps = new PerfectScrollbar(this.$el, this.options)
 
+    onUpdated(() => {
+      nextTick().then(() => {
+        update()
+      })
+    })
+
+    onBeforeUnmount(() => {
+      destroy()
+    })
+
+    function create() {
+      if (isEmpty(ps)) {
+        ps = reactive(new PerfectScrollbar(el.value, props.options))
         eventNames.forEach(eventName => {
-          this.ps.element.addEventListener(eventName, event => this.$emit(eventName, event))
+          ps.element.addEventListener(eventName, event => emit(eventName, event))
         })
       }
-    },
-    createWatcher () {
-      this.watcher = this.$watch('options', () => {
-        this.destroy()
-        this.create()
-      }, {
-        deep: true
-      })
-    },
-    update () {
-      if (this.ps) {
-        this.ps.update()
-      }
-    },
-    destroy () {
-      if (this.ps) {
-        this.ps.destroy()
-        this.ps = null
+    }
+
+    function update() {
+      if (!isEmpty(ps)) {
+        ps.update()
       }
     }
-  },
-  render () {
-    return h(this.tag,
+
+    function destroy() {
+      if (!isEmpty(ps)) {
+        ps.destroy()
+        ps = null
+      }
+    }
+
+    return () => h(
+      props.tag,
       {
-        class: 'ps'
+        class: 'ps',
+        ref: el
       },
-      this.$slots.default && this.$slots.default())
-  }
+      slots.default && slots.default()
+    )
+  },
 }

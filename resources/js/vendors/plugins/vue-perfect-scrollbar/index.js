@@ -2,8 +2,6 @@ import PerfectScrollbar from './scrollbar'
 
 export default {
   install: (Vue, settings) => {
-    console.log('installed scrollbar')
-    console.log(PerfectScrollbar)
     if (settings) {
       if (settings.name && typeof settings.name === 'string') {
         PerfectScrollbar.name = settings.name
@@ -17,10 +15,6 @@ export default {
 
       if (settings.tag && typeof settings.tag === 'string') {
         PerfectScrollbar.props.tag.default = settings.tag
-      }
-
-      if (settings.watchOptions && typeof settings.watchOptions === 'boolean') {
-        PerfectScrollbar.props.watchOptions = settings.watchOptions
       }
     }
 

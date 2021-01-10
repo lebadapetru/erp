@@ -9,5 +9,14 @@ import vuePerfectScrollbar from "resources/js/vendors/plugins/vue-perfect-scroll
 createApp(App)
   .use(store)
   .use(vueClickAway)
-  .use(vuePerfectScrollbar)
+  .use(vuePerfectScrollbar, {
+    options: {
+      wheelSpeed: 0.1,
+      swipeEasing: true,
+      wheelPropagation: false,
+      minScrollbarLength: 40,
+      maxScrollbarLength: 300,
+      suppressScrollX: true
+    }
+  })
   .mount('#app');
