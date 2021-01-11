@@ -11,7 +11,7 @@ createApp(App)
   .use(vueClickAway)
   .use(vuePerfectScrollbar, {
     options: {
-      wheelSpeed: 0.1,
+      wheelSpeed: 0.3,
       swipeEasing: true,
       wheelPropagation: false,
       minScrollbarLength: 40,

@@ -97,7 +97,7 @@
         <form>
           <!--begin::Header-->
           <div class="d-flex flex-column pt-12 bgi-size-cover bgi-no-repeat rounded-top"
-               style="background-image: url(assets/media/misc/bg-1.jpg)">
+               style="background-image: url(build/media/misc/bg-1.jpg)">
             <!--begin::Title-->
             <h4 class="d-flex flex-center rounded-top">
               <span class="text-white">User Notifications</span>
@@ -782,7 +782,7 @@
       <!--begin::Toggle-->
       <div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
         <div class="btn btn-icon btn-clean btn-dropdown btn-lg mr-1">
-          <img class="h-20px w-20px rounded-sm" src="assets/media/svg/flags/226-united-states.svg" alt="" />
+          <img class="h-20px w-20px rounded-sm" src="build/media/svg/flags/226-united-states.svg" alt="" />
         </div>
       </div>
       <!--end::Toggle-->

@@ -76,5 +76,6 @@ export default {
 <style lang="scss">
 // Import Main styles for this application
 @import "fonts/poppins/poppins.css";
+@import "plugins/keenthemes-icons/font/ki.css";
 @import "sass/style";
 </style>
