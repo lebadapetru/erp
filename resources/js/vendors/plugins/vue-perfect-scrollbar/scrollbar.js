@@ -66,6 +66,8 @@ export default {
     })
 
     function create() {
+      el.value.style.height = el.value.clientHeight + 'px'
+      el.value.style.overflow = 'hidden'
       if (isEmpty(ps)) {
         ps = reactive(new PerfectScrollbar(el.value, props.options))
         eventNames.forEach(eventName => {

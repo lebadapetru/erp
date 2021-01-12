@@ -13,5 +13,12 @@
 {% endblock %}
 
 {% block javascripts %}
+    {% block globals %}
+        <script>
+          window.app = {
+            url: '{{ app_url }}',
+          }
+        </script>
+    {% endblock %}
     {{ encore_entry_script_tags('login') }}
 {% endblock %}

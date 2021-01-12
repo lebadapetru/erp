@@ -9,13 +9,18 @@
     <div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
       <h3 class="font-weight-bold m-0">User Profile
         <small class="text-muted font-size-sm ml-2">12 messages</small></h3>
-      <a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="kt_quick_user_close">
+      <a
+          href="#"
+          class="btn btn-xs btn-icon btn-light btn-hover-primary"
+          id="kt_quick_user_close"
+          @click="closeUserPanel"
+      >
         <i class="ki ki-close icon-xs text-muted"></i>
       </a>
     </div>
     <!--end::Header-->
     <!--begin::Content-->
-    <vue-perfect-scrollbar class="offcanvas-content pr-5 mr-n5 scroll" style="height: 831px; overflow: hidden;">
+    <vue-perfect-scrollbar class="offcanvas-content pr-5 mr-n5 scroll">
         <!--begin::Header-->
         <div class="d-flex align-items-center mt-5">
           <div class="symbol symbol-100 mr-5">
@@ -23,7 +28,7 @@
             <i class="symbol-badge bg-success"></i>
           </div>
           <div class="d-flex flex-column">
-            <a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">James Jones</a>
+            <a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">{{ firstName }} {{ lastName }}</a>
             <div class="text-muted mt-1">Application Developer</div>
             <div class="navi mt-2">
               <a href="#" class="navi-item">
@@ -41,10 +46,10 @@
                       <!--end::Svg Icon-->
 										</span>
 									</span>
-									<span class="navi-text text-muted text-hover-primary">jm@softplus.com</span>
+									<span class="navi-text text-muted text-hover-primary">{{ user.email }}</span>
 								</span>
               </a>
-              <a href="#" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5">Sign Out</a>
+              <a href="/logout" class="btn btn-sm btn-light-primary font-weight-bolder py-2 px-5">Sign Out</a>
             </div>
           </div>
         </div>
@@ -267,12 +272,18 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { startCase, toLower } from "lodash";
 
 export default {
   name: "UserPanel",
+  props: {
+
+  },
   setup() {
     const store = useStore()
     const isUserPanelVisible = computed(() => store.state.globals.isUserPanelVisible)
+    const firstName = computed(() => startCase(toLower(window.app.user.first_name)))
+    const lastName = computed(() => startCase(toLower(window.app.user.last_name)))
 
     const closeUserPanel = (vm) => {
       const userPanelTrigger = vm.path.find((node) => node.id === 'kt_quick_user_toggle')
@@ -290,6 +301,9 @@ export default {
 
 
     return {
+      firstName,
+      lastName,
+      user: window.app.user,
       isUserPanelVisible,
       closeUserPanel
     }

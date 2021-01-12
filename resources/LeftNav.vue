@@ -27,9 +27,8 @@
     <!--end::Brand-->
     <!--begin::Aside Menu-->
     <vue-perfect-scrollbar
-        class="aside-menu-wrapper flex-column-fluid scroll"
+        class="aside-menu-wrapper scroll"
         id="kt_aside_menu_wrapper"
-        style="height: 846px; overflow: hidden;"
     >
         <!--begin::Menu Container-->
         <div id="kt_aside_menu" class="aside-menu my-4" data-menu-vertical="1" data-menu-scroll="1" data-menu-dropdown-timeout="500">
