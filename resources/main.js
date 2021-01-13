@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import router from "resources/router";
 import App from "./App";
 import "resources/httpClient"; /*TODO create plugin*/
 import 'es6-promise/auto'
@@ -8,6 +9,7 @@ import vuePerfectScrollbar from "./js/vendors/plugins/vue-perfect-scrollbar";
 
 createApp(App)
   .use(store)
+  .use(router)
   .use(vueClickAway)
   .use(vuePerfectScrollbar, {
     options: {
