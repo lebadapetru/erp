@@ -16,12 +16,12 @@ Encore
     // only needed for CDN's or sub-directory deploy
     //.setManifestKeyPrefix('build/')
     .copyFiles({
-        from: './resources/media',
+        from: './resources/assets/media',
         to: 'media/[path][name].[ext]',
         pattern: /\.(png|jpg|jpeg|svg)$/
     })
     .copyFiles({
-        from: './resources/fonts',
+        from: './resources/assets/fonts',
         to: 'fonts/[path][name].[ext]',
         pattern: /\.(ttf)$/
     })
@@ -35,7 +35,7 @@ Encore
      * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
      */
     .addEntry('main', './resources/main.js')
-    .addEntry('login', './resources/pages/login/login.js')
+    .addEntry('login', './resources/views/login/login.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 

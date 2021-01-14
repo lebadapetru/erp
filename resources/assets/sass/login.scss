@@ -1,0 +1,85 @@
+//
+// Login 5
+// Pages SASS files are compiled into separate css files
+//
+
+
+// Initialization of global variables, mixins and functions
+@import "./init";
+
+.login.login-5 {
+    background-color: get($layout-themes, dark);
+    // Form modes
+    .login-signin,
+    .login-signup,
+    .login-forgot {
+        display: block;
+    }
+
+    &.login-signin-on {
+        .login-signup {
+            display: block;
+        }
+
+        .login-signin {
+            display: block;
+        }
+
+        .login-forgot {
+            display: block;
+        }
+    }
+
+    &.login-signup-on {
+        .login-signup {
+            display: block;
+        }
+
+        .login-signin {
+            display: block;
+        }
+
+        .login-forgot {
+            display: block;
+        }
+    }
+
+    &.login-forgot-on {
+        .login-signup {
+            display: block;
+        }
+
+        .login-signin {
+            display: block;
+        }
+
+        .login-forgot {
+            display: block;
+        }
+    }
+}
+
+// Desktop view
+@include media-breakpoint-up(xs) {
+    .login.login-5 {
+        .login-form {
+            width: 100%;
+            max-width: 450px;
+        }
+    }
+}
+
+// Tablet and Mobile mode
+@include media-breakpoint-between(lg, xl) {
+
+}
+
+// Mobile mode
+@include media-breakpoint-down(xs) {
+    .login.login-5 {
+        .login-form {
+            width: 100%;
+            max-width: 100%;
+        }
+    }
+}

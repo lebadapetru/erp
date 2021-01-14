@@ -1,11 +1,10 @@
 import { createApp } from 'vue'
-import router from "resources/router";
 import App from "./App";
-import "resources/httpClient"; /*TODO create plugin*/
-import 'es6-promise/auto'
+import router from "./router";
 import store from './store'
-import vueClickAway from './js/vendors/plugins/vue-click-away'
-import vuePerfectScrollbar from "./js/vendors/plugins/vue-perfect-scrollbar";
+import "./httpClient"; /*TODO create plugin*/
+import vueClickAway from './assets/js/vendors/plugins/vue-click-away'
+import vuePerfectScrollbar from "./assets/js/vendors/plugins/vue-perfect-scrollbar";
 
 createApp(App)
   .use(store)
