@@ -38,11 +38,6 @@ export default {
       required: false,
       default: 'div'
     },
-    watchOptions: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
   },
   emits: eventNames,
   setup(props, {emit, slots}) {
@@ -66,7 +61,7 @@ export default {
     })
 
     function create() {
-      el.value.style.height = el.value.clientHeight + 'px'
+      el.value.style.height = (el.value.parentNode.clientHeight*0.9) + 'px'
       el.value.style.overflow = 'hidden'
       if (isEmpty(ps)) {
         ps = reactive(new PerfectScrollbar(el.value, props.options))

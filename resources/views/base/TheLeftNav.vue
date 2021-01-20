@@ -45,22 +45,26 @@
            data-menu-dropdown-timeout="500">
         <!--begin::Menu Nav-->
         <ul class="menu-nav">
-          <li class="menu-section">
-            <h4 class="menu-text">E-Commerce</h4>
-            <i class="menu-icon ki ki-bold-more-hor icon-md"></i>
-          </li>
+<!--          <li class="menu-section">-->
+<!--            <h4 class="menu-text">E-Commerce</h4>-->
+<!--            <i class="menu-icon ki ki-bold-more-hor icon-md"></i>-->
+<!--          </li>-->
           <li
               v-for="(parentRoute, parentIndex) in routes"
               :key="parentIndex"
               class="menu-item menu-item-submenu"
               aria-haspopup="true"
               data-menu-toggle="hover"
-              :class="{'menu-item-open': false}"
+              :class="{'menu-item-open': ((selectedMenuItem === parentIndex) && parentRoute.hasChildren)}"
+              @click="toggleMenuItem(parentRoute, parentIndex, this)"
           >
             <router-link
                 :to="parentRoute.path"
                 class="menu-link menu-toggle"
             >
+              <!--begin::Svg Icon-->
+              <span class="svg-icon menu-icon" v-html="parentRoute.meta.icon"></span>
+              <!--end::Svg Icon-->
               <span class="menu-text">{{ parentRoute.name }}</span>
               <i
                   v-if="parentRoute.hasChildren"
@@ -70,6 +74,8 @@
             <div
                 v-if="parentRoute.hasChildren"
                 class="menu-submenu"
+                :id="'menu-submenu-'+parentIndex"
+                @click.stop
             >
               <i class="menu-arrow"></i>
               <ul class="menu-subnav">
@@ -109,38 +115,72 @@
 </template>
 
 <script>
-import { useRouter, useRoute } from 'vue-router'
-import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
+import $ from 'jquery'
 
 export default {
   name: "TheLeftNav",
   setup() {
+    let selectedMenuItem = ref(null)
     const router = useRouter()
-    const route = useRoute()
 
-    console.log(router)
-    console.log(route)
-    const routes = computed(() => {
-      return router.options.routes
-          .filter((route) => (route.category.includes('TheLeftNav')))
+    let processRoutes = (routes) => {
+      return routes
+          .filter((route) => (
+              !route.meta.hasOwnProperty('isSystem') ||
+              (route.meta.hasOwnProperty('isSystem') && !route.meta.isSystem)
+          ))
           .map((route) => {
             route.hasChildren = false
-            if (Array.isArray(route.children) && route.children.length > 0) {
+            if (
+                Array.isArray(route.children) &&
+                route.children.length > 0
+            ) {
+              let children = route.children.filter((child) => {
+                return !child.path.includes('/:')
+              })
+              if (!children.length) {
+                return route
+              }
+              route.children = processRoutes(children)
               route.hasChildren = true
+
+              return route
             }
 
             return route
           })
+    }
+
+    const routes = computed(() => {
+      return processRoutes(router.options.routes)
     })
-    console.log(routes)
+
+    const toggleMenuItem = (item, index) => {
+      if (!item.hasChildren) {
+        return;
+      }
+      $('#kt_aside_menu>ul:first-child>li>div[class=menu-submenu]').slideUp('fast')
+
+      if (selectedMenuItem.value === index) {
+        selectedMenuItem.value = null
+
+        return
+      }
+
+      $('#menu-submenu-' + index).slideDown('fast')
+      selectedMenuItem.value = index
+    }
 
     return {
-      routes
+      routes,
+      toggleMenuItem,
+      selectedMenuItem
     }
   }
 }
 </script>
 
 <style scoped>
-
 </style>
