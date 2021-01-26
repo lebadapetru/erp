@@ -19,7 +19,11 @@
 
         <!--begin::Entry-->
         <div class="d-flex flex-column-fluid">
-          <router-view></router-view>
+          <!--begin::Container-->
+          <div class="container">
+            <router-view></router-view>
+          </div>
+          <!--end::Container-->
         </div>
         <!--end::Entry-->
       </div>
@@ -75,5 +79,7 @@ export default {
 // Import Main styles for this application
 @import "./assets/fonts/poppins/poppins.css";
 @import "./assets/fonts/keenthemes-icons/font/ki.css";
+@import "./assets/plugins/flaticon/flaticon.css";
+@import "./assets/plugins/flaticon2/flaticon.css";
 @import "./assets/sass/style";
 </style>
