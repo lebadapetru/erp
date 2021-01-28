@@ -3,7 +3,6 @@
       id="kt_quick_user"
       class="offcanvas offcanvas-right p-10"
       :class="{'offcanvas-on': isUserPanelVisible}"
-      v-click-away="closeUserPanel"
   >
     <!--begin::Header-->
     <div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
@@ -286,12 +285,8 @@ export default {
     const lastName = computed(() => startCase(toLower(window.app.user.last_name)))
 
     const closeUserPanel = (vm) => {
-      const userPanelTrigger = vm.path.find((node) => node.id === 'kt_quick_user_toggle')
+      console.log('close')
       if (!isUserPanelVisible.value) {
-        return
-      }
-
-      if (userPanelTrigger) {
         return
       }
 

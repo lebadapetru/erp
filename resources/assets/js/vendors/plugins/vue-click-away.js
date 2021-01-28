@@ -8,7 +8,7 @@ const onMounted = (el, binding, vnode) => {
   let vm = vnode.context;
   let callback = binding.value;
 
-  let nextTick = false;
+  let nextTick = true;
   setTimeout(function () {
     nextTick = true;
   }, 0);
@@ -39,6 +39,13 @@ const onMounted = (el, binding, vnode) => {
   }
 
   el[UNIQUE_ID] = (event) => {
+    console.log(el)
+    console.log(event.target)
+    console.log(el.contains(event.target))
+    console.log(isVisible(el))
+    console.log(callback)
+    console.log(nextTick)
+    console.log(typeof callback === "function")
     if (
       (!el || !el.contains(event.target)) &&
       isVisible(el) &&
@@ -46,6 +53,10 @@ const onMounted = (el, binding, vnode) => {
       nextTick &&
       typeof callback === "function"
     ) {
+/*      if (
+        el.getAttribute('aria-haspopup') &&
+
+      )*/
       console.log('trigger')
       return callback.call(vm, event);
     }

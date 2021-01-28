@@ -875,10 +875,8 @@
     <div
       class="btn-group ml-2"
       :class="{'show': isSubmitDropdownVisible}"
-      v-click-away="hideSubmitDropdown"
     >
       <button
-        @click="toggleSubmitDropdown"
         type="button"
         class="btn btn-primary font-weight-bold"
       >Submit</button>
@@ -888,11 +886,12 @@
         data-toggle="dropdown"
         aria-haspopup="true"
         :aria-expanded="isSubmitDropdownVisible"
-        @click="toggleSubmitDropdown"
       ></button>
+<!--TODO vueClickAway to not affect the trigger      -->
       <div
         class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right"
         :class="{'show': isSubmitDropdownVisible}"
+        v-click-away="hideSubmitDropdown"
       >
         <ul class="navi py-5">
           <li class="navi-item">
@@ -934,10 +933,12 @@ export default {
     let isSubmitDropdownVisible = ref(false)
 
     const toggleSubmitDropdown = () => {
+      console.log('toggle')
       isSubmitDropdownVisible.value = !isSubmitDropdownVisible.value
     }
 
     const hideSubmitDropdown = () => {
+      console.log('hide')
       isSubmitDropdownVisible.value = false
     }
 
