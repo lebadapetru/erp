@@ -90,7 +90,6 @@
 import { useRouter } from 'vue-router'
 import TheBrand from "resources/views/base/TheBrand";
 import { computed, ref } from 'vue'
-import $ from 'jquery'
 
 export default {
   name: "TheLeftNav",

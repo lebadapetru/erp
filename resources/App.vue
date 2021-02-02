@@ -82,4 +82,5 @@ export default {
 @import "./assets/plugins/flaticon/flaticon.css";
 @import "./assets/plugins/flaticon2/flaticon.css";
 @import "./assets/sass/style";
+@import "resources/assets/sass/vendors/plugins/ckeditor";
 </style>

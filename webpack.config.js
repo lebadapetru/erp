@@ -5,79 +5,81 @@ const webpack = require('webpack');
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
 if (!Encore.isRuntimeEnvironmentConfigured()) {
-    Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
+  Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
 }
 
 Encore
-// directory where compiled assets will be stored
-    .setOutputPath('public/build/')
-    // public path used by the web server to access the output path
-    .setPublicPath('/build')
-    // only needed for CDN's or sub-directory deploy
-    //.setManifestKeyPrefix('build/')
-    .copyFiles({
-        from: './resources/assets/media',
-        to: 'media/[path][name].[ext]',
-        pattern: /\.(png|jpg|jpeg|svg)$/
-    })
-    .copyFiles({
-        from: './resources/assets/fonts',
-        to: 'fonts/[path][name].[ext]',
-        pattern: /\.(ttf)$/
-    })
-    /*
-     * ENTRY CONFIG
-     *
-     * Add 1 entry for each "page" of your app
-     * (including one that's included on every page - e.g. "app")
-     *
-     * Each entry will result in one JavaScript file (e.g. main.js)
-     * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
-     */
-    .addEntry('main', './resources/main.js')
-    .addEntry('login', './resources/views/login/login.js')
-    //.addEntry('page1', './assets/js/page1.js')
-    //.addEntry('page2', './assets/js/page2.js')
+  // directory where compiled assets will be stored
+  .setOutputPath('public/build/')
+  // public path used by the web server to access the output path
+  .setPublicPath('/build')
+  // only needed for CDN's or sub-directory deploy
+  //.setManifestKeyPrefix('build/')
+  .copyFiles({
+    from: './resources/assets/media',
+    to: 'media/[path][name].[ext]',
+    pattern: /\.(png|jpg|jpeg|svg)$/
+  })
+  .copyFiles({
+    from: './resources/assets/fonts',
+    to: 'fonts/[path][name].[ext]',
+    pattern: /\.(ttf)$/
+  })
+  /*
+   * ENTRY CONFIG
+   *
+   * Add 1 entry for each "page" of your app
+   * (including one that's included on every page - e.g. "app")
+   *
+   * Each entry will result in one JavaScript file (e.g. main.js)
+   * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
+   */
+  .addEntry('main', './resources/main.js')
+  .addEntry('login', './resources/views/login/login.js')
+  //.addEntry('page1', './assets/js/page1.js')
+  //.addEntry('page2', './assets/js/page2.js')
 
-    // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
-    .splitEntryChunks()
+  // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
+  .splitEntryChunks()
 
-    // will require an extra script tag for runtime.js
-    // but, you probably want this, unless you're building a single-page app
-    .enableSingleRuntimeChunk()
+  // will require an extra script tag for runtime.js
+  // but, you probably want this, unless you're building a single-page app
+  .enableSingleRuntimeChunk()
 
-    /*
-     * FEATURE CONFIG
-     *
-     * Enable & configure other features below. For a full
-     * list of features, see:
-     * https://symfony.com/doc/current/frontend.html#adding-more-features
-     */
-    .cleanupOutputBeforeBuild()
-    .enableBuildNotifications()
-    .enableSourceMaps(!Encore.isProduction())
-    // enables hashed filenames (e.g. app.abc123.css)
-    .enableVersioning(Encore.isProduction())
+  /*
+   * FEATURE CONFIG
+   *
+   * Enable & configure other features below. For a full
+   * list of features, see:
+   * https://symfony.com/doc/current/frontend.html#adding-more-features
+   */
+  .cleanupOutputBeforeBuild()
+  .enableBuildNotifications()
+  .enableSourceMaps(!Encore.isProduction())
+  // enables hashed filenames (e.g. app.abc123.css)
+  .enableVersioning(Encore.isProduction())
 
-    // enables @babel/preset-env polyfills
-    .configureBabel(() => {}, {
-        useBuiltIns: 'usage',
-        corejs: 3
-    })
+  // enables @babel/preset-env polyfills
+  .configureBabel(() => {
+  }, {
+    useBuiltIns: 'usage',
+    corejs: 3
+  })
 
-    // enables Sass/SCSS support
-    .enableSassLoader()
+  // enables Sass/SCSS support
+  .enableSassLoader()
 
-    // enables Vue support
-    .enableVueLoader(() => {}, {
-      version: 3,
-      runtimeCompilerBuild: false //if using only single file components, this is not needed (https://symfony.com/doc/current/frontend/encore/vuejs.html#runtime-compiler-build)
+  // enables Vue support
+  .enableVueLoader(() => {
+  }, {
+    version: 3,
+    runtimeCompilerBuild: false //if using only single file components, this is not needed (https://symfony.com/doc/current/frontend/encore/vuejs.html#runtime-compiler-build)
 
-    })
+  })
 
-    .addAliases({
-      'resources': path.resolve('./resources')
-    })
+  .addAliases({
+    'resources': path.resolve('./resources')
+  })
 
   .addPlugin(
     new webpack.DefinePlugin({
@@ -86,6 +88,16 @@ Encore
       __VUE_PROD_DEVTOOLS__: false
     })
   )
+
+  .addPlugin(
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jquery: 'jquery',
+      'window.jQuery': 'jquery',
+      jQuery: 'jquery'
+    })
+  )
+
 
 // uncomment if you use TypeScript
 //.enableTypeScriptLoader()
