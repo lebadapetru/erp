@@ -10,12 +10,11 @@
     </div>
     <div class="card-body">
       <!--begin::Form-->
-      <form class="form" id="kt_form">
+      <form class="form" id="kt_form" multi>
         <div class="row">
           <div class="col-xl-2"></div>
           <div class="col-xl-8">
             <div class="my-5">
-              <h3 class="text-dark font-weight-bold mb-10">Customer Info:</h3>
               <div class="form-group row">
                 <div class="col-12">
                   <label>Title</label>
@@ -23,15 +22,18 @@
                 </div>
               </div>
               <div class="form-group row">
-                <div class="col-9">
-                  <label>Last Name</label>
-                  <VCKEditor></VCKEditor>
+                <div class="col-12">
+                  <label>Description</label>
+                  <VCKEditor />
                 </div>
               </div>
+            </div>
+            <div class="separator separator-dashed my-10"></div>
+            <div class="my-5">
+              <h3 class="text-dark font-weight-bold mb-10">Media:</h3>
               <div class="form-group row">
-                <label class="col-3">Company Name</label>
-                <div class="col-9">
-                  <input class="form-control" type="text" value="Loop Inc." />
+                <div class="col-12">
+                  <VDropZone />
                   <span class="form-text text-muted">If you want your invoices addressed to a company. Leave blank to use your full name.</span>
                 </div>
               </div>
@@ -459,32 +461,43 @@
                 <label class="col-3">Time Zone</label>
                 <div class="col-9">
                   <select class="form-control">
-                    <option data-offset="-39600" value="International Date Line West">(GMT-11:00) International Date Line West</option>
+                    <option data-offset="-39600" value="International Date Line West">(GMT-11:00) International Date
+                      Line West
+                    </option>
                     <option data-offset="-39600" value="Midway Island">(GMT-11:00) Midway Island</option>
                     <option data-offset="-39600" value="Samoa">(GMT-11:00) Samoa</option>
                     <option data-offset="-36000" value="Hawaii">(GMT-10:00) Hawaii</option>
                     <option data-offset="-28800" value="Alaska">(GMT-08:00) Alaska</option>
-                    <option data-offset="-25200" value="Pacific Time (US &amp; Canada)">(GMT-07:00) Pacific Time (US &amp; Canada)</option>
+                    <option data-offset="-25200" value="Pacific Time (US &amp; Canada)">(GMT-07:00) Pacific Time (US
+                      &amp; Canada)
+                    </option>
                     <option data-offset="-25200" value="Tijuana">(GMT-07:00) Tijuana</option>
                     <option data-offset="-25200" value="Arizona">(GMT-07:00) Arizona</option>
-                    <option data-offset="-21600" value="Mountain Time (US &amp; Canada)">(GMT-06:00) Mountain Time (US &amp; Canada)</option>
+                    <option data-offset="-21600" value="Mountain Time (US &amp; Canada)">(GMT-06:00) Mountain Time (US
+                      &amp; Canada)
+                    </option>
                     <option data-offset="-21600" value="Chihuahua">(GMT-06:00) Chihuahua</option>
                     <option data-offset="-21600" value="Mazatlan">(GMT-06:00) Mazatlan</option>
                     <option data-offset="-21600" value="Saskatchewan">(GMT-06:00) Saskatchewan</option>
                     <option data-offset="-21600" value="Central America">(GMT-06:00) Central America</option>
-                    <option data-offset="-18000" value="Central Time (US &amp; Canada)">(GMT-05:00) Central Time (US &amp; Canada)</option>
+                    <option data-offset="-18000" value="Central Time (US &amp; Canada)">(GMT-05:00) Central Time (US
+                      &amp; Canada)
+                    </option>
                     <option data-offset="-18000" value="Guadalajara">(GMT-05:00) Guadalajara</option>
                     <option data-offset="-18000" value="Mexico City">(GMT-05:00) Mexico City</option>
                     <option data-offset="-18000" value="Monterrey">(GMT-05:00) Monterrey</option>
                     <option data-offset="-18000" value="Bogota">(GMT-05:00) Bogota</option>
                     <option data-offset="-18000" value="Lima">(GMT-05:00) Lima</option>
                     <option data-offset="-18000" value="Quito">(GMT-05:00) Quito</option>
-                    <option data-offset="-14400" value="Eastern Time (US &amp; Canada)">(GMT-04:00) Eastern Time (US &amp; Canada)</option>
+                    <option data-offset="-14400" value="Eastern Time (US &amp; Canada)">(GMT-04:00) Eastern Time (US
+                      &amp; Canada)
+                    </option>
                     <option data-offset="-14400" value="Indiana (East)">(GMT-04:00) Indiana (East)</option>
                     <option data-offset="-14400" value="Caracas">(GMT-04:00) Caracas</option>
                     <option data-offset="-14400" value="La Paz">(GMT-04:00) La Paz</option>
                     <option data-offset="-14400" value="Georgetown">(GMT-04:00) Georgetown</option>
-                    <option data-offset="-10800" value="Atlantic Time (Canada)">(GMT-03:00) Atlantic Time (Canada)</option>
+                    <option data-offset="-10800" value="Atlantic Time (Canada)">(GMT-03:00) Atlantic Time (Canada)
+                    </option>
                     <option data-offset="-10800" value="Santiago">(GMT-03:00) Santiago</option>
                     <option data-offset="-10800" value="Brasilia">(GMT-03:00) Brasilia</option>
                     <option data-offset="-10800" value="Buenos Aires">(GMT-03:00) Buenos Aires</option>
@@ -628,9 +641,12 @@
               <div class="form-group row">
                 <label class="col-3">Login verification</label>
                 <div class="col-9">
-                  <button type="button" class="btn btn-light-primary font-weight-bold btn-sm">Setup login verification</button>
-                  <div class="form-text text-muted mt-3">After you log in, you will be asked for additional information to confirm your identity and protect your account from being compromised.
-                    <a href="#">Learn more</a>.</div>
+                  <button type="button" class="btn btn-light-primary font-weight-bold btn-sm">Setup login verification
+                  </button>
+                  <div class="form-text text-muted mt-3">After you log in, you will be asked for additional information
+                    to confirm your identity and protect your account from being compromised.
+                    <a href="#">Learn more</a>.
+                  </div>
                 </div>
               </div>
               <div class="form-group row">
@@ -641,14 +657,17 @@
                       <input type="checkbox" />
                       <span></span>Require personal information to reset your password</label>
                   </div>
-                  <div class="form-text text-muted">For extra security, this requires you to confirm your email or phone number when you reset your password.
-                    <a href="#" class="font-weight-bold">Learn more</a>.</div>
+                  <div class="form-text text-muted">For extra security, this requires you to confirm your email or phone
+                    number when you reset your password.
+                    <a href="#" class="font-weight-bold">Learn more</a>.
+                  </div>
                 </div>
               </div>
               <div class="form-group row mt-10">
                 <label class="col-3"></label>
                 <div class="col-9">
-                  <button type="button" class="btn btn-light-danger font-weight-bold btn-sm">Deactivate your account ?</button>
+                  <button type="button" class="btn btn-light-danger font-weight-bold btn-sm">Deactivate your account ?
+                  </button>
                 </div>
               </div>
             </div>
@@ -670,27 +689,28 @@
     <!--end::Button-->
     <!--begin::Dropdown-->
     <div
-      class="btn-group ml-2"
-      :class="{'show': isSubmitDropdownVisible}"
-      v-click-away="hideSubmitDropdown"
+        class="btn-group ml-2"
+        :class="{'show': isSubmitDropdownVisible}"
+        v-click-away="hideSubmitDropdown"
     >
       <button
-        type="button"
-        class="btn btn-primary font-weight-bold"
-        @click="hideSubmitDropdown"
-      >Save Product</button>
+          type="button"
+          class="btn btn-primary font-weight-bold"
+          @click="hideSubmitDropdown"
+      >Save Product
+      </button>
       <button
-        type="button"
-        class="btn btn-primary font-weight-bold dropdown-toggle dropdown-toggle-split"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        :aria-expanded="isSubmitDropdownVisible"
-        @click="toggleSubmitDropdown"
+          type="button"
+          class="btn btn-primary font-weight-bold dropdown-toggle dropdown-toggle-split"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          :aria-expanded="isSubmitDropdownVisible"
+          @click="toggleSubmitDropdown"
       ></button>
-<!--TODO vueClickAway to not affect the trigger      -->
+      <!--TODO vueClickAway to not affect the trigger      -->
       <div
-        class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right"
-        :class="{'show': isSubmitDropdownVisible}"
+          class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right"
+          :class="{'show': isSubmitDropdownVisible}"
       >
         <ul class="navi py-5">
           <li class="navi-item">
@@ -727,10 +747,13 @@
 <script>
 import { ref } from 'vue'
 import VCKEditor from "resources/components/forms/inputs/VCKEditor"
+import VDropZone from "resources/components/forms/inputs/VDropZone";
+
 export default {
   name: "AddProduct",
   components: {
-    VCKEditor
+    VCKEditor,
+    VDropZone,
   },
   setup() {
     let isSubmitDropdownVisible = ref(false)
