@@ -48,7 +48,9 @@ export default {
         maxFiles: 10,
         maxFilesize: 10, // MB
         addRemoveLinks: true,
+        autoQueue: true,
         accept: function(file, done) {
+          done()
           console.log(file)
           console.log(done)
         }
