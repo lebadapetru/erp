@@ -32,7 +32,7 @@ $header-config: (
 		),
 		// Fixed Mode
 		fixed: (
-			zindex: 97,
+			zindex: 1001,//old value 97 but need 1001 fix for ckeditor
 			height: 65px
 		)
 	),

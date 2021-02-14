@@ -39,6 +39,7 @@
     "vee-validate": "^4.0.0-beta.19",
     "vue": "^3.0.2",
     "vue-router": "^4.0.3",
+    "vue-select": "git+https://github.com/sagalbot/vue-select.git#feat/vue-3-compat",
     "vuex": "^4.0.0-rc.1",
     "yup": "^0.29.3"
   }
