@@ -127,9 +127,16 @@
 @import "themes/layout/brand/dark";
 @import "themes/layout/aside/dark";
 
+@import '~vue-select/src/scss/vue-select.scss';
+
+
 .error-message {
     margin-top: 0.25rem;
     color: $danger;
     font-size: 0.9rem;
     font-weight: 400;
+}
+
+.ki {
+    color: $primary;
 }
