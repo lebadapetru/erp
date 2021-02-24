@@ -17,7 +17,7 @@
 
 <script>
 import { useField } from 'vee-validate'
-import { capitalize } from 'lodash'
+import capitalize from 'lodash/capitalize'
 
 export default {
   name: "VEmailInput",

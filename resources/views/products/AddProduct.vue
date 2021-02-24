@@ -281,7 +281,13 @@
               <h6 class="card-label">Categories</h6>
             </div>
 
-            <VSelect2 />
+            <VSelect2
+                :placeholder="`Search for categories`"
+                :has-tags="true"
+                :has-multiple="true"
+                :data='categories'
+                :add-item-callback="addCategory"
+            />
             <span class="form-text text-muted">Add this product to a category so it’s easy to find in your store.</span>
           </div>
 
@@ -380,7 +386,29 @@ export default {
   },
   setup() {
     let isSubmitDropdownVisible = ref(false)
+    let categories = ref([])
+    const getCategories = async () => {
+      const response = await httpClient.get('/api/categories')
+      response.data.forEach(category => {
+        categories.value.push({
+          id: category.id,
+          text: category.title,
+        })
+      })
 
+      console.log(categories)
+    }
+    getCategories()
+    const addCategory = (category) => {
+      httpClient.post('/api/categories', {
+        title: category?.text
+      }).then((response) => {
+        console.log('added')
+        console.log(response)
+      })
+
+      return Promise.resolve('test')
+    }
     const toggleSubmitDropdown = () => {
       isSubmitDropdownVisible.value = !isSubmitDropdownVisible.value
     }
@@ -388,11 +416,12 @@ export default {
     const hideSubmitDropdown = () => {
       isSubmitDropdownVisible.value = false
     }
-
     return {
       toggleSubmitDropdown,
       hideSubmitDropdown,
-      isSubmitDropdownVisible
+      isSubmitDropdownVisible,
+      categories,
+      addCategory
     }
   }
 }

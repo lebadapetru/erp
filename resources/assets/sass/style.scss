@@ -17,6 +17,8 @@
 @import "~dropzone/src/dropzone.scss";
 @import "~dropzone/src/basic.scss";
 
+@import '~select2/dist/css/select2.css';
+
 // 3: Components
 @import "components/utilities",
 "components/burger-icon",
@@ -127,7 +129,7 @@
 @import "themes/layout/brand/dark";
 @import "themes/layout/aside/dark";
 
-@import '~vue-select/src/scss/vue-select.scss';
+//@import '~vue-select/src/scss/vue-select.scss';
 
 
 .error-message {

@@ -28,6 +28,7 @@ httpClient.interceptors.request.use(function (config) {
 
 httpClient.interceptors.response.use(function (response) {
   NProgress.done()
+  /*TODO handle success response with a simple fixed top bar message*/
   //handleResponse(response)
   console.log(response)
 

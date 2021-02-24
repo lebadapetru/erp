@@ -866,7 +866,8 @@
 
 <script>
 import { computed } from "vue";
-import { startCase, toLower } from "lodash"
+import startCase from "lodash/startCase"
+import toLower from "lodash/toLower"
 import { useStore } from "vuex";
 
 export default {
