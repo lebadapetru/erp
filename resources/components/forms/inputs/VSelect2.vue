@@ -1,5 +1,6 @@
 <template>
   <select
+      ref="el"
       class="vue-select2 form-control"
   >
   </select>
@@ -9,6 +10,8 @@
 import {
   onMounted,
   onUnmounted,
+  watch,
+  ref
 } from 'vue'
 import 'select2'
 import isEmpty from 'lodash/isEmpty'
@@ -17,7 +20,7 @@ import Swal from "sweetalert2";
 
 export default {
   name: "VSelect2",
-  emits: [],
+  emits: ['item-added'],
   props: {
     placeholder: {
       type: String,
@@ -44,7 +47,8 @@ export default {
       required: false
     }
   },
-  setup(props, { emit }) {
+  setup(props, {emit}) {
+    const el = ref(null)
     onMounted(() => {
       $(document).ready(function () {
         console.log(props.data)
@@ -90,8 +94,10 @@ export default {
               if (result.isConfirmed) {
                 props.addItemCallback.call(this, event.params.data).then((response) => {
                   console.log(response)
-                  emit.event('item-added')
+                  emit('item-added')
                 })
+              } else {
+                event.params.data.selected = false
               }
 
             })
@@ -107,7 +113,12 @@ export default {
           .select2("destroy")
     })
 
+    watch(props.data, (newValue) => {
+      console.log(newValue)
+    })
+
     return {
+      el
     }
   }
 }

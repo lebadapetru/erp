@@ -287,6 +287,7 @@
                 :has-multiple="true"
                 :data='categories'
                 :add-item-callback="addCategory"
+                @item-added="getCategories()"
             />
             <span class="form-text text-muted">Add this product to a category so it’s easy to find in your store.</span>
           </div>
@@ -388,6 +389,7 @@ export default {
     let isSubmitDropdownVisible = ref(false)
     let categories = ref([])
     const getCategories = async () => {
+      console.log('getCategories')
       const response = await httpClient.get('/api/categories')
       response.data.forEach(category => {
         categories.value.push({
@@ -421,7 +423,8 @@ export default {
       hideSubmitDropdown,
       isSubmitDropdownVisible,
       categories,
-      addCategory
+      addCategory,
+      getCategories
     }
   }
 }
