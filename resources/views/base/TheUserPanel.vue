@@ -3,6 +3,7 @@
       id="kt_quick_user"
       class="offcanvas offcanvas-right p-10"
       :class="{'offcanvas-on': isUserPanelVisible}"
+      v-click-away="{callback: closeUserPanel, trigger: '#kt_quick_user_toggle'}"
   >
     <!--begin::Header-->
     <div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">

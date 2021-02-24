@@ -1,12 +1,13 @@
+import isEqual from 'lodash/isEqual'
+
 const clickEventType = document.ontouchstart !== null ? "click" : "touchstart";
 
 const UNIQUE_ID = "__vue_click_away__";
 
 const onMounted = (el, binding, vnode) => {
   onUnmounted(el);
-
   let vm = vnode.context;
-  let callback = binding.value;
+  let callback = binding.value.callback;
 
   let nextTick = true;
   setTimeout(function () {
@@ -39,25 +40,14 @@ const onMounted = (el, binding, vnode) => {
   }
 
   el[UNIQUE_ID] = (event) => {
-    console.log(el)
-    console.log(event.target)
-    console.log(el.contains(event.target))
-    console.log(isVisible(el))
-    console.log(callback)
-    console.log(nextTick)
-    console.log(typeof callback === "function")
     if (
       (!el || !el.contains(event.target)) &&
       isVisible(el) &&
+      ('#'+event.target?.id !== binding.value?.trigger) &&
       callback &&
       nextTick &&
       typeof callback === "function"
     ) {
-/*      if (
-        el.getAttribute('aria-haspopup') &&
-
-      )*/
-      console.log('trigger')
       return callback.call(vm, event);
     }
   };
@@ -71,10 +61,10 @@ const onUnmounted = (el) => {
 };
 
 const onUpdated = (el, binding, vnode) => {
-  if (binding.value === binding.oldValue) {
+  if (isEqual(binding.value, binding.oldValue)) {
     return;
   }
-  onMounted(el, binding, vnode);
+  onMounted(el, binding.value, vnode);
 };
 
 const plugin = {

@@ -60,7 +60,7 @@ export default {
           tokenSeparators: [',', ' '],
           data: props.data,
           createTag: function (params) {
-            console.log(params)
+            /*TODO creation constraints based on user permissions*/
             let term = trim(params.term);
 
             if (isEmpty(term)) {
@@ -97,11 +97,9 @@ export default {
                   emit('item-added')
                 })
               } else {
-                event.params.data.selected = false
+                $(`.vue-select2 option[value='${event.params.data.id}']`).remove()
               }
-
             })
-
           }
         })
       })

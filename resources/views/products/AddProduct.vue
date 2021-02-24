@@ -317,12 +317,10 @@
     <div
         class="btn-group ml-2"
         :class="{'show': isSubmitDropdownVisible}"
-        v-click-away="hideSubmitDropdown"
     >
       <button
           type="button"
           class="btn btn-primary font-weight-bold"
-          @click="hideSubmitDropdown"
       >Save Product
       </button>
       <button
@@ -332,11 +330,12 @@
           aria-haspopup="true"
           :aria-expanded="isSubmitDropdownVisible"
           @click="toggleSubmitDropdown"
+          id="kt_submit_menu_toggle"
       ></button>
-      <!--TODO vueClickAway to not affect the trigger      -->
       <div
           class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right"
           :class="{'show': isSubmitDropdownVisible}"
+          v-click-away="{callback: hideSubmitDropdown, trigger: '#kt_submit_menu_toggle'}"
       >
         <ul class="navi py-5">
           <li class="navi-item">
