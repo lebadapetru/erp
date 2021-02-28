@@ -2,15 +2,38 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ProductsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"product: read"}},
+ *     denormalizationContext={"groups"={"product: write"}},
+ *     attributes={"pagination_items_per_page"=30}
+ * )
+ * @ApiFilter(PropertyFilter::class)
+ * @ApiFilter(RangeFilter::class, properties={"price"})
+ * @ApiFilter(BooleanFilter::class, properties={"isPublic"})
+ * @ApiFilter(DateFilter::class, properties={"deletedAt", "updatedAt", "createdAt"})
+ * @ApiFilter(NumericFilter::class, properties={"stock"})
+ * @ApiFilter(SearchFilter::class, properties={
+ *          "title": "partial",
+ *          "description": "partial",
+ *          "status": "exact",
+ *          "sku": "word_start"
+ *     })
  * @ORM\Entity(repositoryClass=ProductsRepository::class)
  * @ORM\Table("`products`")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
@@ -26,65 +49,83 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"product: read", "product: write"})
      */
     private string $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"product: read", "product: write"})
      */
     private ?string $description;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"product: read", "product: write"})
      */
-    private bool $public = true;
+    private bool $isPublic = true;
 
     /**
      * TODO oneToOne relation to a diff table
      * @ORM\Column(type="integer")
+     * @Groups({"product: read", "product: write"})
      */
     private int $status;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"product: read", "product: write"})
      */
     private ?string $sku;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"product: read", "product: write"})
      */
     private int $stock = 0;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
+     * @ORM\Column(type="integer")
+     * @Groups({"product: read", "product: write"})
      */
-    private $price = 0;
+    private int $price = 0;
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
+     * @Groups({"product: read"})
      */
     private ?\DateTimeInterface $deletedAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
+     * @Groups({"product: read"})
      */
     private ?\DateTimeInterface $updatedAt;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
+     * @Groups({"product: read"})
      */
     private ?\DateTimeInterface $createdAt;
 
     /**
      * @ORM\ManyToMany(targetEntity=Media::class, inversedBy="products")
+     * @Groups({"product: read", "product: write"})
      */
-    private $media; /*TODO wait for stable php 8 and symfony to use union type hinting*/
+    private $media;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="products")
+     * @Groups({"product: read", "product: write"})
+     */
+    private $categories; /*TODO wait for stable php 8 and symfony to use union type hinting*/
 
     public function __construct()
     {
         $this->media = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -118,12 +159,12 @@ class Product
 
     public function isPublic(): ?bool
     {
-        return $this->public;
+        return $this->isPublic;
     }
 
-    public function setPublic(bool $public): self
+    public function setIsPublic(bool $isPublic): self
     {
-        $this->public = $public;
+        $this->isPublic = $isPublic;
 
         return $this;
     }
@@ -234,6 +275,30 @@ class Product
         if ($this->media->contains($media)) {
             $this->media->removeElement($media);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        $this->categories->removeElement($category);
 
         return $this;
     }

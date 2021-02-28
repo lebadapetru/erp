@@ -35,7 +35,7 @@ class Service
     /**
      * @ORM\Column(type="boolean")
      */
-    private $active;
+    private bool $isActive = false;
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
@@ -95,12 +95,12 @@ class Service
 
     public function isActive(): ?bool
     {
-        return $this->active;
+        return $this->isActive;
     }
 
-    public function setIsActive(bool $active): self
+    public function setIsActive(bool $isActive): self
     {
-        $this->active = $active;
+        $this->isActive = $isActive;
 
         return $this;
     }

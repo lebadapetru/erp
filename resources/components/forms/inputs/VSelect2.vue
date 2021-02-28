@@ -1,7 +1,7 @@
 <template>
   <select
-      ref="el"
-      class="vue-select2 form-control"
+    ref="el"
+    class="vue-select2 form-control"
   >
   </select>
 </template>
@@ -107,13 +107,19 @@ export default {
 
     onUnmounted(() => {
       $('.vue-select2')
-          .off()
-          .select2("destroy")
+        .off()
+        .select2("destroy")
     })
 
-    watch(props.data, (newValue) => {
-      console.log(newValue)
-    })
+    watch(
+      props.data,
+      (value, newValue) => {
+        console.log('watch')
+        console.log(value)
+        console.log(newValue)
+      },
+      {immediate: false, lazy: true}
+    )
 
     return {
       el

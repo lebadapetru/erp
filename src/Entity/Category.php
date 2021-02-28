@@ -4,11 +4,18 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CategoriesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"category: read"}},
+ *     denormalizationContext={"groups"={"category: write"}},
+ *     attributes={"pagination_items_per_page"=1}
+ * )
  * @ORM\Entity(repositoryClass=CategoriesRepository::class)
  * @ORM\Table("`categories`")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
@@ -24,35 +31,52 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"category: read", "category: write"})
      */
     private string $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"category: read", "category: write"})
      */
     private ?string $description;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"category: read", "category: write"})
      */
-    private bool $public = true;
+    private bool $isPublic = true;
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
+     * @Groups({"category: read"})
      */
     private ?\DateTimeInterface $deletedAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
+     * @Groups({"category: read"})
      */
     private ?\DateTimeInterface $updatedAt;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
+     * @Groups({"category: read"})
      */
     private ?\DateTimeInterface $createdAt;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Product::class, mappedBy="categories")
+     * @Groups({"category: read", "category: write"})
+     */
+    private $products;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -85,12 +109,12 @@ class Category
 
     public function isPublic(): ?bool
     {
-        return $this->public;
+        return $this->isPublic;
     }
 
-    public function setPublic(bool $public): self
+    public function setIsPublic(bool $isPublic): self
     {
-        $this->public = $public;
+        $this->isPublic = $isPublic;
 
         return $this;
     }
@@ -127,6 +151,33 @@ class Category
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Product[]
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+            $product->addCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        if ($this->products->removeElement($product)) {
+            $product->removeCategory($this);
+        }
 
         return $this;
     }

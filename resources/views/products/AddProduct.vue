@@ -282,6 +282,7 @@
             </div>
 
             <VSelect2
+              v-if="categories"
                 :placeholder="`Search for categories`"
                 :has-tags="true"
                 :has-multiple="true"
