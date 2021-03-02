@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"={"category: read"}},
  *     denormalizationContext={"groups"={"category: write"}},
- *     attributes={"pagination_items_per_page"=1}
+ *     attributes={}
  * )
  * @ORM\Entity(repositoryClass=CategoriesRepository::class)
  * @ORM\Table("`categories`")
@@ -26,6 +26,7 @@ class Category
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"category: read", "category: write"})
      */
     private int $id;
 

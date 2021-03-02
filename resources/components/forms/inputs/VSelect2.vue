@@ -1,7 +1,7 @@
 <template>
   <select
-    ref="el"
-    class="vue-select2 form-control"
+      ref="el"
+      class="vue-select2 form-control"
   >
   </select>
 </template>
@@ -11,7 +11,8 @@ import {
   onMounted,
   onUnmounted,
   watch,
-  ref
+  ref,
+  nextTick
 } from 'vue'
 import 'select2'
 import isEmpty from 'lodash/isEmpty'
@@ -49,13 +50,15 @@ export default {
   },
   setup(props, {emit}) {
     const el = ref(null)
-    onMounted(() => {
+
+    const createSelect2 = () => {
       $(document).ready(function () {
         console.log(props.data)
-        $('.vue-select2').select2({
+        console.log(isEmpty(props.data))
+        $(el.value).select2({
           placeholder: props.placeholder,
           multiple: props.hasMultiple,
-          tags: props.hasTags,
+          tags: props.hasTags && props.addItemCallback,
           allowClear: props.allowClear,
           tokenSeparators: [',', ' '],
           data: props.data,
@@ -74,7 +77,6 @@ export default {
             }
           },
         }).on('select2:select', function (event) {
-          console.log(event)
           if (event.params.data?.newTag && props.addItemCallback !== undefined) {
             Swal.fire({
               title: 'Are you sure?',
@@ -103,23 +105,32 @@ export default {
           }
         })
       })
+    }
+
+    onMounted(() => {
+      /*TODO there is a known issue, select2 initialize before the props.data has been received when cache is invalidated*/
+      createSelect2()
     })
 
     onUnmounted(() => {
-      $('.vue-select2')
-        .off()
-        .select2("destroy")
+      $(el.value)
+          .off()
+          .val(null)
+          .empty()
+          .select2("destroy")
     })
 
-    watch(
-      props.data,
-      (value, newValue) => {
-        console.log('watch')
-        console.log(value)
-        console.log(newValue)
-      },
-      {immediate: false, lazy: true}
-    )
+    watch(() => props.data, (newValue, oldValue) => {
+      if ($(el.value).hasClass("select2-hidden-accessible")) {
+        $(el.value)
+            .off()
+            .val(null)
+            .empty()
+            .select2("destroy")
+      }
+      createSelect2()
+    });
+
 
     return {
       el

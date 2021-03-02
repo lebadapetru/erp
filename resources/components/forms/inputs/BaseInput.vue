@@ -1,13 +1,13 @@
 <template>
   <input
-      type="text"
+      :type="type"
       :class="styleClasses"
       :name="name"
       :id="name"
       :value="inputValue"
       :placeholder="placeholder"
       :autocomplete="autocomplete"
-      @input="handleChange"
+      @input="emitEvent"
       @blur="handleBlur"
   />
   <div class="error-message" v-if="errorMessage">
@@ -20,8 +20,12 @@ import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
 
 export default {
-  name: "VTextInput",
+  name: "BaseInput",
   props: {
+    type: {
+      type: String,
+      default: 'text'
+    },
     styleClasses: {
       type: String,
       default: 'form-control'
@@ -34,31 +38,38 @@ export default {
       type: String,
       default: 'on'
     },
-    value: {
-      type: String,
-      default: '',
-    },
     name: {
       type: String,
       default: 'text',
     },
-    successMessage: {
-      type: String,
-      default: '',
+    modelValue: {
+      type: [String, Number],
+      default: ''
     },
+    rules: {
+      type: Object,
+      default: undefined
+    }
   },
-  setup(props) {
+  emits: ['update:modelValue'],
+  setup(props, {emit}) {
     const {
       value: inputValue,
       errorMessage,
       handleBlur,
       handleChange,
       meta,
-    } = useField(props.name, undefined, {
-      initialValue: props.value,
+    } = useField(props.name, props.rules, {
+      initialValue: props.modelValue,
     });
 
+    const emitEvent = (event) => {
+      handleChange(event)
+      emit('update:modelValue', event.target.value);
+    }
+
     return {
+      emitEvent,
       handleChange,
       handleBlur,
       errorMessage,

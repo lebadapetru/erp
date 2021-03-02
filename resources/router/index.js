@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 const TheDashboard = () => import('../views/dashboard/TheDashboard')
 const TheCategories = () => import('../views/categories/TheCategories')
 const TheProducts = () => import('../views/products/TheProducts')
-const AddProduct = () => import('../views/products/AddProduct')
+const ProductForm = () => import('../components/forms/VProductForm')
 const TheServices = () => import('../views/services/TheServices')
 const TheECommerce = () => import('../views/ecommerce/TheECommerce')
 const NotFound = () => import('../views/dashboard/TheDashboard')
@@ -39,7 +39,7 @@ export default createRouter({
             {
               path: '/products/new',
               name: 'Add product',
-              component: AddProduct,
+              component: ProductForm,
               meta: {}
             },
             {

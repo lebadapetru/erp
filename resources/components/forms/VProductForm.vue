@@ -137,7 +137,7 @@
             <div class="form-group row">
               <div class="col-12">
                 <label>Available</label>
-                  <input type="number" class="form-control" placeholder="0" value="0" />
+                <input type="number" class="form-control" placeholder="0" value="0" />
               </div>
             </div>
           </div>
@@ -282,14 +282,15 @@
             </div>
 
             <VSelect2
-              v-if="categories"
+                v-if="categories"
                 :placeholder="`Search for categories`"
                 :has-tags="true"
                 :has-multiple="true"
-                :data='categories'
-                :add-item-callback="addCategory"
+                :data="categories"
+                :add-item-callback="createCategory"
                 @item-added="getCategories()"
             />
+
             <span class="form-text text-muted">Add this product to a category so it’s easy to find in your store.</span>
           </div>
 
@@ -371,14 +372,15 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { toRefs, reactive } from 'vue'
 import VCKEditor from "resources/components/forms/inputs/VCKEditor"
 import VDropZone from "resources/components/forms/inputs/VDropZone";
 import VSelect from "resources/components/forms/inputs/VSelect";
 import VSelect2 from "resources/components/forms/inputs/VSelect2";
+import { useCategoryRepository } from "resources/js/repository/CategoryRepository"
 
 export default {
-  name: "AddProduct",
+  name: "VProductForm",
   components: {
     VCKEditor,
     VDropZone,
@@ -386,22 +388,21 @@ export default {
     VSelect2,
   },
   setup() {
-    let isSubmitDropdownVisible = ref(false)
-    let categories = ref([])
-    const getCategories = async () => {
-      console.log('getCategories')
-      const response = await httpClient.get('/api/categories')
-      response.data.forEach(category => {
-        categories.value.push({
-          id: category.id,
-          text: category.title,
-        })
-      })
+    const state = reactive({
+      isSubmitDropdownVisible: false,
+      categories: [],
+    })
 
-      console.log(categories)
-    }
-    getCategories()
-    const addCategory = (category) => {
+    const { getCategories } = useCategoryRepository()
+
+    getCategories().then((categories) => {
+      state.categories = categories.map(category => ({
+        id: category.id,
+        text: category.title,
+      }))
+    })
+
+    const createCategory = (category) => {
       httpClient.post('/api/categories', {
         title: category?.text
       }).then((response) => {
@@ -409,22 +410,22 @@ export default {
         console.log(response)
       })
 
-      return Promise.resolve('test')
+      return Promise.resolve()
     }
+
     const toggleSubmitDropdown = () => {
-      isSubmitDropdownVisible.value = !isSubmitDropdownVisible.value
+      state.isSubmitDropdownVisible = !state.isSubmitDropdownVisible
     }
 
     const hideSubmitDropdown = () => {
-      isSubmitDropdownVisible.value = false
+      state.isSubmitDropdownVisible = false
     }
     return {
+      ...toRefs(state),
       toggleSubmitDropdown,
       hideSubmitDropdown,
-      isSubmitDropdownVisible,
-      categories,
-      addCategory,
-      getCategories
+      createCategory,
+      getCategories,
     }
   }
 }

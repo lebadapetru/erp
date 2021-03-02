@@ -6,13 +6,21 @@
       :validation-schema="schema"
   >
     <div class="form-group">
-      <VEmailInput
+      <BaseInput
           style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+          type="text"
+          placeholder="Email"
+          autocomplete="email"
+          name="email"
       />
     </div>
     <div class="form-group">
-      <VPasswordInput
+      <BaseInput
           style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+          type="text"
+          placeholder="Password"
+          autocomplete="password"
+          name="password"
       />
     </div>
     <div class="form-group d-flex flex-wrap justify-content-between align-items-center px-8 opacity-60">
@@ -37,8 +45,7 @@
 
 <script>
 import { Form, Field } from 'vee-validate'
-import VEmailInput from "./inputs/VEmailInput";
-import VPasswordInput from "./inputs/VPasswordInput";
+import BaseInput from "./inputs/BaseInput";
 import { object, string } from 'yup'
 import { useStore } from "vuex";
 
@@ -47,8 +54,7 @@ export default {
   components: {
     Form,
     Field,
-    VEmailInput,
-    VPasswordInput
+    BaseInput,
   },
   setup() {
     const store = useStore()

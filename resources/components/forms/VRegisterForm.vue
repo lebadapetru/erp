@@ -1,47 +1,57 @@
 <template>
   <Form
-    class="form text-center"
-    id="kt_login_signup_form"
-    @submit="onSubmit"
-    :validation-schema="schema"
+      class="form text-center"
+      id="kt_login_signup_form"
+      @submit="onSubmit"
+      :validation-schema="schema"
   >
     <div class="row">
       <div class="col">
         <div class="form-group">
-          <VTextInput
-            style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
-            placeholder="First name"
-            name="firstName"
-            autocomplete="given-name"
+          <BaseInput
+              type="text"
+              style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+              placeholder="First name"
+              name="firstName"
+              autocomplete="given-name"
           />
         </div>
       </div>
       <div class="col">
         <div class="form-group">
-          <VTextInput
-            style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
-            placeholder="Last name"
-            name="lastName"
-            autocomplete="family-name"
+          <BaseInput
+              type="text"
+              style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+              placeholder="Last name"
+              name="lastName"
+              autocomplete="family-name"
           />
         </div>
       </div>
     </div>
     <div class="form-group">
-      <VEmailInput
-        style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+      <BaseInput
+          type="text"
+          style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+          placeholder="Email"
+          autocomplete="email"
+          name="email"
       />
     </div>
     <div class="form-group">
-      <VPasswordInput
-        style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+      <BaseInput
+          style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+          placeholder="Password"
+          autocomplete="password"
+          name="password"
       />
     </div>
     <div class="form-group">
-      <VPasswordInput
-        name="confirmPassword"
-        placeholder="Confirm Password"
-        style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+      <BaseInput
+          style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+          placeholder="Confirm Password"
+          autocomplete="password"
+          name="confirmPassword"
       />
     </div>
     <div class="form-group px-8">
@@ -57,9 +67,9 @@
     <div class="form-group">
       <button id="kt_login_signup_submit" class="btn btn-pill btn-primary opacity-90 px-15 py-3 m-2">Sign Up</button>
       <a
-        @click="showLoginSection"
-        id="kt_login_signup_cancel"
-        class="btn btn-pill btn-outline-white opacity-70 px-15 py-3 m-2"
+          @click="showLoginSection"
+          id="kt_login_signup_cancel"
+          class="btn btn-pill btn-outline-white opacity-70 px-15 py-3 m-2"
       >Cancel</a>
     </div>
   </Form>
@@ -67,13 +77,12 @@
 
 <script>
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import VEmailInput from "./inputs/VEmailInput";
-import VPasswordInput from "./inputs/VPasswordInput";
-import VTextInput from "./inputs/VTextInput";
-import { object, string, ref } from 'yup'
+import BaseInput from "./inputs/BaseInput";
+import { object, string, ref as yupRef } from 'yup'
 import Swal from 'sweetalert2'
 import { LoremIpsum } from "lorem-ipsum";
 import { useStore } from "vuex";
+import { ref } from 'vue'
 
 export default {
   name: "VRegisterForm",
@@ -81,11 +90,10 @@ export default {
     Form,
     Field,
     ErrorMessage,
-    VEmailInput,
-    VPasswordInput,
-    VTextInput
+    BaseInput
   },
   setup() {
+    let firstName = ref('kkt')
     const store = useStore()
 
     const schema = object().shape({
@@ -93,11 +101,11 @@ export default {
       lastName: string().trim().required('Last name is required'),
       email: string().required('Email address is required').email(),
       password: string().trim().required('Password is required').min(8).max(128), /*TODO implement strong password validation*/
-      confirmPassword: string().required('Password confirmation is required').oneOf([ref("password")], 'Passwords do not match'),
+      confirmPassword: string().required('Password confirmation is required').oneOf([yupRef("password")], 'Passwords do not match'),
       agreeTermsAndConditions: string().required('You must accept the terms and conditions')
     });
 
-    function openTermsAndConditions() {
+    const openTermsAndConditions = () => {
       const lorem = new LoremIpsum({
         sentencesPerParagraph: {
           max: 8,
@@ -120,7 +128,7 @@ export default {
       })
     }
 
-    function onSubmit(values) {
+    const onSubmit = (values) => {
       httpClient.post('/register', values).then((response) => {
         Swal.fire({
           text: response.data,
@@ -138,6 +146,7 @@ export default {
     }
 
     return {
+      firstName,
       schema,
       openTermsAndConditions,
       onSubmit,

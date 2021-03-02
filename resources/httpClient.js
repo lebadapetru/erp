@@ -17,11 +17,11 @@ const httpClient = axios.create({
 
 httpClient.interceptors.request.use(function (config) {
   NProgress.start()
-  console.log(config)
+  //console.log(config)
 
   return config;
 }, function (error) {
-  console.log(error)
+  //console.log(error)
 
   return Promise.reject(error);
 });
@@ -30,12 +30,12 @@ httpClient.interceptors.response.use(function (response) {
   NProgress.done()
   /*TODO handle success response with a simple fixed top bar message*/
   //handleResponse(response)
-  console.log(response)
+  //console.log(response)
 
   return response;
 }, function (error) {
   NProgress.done()
-  console.log(error.response)
+  //console.log(error.response)
   handleResponse(error.response)
 
   return Promise.reject(error);

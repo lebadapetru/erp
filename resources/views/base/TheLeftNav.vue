@@ -89,7 +89,7 @@
 <script>
 import { useRouter } from 'vue-router'
 import TheBrand from "resources/views/base/TheBrand";
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 
 export default {
   name: "TheLeftNav",
@@ -128,9 +128,7 @@ export default {
           })
     }
 
-    const routes = computed(() => {
-      return processRoutes(router.options.routes)
-    })
+    const routes = processRoutes(router.options.routes)
 
     const toggleMenuItem = (item, index) => {
       if (!item.hasChildren) {

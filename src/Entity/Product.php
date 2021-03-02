@@ -21,7 +21,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
  * @ApiResource(
  *     normalizationContext={"groups"={"product: read"}},
  *     denormalizationContext={"groups"={"product: write"}},
- *     attributes={"pagination_items_per_page"=30}
+ *     attributes={}
  * )
  * @ApiFilter(PropertyFilter::class)
  * @ApiFilter(RangeFilter::class, properties={"price"})
