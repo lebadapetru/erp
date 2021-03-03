@@ -1,4 +1,5 @@
 <template>
+  <label v-if="label.trim().length">{{ label }}</label>
   <input
       :type="type"
       :class="styleClasses"
@@ -7,7 +8,7 @@
       :value="inputValue"
       :placeholder="placeholder"
       :autocomplete="autocomplete"
-      @input="emitEvent"
+      @input="onInput"
       @blur="handleBlur"
   />
   <div class="error-message" v-if="errorMessage">
@@ -20,8 +21,12 @@ import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
 
 export default {
-  name: "BaseInput",
+  name: "VBaseInput",
   props: {
+    label: {
+      type: String,
+      default: ''
+    },
     type: {
       type: String,
       default: 'text'
@@ -63,13 +68,13 @@ export default {
       initialValue: props.modelValue,
     });
 
-    const emitEvent = (event) => {
+    const onInput = (event) => {
       handleChange(event)
       emit('update:modelValue', event.target.value);
     }
 
     return {
-      emitEvent,
+      onInput,
       handleChange,
       handleBlur,
       errorMessage,

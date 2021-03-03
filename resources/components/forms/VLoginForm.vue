@@ -6,7 +6,7 @@
       :validation-schema="schema"
   >
     <div class="form-group">
-      <BaseInput
+      <VBaseInput
           style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
           type="text"
           placeholder="Email"
@@ -15,7 +15,7 @@
       />
     </div>
     <div class="form-group">
-      <BaseInput
+      <VBaseInput
           style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
           type="text"
           placeholder="Password"
@@ -45,7 +45,7 @@
 
 <script>
 import { Form, Field } from 'vee-validate'
-import BaseInput from "./inputs/BaseInput";
+import VBaseInput from "./inputs/VBaseInput";
 import { object, string } from 'yup'
 import { useStore } from "vuex";
 
@@ -54,7 +54,7 @@ export default {
   components: {
     Form,
     Field,
-    BaseInput,
+    VBaseInput,
   },
   setup() {
     const store = useStore()

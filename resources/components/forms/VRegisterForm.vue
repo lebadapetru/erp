@@ -8,7 +8,7 @@
     <div class="row">
       <div class="col">
         <div class="form-group">
-          <BaseInput
+          <VBaseInput
               type="text"
               style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
               placeholder="First name"
@@ -19,7 +19,7 @@
       </div>
       <div class="col">
         <div class="form-group">
-          <BaseInput
+          <VBaseInput
               type="text"
               style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
               placeholder="Last name"
@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="form-group">
-      <BaseInput
+      <VBaseInput
           type="text"
           style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
           placeholder="Email"
@@ -39,7 +39,7 @@
       />
     </div>
     <div class="form-group">
-      <BaseInput
+      <VBaseInput
           style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
           placeholder="Password"
           autocomplete="password"
@@ -47,7 +47,7 @@
       />
     </div>
     <div class="form-group">
-      <BaseInput
+      <VBaseInput
           style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
           placeholder="Confirm Password"
           autocomplete="password"
@@ -77,8 +77,8 @@
 
 <script>
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import BaseInput from "./inputs/BaseInput";
 import { object, string, ref as yupRef } from 'yup'
+import VBaseInput from "./inputs/VBaseInput";
 import Swal from 'sweetalert2'
 import { LoremIpsum } from "lorem-ipsum";
 import { useStore } from "vuex";
@@ -90,10 +90,9 @@ export default {
     Form,
     Field,
     ErrorMessage,
-    BaseInput
+    VBaseInput
   },
   setup() {
-    let firstName = ref('kkt')
     const store = useStore()
 
     const schema = object().shape({
@@ -146,7 +145,6 @@ export default {
     }
 
     return {
-      firstName,
       schema,
       openTermsAndConditions,
       onSubmit,

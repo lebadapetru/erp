@@ -1,10 +1,18 @@
 function useCategoryRepository() {
   const url = '/api/categories'
 
-  const getCategories = () => {
+  const createCategory = async (category) => {
+    return await httpClient.post(url, category)
+      .then((response) => {
+        console.log('added')
+        console.log(response)
+      })
+  }
+
+  const readCategories = () => {
     return httpClient.get(url)
       .then((response) => {
-        console.log('getCategories')
+        console.log('readCategories')
         console.log(response.data)
         return response.data
       })
@@ -14,7 +22,8 @@ function useCategoryRepository() {
   }
 
   return {
-    getCategories
+    createCategory,
+    readCategories
   }
 }
 

@@ -5,7 +5,7 @@
     @submit="onSubmit"
   >
     <div class="form-group mb-10">
-      <BaseInput
+      <VBaseInput
         style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
         type="text"
         placeholder="Email"
@@ -27,7 +27,7 @@
 
 <script>
 import { Form, Field, ErrorMessage } from 'vee-validate'
-import BaseInput from "./inputs/BaseInput";
+import VBaseInput from "./inputs/VBaseInput";
 import { string } from "yup";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
@@ -38,7 +38,7 @@ export default {
     Form,
     Field,
     ErrorMessage,
-    BaseInput
+    VBaseInput
   },
   setup() {
     const store = useStore()

@@ -1,6 +1,11 @@
 <template>
   <!--begin::Add ProductForm-->
-  <form class="form">
+  <form
+      ref="productForm"
+      class="form"
+      @submit.prevent="onSubmit"
+      :validation-schema="schema"
+  >
     <div class="row">
       <div class="col-xl-8">
         <!--begin::Title&Description-->
@@ -9,7 +14,10 @@
             <div class="form-group row">
               <div class="col-12">
                 <label>Title</label>
-                <input class="form-control" type="text" value="Shoes" />
+                <VBaseInput
+                    placeholder="Cotton blue jeans"
+                    v-model="title"
+                />
               </div>
             </div>
             <div class="form-group row">
@@ -281,15 +289,7 @@
               <h6 class="card-label">Categories</h6>
             </div>
 
-            <VSelect2
-                v-if="categories"
-                :placeholder="`Search for categories`"
-                :has-tags="true"
-                :has-multiple="true"
-                :data="categories"
-                :add-item-callback="createCategory"
-                @item-added="getCategories()"
-            />
+            <VSelectCategories />
 
             <span class="form-text text-muted">Add this product to a category so it’s easy to find in your store.</span>
           </div>
@@ -305,138 +305,70 @@
         <!--end::Organization-->
       </div>
     </div>
+    <VProductFormToolbarActions
+        v-if="productForm"
+        :target-form="productForm"
+    />
   </form>
   <!--end::AddProductForm-->
 
-  <teleport to="#toolbar">
-    <!--begin::Button-->
-    <a href="#" class="btn btn-default font-weight-bold">
-      <i class="ki ki-long-arrow-back icon-xs"></i>
-      Back
-    </a>
-    <!--end::Button-->
-    <!--begin::Dropdown-->
-    <div
-        class="btn-group ml-2"
-        :class="{'show': isSubmitDropdownVisible}"
-    >
-      <button
-          type="button"
-          class="btn btn-primary font-weight-bold"
-      >Save Product
-      </button>
-      <button
-          type="button"
-          class="btn btn-primary font-weight-bold dropdown-toggle dropdown-toggle-split"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          :aria-expanded="isSubmitDropdownVisible"
-          @click="toggleSubmitDropdown"
-          id="kt_submit_menu_toggle"
-      ></button>
-      <div
-          class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right"
-          :class="{'show': isSubmitDropdownVisible}"
-          v-click-away="{callback: hideSubmitDropdown, trigger: '#kt_submit_menu_toggle'}"
-      >
-        <ul class="navi py-5">
-          <li class="navi-item">
-            <a href="#" class="navi-link">
-														<span class="navi-icon">
-															<i class="nav-icon flaticon2-reload"></i>
-														</span>
-              <span class="navi-text">Save &amp; continue</span>
-            </a>
-          </li>
-          <li class="navi-item">
-            <a href="#" class="navi-link">
-														<span class="navi-icon">
-															<i class="nav-icon flaticon2-add-1"></i>
-														</span>
-              <span class="navi-text">Save &amp; add new</span>
-            </a>
-          </li>
-          <li class="navi-item">
-            <a href="#" class="navi-link">
-														<span class="navi-icon">
-															<i class="flaticon2-left-arrow"></i>
-														</span>
-              <span class="navi-text">Save &amp; exit</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <!--end::Dropdown-->
-  </teleport>
+
 </template>
 
 <script>
-import { toRefs, reactive } from 'vue'
+import { useForm } from 'vee-validate'
+import { object, string, ref as yupRef } from 'yup'
+import { toRefs, reactive, ref } from 'vue'
 import VCKEditor from "resources/components/forms/inputs/VCKEditor"
 import VDropZone from "resources/components/forms/inputs/VDropZone";
 import VSelect from "resources/components/forms/inputs/VSelect";
-import VSelect2 from "resources/components/forms/inputs/VSelect2";
-import { useCategoryRepository } from "resources/js/repository/CategoryRepository"
+import VSelectCategories from "resources/views/products/components/forms/inputs/VSelectCategories";
+import VProductFormToolbarActions from "resources/views/products/components/teleports/VProductFormToolbarActions";
+import VBaseInput from "resources/components/forms/inputs/VBaseInput";
 
 export default {
   name: "VProductForm",
   components: {
+    VBaseInput,
+    VProductFormToolbarActions,
     VCKEditor,
     VDropZone,
     VSelect,
-    VSelect2,
+    VSelectCategories,
   },
   setup() {
     const state = reactive({
-      isSubmitDropdownVisible: false,
-      categories: [],
+      title: ''
     })
 
-    const { getCategories } = useCategoryRepository()
+    const { handleSubmit } = useForm()
 
-    getCategories().then((categories) => {
-      state.categories = categories.map(category => ({
-        id: category.id,
-        text: category.title,
-      }))
-    })
+    const productForm = ref(null)
+    console.log(productForm)
+    const schema = object().shape({
+      title: string().trim().required('Title is required.'),
+    });
 
-    const createCategory = (category) => {
-      httpClient.post('/api/categories', {
-        title: category?.text
-      }).then((response) => {
-        console.log('added')
-        console.log(response)
-      })
+    /*const onSubmit = handleSubmit(values => {
+      alert(JSON.stringify(values, null, 2));
+    })*/
 
-      return Promise.resolve()
+    const onSubmit = (e) => {
+      e.preventDefault()
+
+      console.log('wtf')
+      return false
     }
 
-    const toggleSubmitDropdown = () => {
-      state.isSubmitDropdownVisible = !state.isSubmitDropdownVisible
-    }
-
-    const hideSubmitDropdown = () => {
-      state.isSubmitDropdownVisible = false
-    }
     return {
       ...toRefs(state),
-      toggleSubmitDropdown,
-      hideSubmitDropdown,
-      createCategory,
-      getCategories,
+      productForm,
+      onSubmit,
+      schema
     }
   }
 }
 </script>
 
 <style scoped>
-.dropdown-menu-right {
-  position: absolute;
-  transform: translate3d(-30px, 40px, 0px);
-  top: 0;
-  left: 0;
-  will-change: transform;
-}
 </style>
