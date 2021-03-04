@@ -93,7 +93,7 @@ export default {
     const onSave = () => {
       console.log('save')
       console.log(props.targetForm)
-      props.targetForm.submit()
+      props.targetForm.dispatchEvent(new Event('submit'));
     }
 
     return {

@@ -3,7 +3,7 @@
   <form
       ref="productForm"
       class="form"
-      @submit.prevent="onSubmit"
+      @submit="onSubmit"
       :validation-schema="schema"
   >
     <div class="row">
@@ -349,16 +349,9 @@ export default {
       title: string().trim().required('Title is required.'),
     });
 
-    /*const onSubmit = handleSubmit(values => {
+    const onSubmit = handleSubmit(values => {
       alert(JSON.stringify(values, null, 2));
-    })*/
-
-    const onSubmit = (e) => {
-      e.preventDefault()
-
-      console.log('wtf')
-      return false
-    }
+    })
 
     return {
       ...toRefs(state),
