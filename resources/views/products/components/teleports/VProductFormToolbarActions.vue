@@ -91,9 +91,7 @@ export default {
     }
 
     const onSave = () => {
-      console.log('save')
-      console.log(props.targetForm)
-      props.targetForm.dispatchEvent(new Event('submit'));
+      props.targetForm.el.dispatchEvent(new Event('submit'));
     }
 
     return {

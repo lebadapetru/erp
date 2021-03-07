@@ -17,7 +17,7 @@
     <div class="form-group">
       <VBaseInput
           style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
-          type="text"
+          type="password"
           placeholder="Password"
           autocomplete="password"
           name="password"

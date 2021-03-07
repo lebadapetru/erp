@@ -40,6 +40,7 @@
     </div>
     <div class="form-group">
       <VBaseInput
+          type="password"
           style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
           placeholder="Password"
           autocomplete="password"
@@ -48,6 +49,7 @@
     </div>
     <div class="form-group">
       <VBaseInput
+          type="password"
           style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
           placeholder="Confirm Password"
           autocomplete="password"

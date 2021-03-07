@@ -81,7 +81,7 @@ export default {
       inputValue,
       meta,
       capitalize
-    };
+    }
   },
 }
 </script>

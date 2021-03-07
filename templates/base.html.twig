@@ -21,7 +21,7 @@
         {% block body %}{% endblock %}
         {% block javascripts %}
             {% block globals %}
-            <script>
+            <script >
               window.app = {
                 url: '{{ app_url }}',
                 user: {{ user|json_encode|raw }}

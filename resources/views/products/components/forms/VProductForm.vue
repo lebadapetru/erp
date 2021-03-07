@@ -1,10 +1,9 @@
 <template>
   <!--begin::Add ProductForm-->
-  <form
+  <VBaseForm
       ref="productForm"
-      class="form"
+      :validation-schema="validationSchema"
       @submit="onSubmit"
-      :validation-schema="schema"
   >
     <div class="row">
       <div class="col-xl-8">
@@ -16,6 +15,7 @@
                 <label>Title</label>
                 <VBaseInput
                     placeholder="Cotton blue jeans"
+                    name="title"
                     v-model="title"
                 />
               </div>
@@ -23,7 +23,7 @@
             <div class="form-group row">
               <div class="col-12">
                 <label>Description</label>
-                <VCKEditor />
+                <VTinyMCE v-model="description" />
               </div>
             </div>
           </div>
@@ -309,17 +309,18 @@
         v-if="productForm"
         :target-form="productForm"
     />
-  </form>
+  </VBaseForm>
   <!--end::AddProductForm-->
 
 
 </template>
 
 <script>
-import { useForm } from 'vee-validate'
-import { object, string, ref as yupRef } from 'yup'
 import { toRefs, reactive, ref } from 'vue'
+import { object, string } from 'yup'
+import VBaseForm from "resources/components/forms/VBaseForm";
 import VCKEditor from "resources/components/forms/inputs/VCKEditor"
+import VTinyMCE from "resources/components/forms/inputs/VTinyMCE";
 import VDropZone from "resources/components/forms/inputs/VDropZone";
 import VSelect from "resources/components/forms/inputs/VSelect";
 import VSelectCategories from "resources/views/products/components/forms/inputs/VSelectCategories";
@@ -329,35 +330,37 @@ import VBaseInput from "resources/components/forms/inputs/VBaseInput";
 export default {
   name: "VProductForm",
   components: {
+    VBaseForm,
     VBaseInput,
     VProductFormToolbarActions,
     VCKEditor,
+    VTinyMCE,
     VDropZone,
     VSelect,
     VSelectCategories,
   },
   setup() {
     const state = reactive({
-      title: ''
+      title: '',
+      description: ''
     })
-
-    const { handleSubmit } = useForm()
-
     const productForm = ref(null)
-    console.log(productForm)
-    const schema = object().shape({
+
+    const validationSchema = object().shape({
       title: string().trim().required('Title is required.'),
+      description: string().required('Title is required.'),
     });
 
-    const onSubmit = handleSubmit(values => {
-      alert(JSON.stringify(values, null, 2));
-    })
+    const onSubmit = (data) => {
+      console.log('final submit')
+      console.log(data)
+    }
 
     return {
       ...toRefs(state),
       productForm,
       onSubmit,
-      schema
+      validationSchema
     }
   }
 }
