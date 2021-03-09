@@ -1,12 +1,21 @@
 <template>
   <editor
-    api-key="no-api-key"
-    :init="config"
+      :api-key="apiKey"
+      :init="config"
+      :modelValue="inputValue"
+      @keyup="onInput"
+      @change="onInput"
+      @init="onInit"
   />
+  <div class="error-message" v-if="errorMessage">
+    {{ capitalize(errorMessage) }}
+  </div>
 </template>
 
 <script>
 import Editor from '@tinymce/tinymce-vue'
+import { useField } from 'vee-validate'
+import capitalize from 'lodash/capitalize'
 
 export default {
   name: "VTinyMCE",
@@ -18,28 +27,51 @@ export default {
       type: String,
       default: ''
     },
+    rules: {
+      type: Object,
+      default: undefined
+    },
+    name: {
+      type: String,
+      default: 'description'
+    }
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
 
-    function cra() {
-      console.log('done')
+    const {
+      value: inputValue,
+      errorMessage,
+      handleChange,
+    } = useField(props.name, props.rules, {
+      initialValue: props.modelValue,
+    });
+
+    const onInit = (e) => {
+      console.log('tinymce loaded')
     }
 
-    const onInput = (event) => {
-      console.log('on textarea input')
-      emit('update:modelValue', event.target.value)
+    const onInput = (event, editor) => {
+      handleChange(editor.getContent())
+      emit('update:modelValue', editor.getContent())
     }
 
     return {
       onInput,
+      onInit,
+      inputValue,
+      handleChange,
+      errorMessage,
+      capitalize,
+      apiKey: window.app.tinymce_api_key,
       config: {
-        height: 200,
+        branding: false,
         menubar: true,
-        resize: true,
         statusbar: true,
+        resize: true,
+        height: 400,
         plugins: [
-          'advlist autolink autosave autoresize link image lists charmap hr anchor',
+          'advlist autolink autosave link image media lists charmap hr anchor',
           'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime nonbreaking',
           'table template paste importcss textpattern spellchecker'
         ],
@@ -48,17 +80,6 @@ export default {
           'cut copy paste removeformat | searchreplace | bullist numlist | outdent indent | hr | link unlink anchor image code | inserttime',
           'table | subscript superscript | charmap | visualchars visualblocks nonbreaking | template | helloworld'
         ],
-        setup: function (editor) {
-          editor.on('init', cra);
-          editor.on('change', function(e) {
-            var value=editor.getContent();
-            emit('update:modelValue', value)
-          })
-          editor.on("keyup",function(e) {
-            var value=editor.getContent();
-            emit('update:modelValue', value)
-          })
-        }
       }
     }
   }

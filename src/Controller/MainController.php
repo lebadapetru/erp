@@ -25,6 +25,7 @@ class MainController extends AbstractController
 
         return $this->render('app.html.twig', [
             'app_url' => $this->getParameter('app.url'),
+            'tinymce_api_key' => $this->getParameter('tinymce.api.key'),
             'user' => [
                 'id' => $user->getId(),
                 'first_name' => $user->getFirstName(),

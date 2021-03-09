@@ -348,7 +348,7 @@ export default {
 
     const validationSchema = object().shape({
       title: string().trim().required('Title is required.'),
-      description: string().required('Title is required.'),
+      description: string().required('Description is required.'),
     });
 
     const onSubmit = (data) => {

@@ -8,6 +8,7 @@ parameters:
     app.private_key_path: '%kernel.project_dir%/oauth2/private.key'
     app.key_permission_check: '%env(KEY_PERMISSION_CHECK)%'
     app.url: '%env(APP_URL)%'
+    tinymce.api.key: '%env(TINYMCE_API_KEY)%'
 
 services:
     # default configuration for services in *this* file

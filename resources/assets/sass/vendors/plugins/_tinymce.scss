@@ -10,5 +10,6 @@
 
 .tox-tinymce{
     @include border-radius($border-radius !important);
-    height: 500px !important;
+    //height: 500px !important;
+    //z-index: 2147483645 !important;
 }
