@@ -9,7 +9,7 @@
 		justify-content: space-between;
 		height: get($header-config, desktop, default, height);
 		position: relative;
-		z-index: 9999;
+		z-index: 1052;
 
 		// Fixed Header Mode
 		&.header-fixed {
