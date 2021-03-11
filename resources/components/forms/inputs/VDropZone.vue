@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import Dropzone from 'dropzone'
 
 export default {
@@ -36,7 +36,7 @@ export default {
   props: {
     name: {
       type: String,
-      default: 'media'
+      default: 'file'
     },
     multiple: {
       type: Boolean,
@@ -47,21 +47,48 @@ export default {
     const el = ref(null)
     Dropzone.autoDiscover = false
     onMounted(() => {
-      const myDropzone = new Dropzone(el.value, {
-        url: "/file/post",
+      new Dropzone(el.value, {
+        url: "/upload",
         paramName: props.name,
         maxFiles: 10,
         maxFilesize: 10, // MB
+        chunking: false,
+        chunkSize: 2000000, //2mb
+        parallelChunkUploads: false,
+        retryChunks: true,   // retry chunks on failure
+        retryChunksLimit: 3,
+        thumbnailMethod: 'contain',
         addRemoveLinks: true,
         autoQueue: true,
-        accept: function (file, done) {
-          done()
+        autoProcessQueue: true,
+        acceptedFiles: Object.values(window.app.fileConfiguration.mimeTypes).flat().join(','),
+        sending: function (file, xhr, formData) {
+          console.log('sending')
+        },
+        success: function (file, response) {
+          console.log('success')
           console.log(file)
-          console.log(done)
+          console.log(response)
+        },
+        error: function (file, error) {
+          console.log('error')
+          console.log(file)
+          console.log(error)
+        },
+        /*accept: function (file, done) {
+          //done()
+          console.log(file)
+        },*/
+        chunksUploaded: function () {
+          console.log('done')
         }
       });
 
-      console.log(myDropzone)
+      console.log(el.value.dropzone)
+    })
+
+    onUnmounted(() => {
+      el.value.dropzone.destroy()
     })
 
     return {

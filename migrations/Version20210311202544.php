@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210228201027 extends AbstractMigration
+final class Version20210311202544 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -23,8 +23,8 @@ final class Version20210228201027 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE "categories_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "email_tokens_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "features_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE "files_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "groups_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE "media_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "permissions_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "products_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "reset_password_tokens_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
@@ -38,6 +38,7 @@ final class Version20210228201027 extends AbstractMigration
         $this->addSql('CREATE TABLE "features" (id INT NOT NULL, service_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, label VARCHAR(255) NOT NULL, parent INT DEFAULT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_BFC0DC13EA750E8 ON "features" (label)');
         $this->addSql('CREATE INDEX IDX_BFC0DC13ED5CA9E6 ON "features" (service_id)');
+        $this->addSql('CREATE TABLE "files" (id INT NOT NULL, name VARCHAR(255) NOT NULL, extension VARCHAR(255) NOT NULL, mime_type VARCHAR(255) NOT NULL, size INT NOT NULL, width DOUBLE PRECISION DEFAULT NULL, height DOUBLE PRECISION DEFAULT NULL, path VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE "groups" (id INT NOT NULL, name VARCHAR(255) NOT NULL, label VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_F06D3970EA750E8 ON "groups" (label)');
         $this->addSql('CREATE TABLE group_user (group_id INT NOT NULL, user_id INT NOT NULL, PRIMARY KEY(group_id, user_id))');
@@ -46,13 +47,12 @@ final class Version20210228201027 extends AbstractMigration
         $this->addSql('CREATE TABLE group_role (group_id INT NOT NULL, role_id INT NOT NULL, PRIMARY KEY(group_id, role_id))');
         $this->addSql('CREATE INDEX IDX_7E33D11AFE54D947 ON group_role (group_id)');
         $this->addSql('CREATE INDEX IDX_7E33D11AD60322AC ON group_role (role_id)');
-        $this->addSql('CREATE TABLE "media" (id INT NOT NULL, name VARCHAR(255) NOT NULL, extension VARCHAR(255) NOT NULL, mime_type VARCHAR(255) NOT NULL, size INT NOT NULL, width DOUBLE PRECISION DEFAULT NULL, height DOUBLE PRECISION DEFAULT NULL, path VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE "permissions" (id INT NOT NULL, name VARCHAR(255) NOT NULL, label VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_2DEDCC6FEA750E8 ON "permissions" (label)');
         $this->addSql('CREATE TABLE "products" (id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, is_public BOOLEAN NOT NULL, status INT NOT NULL, sku VARCHAR(255) DEFAULT NULL, stock INT NOT NULL, price INT NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE TABLE product_media (product_id INT NOT NULL, media_id INT NOT NULL, PRIMARY KEY(product_id, media_id))');
-        $this->addSql('CREATE INDEX IDX_CB70DA504584665A ON product_media (product_id)');
-        $this->addSql('CREATE INDEX IDX_CB70DA50EA9FDD75 ON product_media (media_id)');
+        $this->addSql('CREATE TABLE product_file (product_id INT NOT NULL, file_id INT NOT NULL, PRIMARY KEY(product_id, file_id))');
+        $this->addSql('CREATE INDEX IDX_17714B14584665A ON product_file (product_id)');
+        $this->addSql('CREATE INDEX IDX_17714B193CB796C ON product_file (file_id)');
         $this->addSql('CREATE TABLE product_category (product_id INT NOT NULL, category_id INT NOT NULL, PRIMARY KEY(product_id, category_id))');
         $this->addSql('CREATE INDEX IDX_CDFC73564584665A ON product_category (product_id)');
         $this->addSql('CREATE INDEX IDX_CDFC735612469DE2 ON product_category (category_id)');
@@ -78,8 +78,8 @@ final class Version20210228201027 extends AbstractMigration
         $this->addSql('ALTER TABLE group_user ADD CONSTRAINT FK_A4C98D39A76ED395 FOREIGN KEY (user_id) REFERENCES "users" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE group_role ADD CONSTRAINT FK_7E33D11AFE54D947 FOREIGN KEY (group_id) REFERENCES "groups" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE group_role ADD CONSTRAINT FK_7E33D11AD60322AC FOREIGN KEY (role_id) REFERENCES "roles" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE product_media ADD CONSTRAINT FK_CB70DA504584665A FOREIGN KEY (product_id) REFERENCES "products" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE product_media ADD CONSTRAINT FK_CB70DA50EA9FDD75 FOREIGN KEY (media_id) REFERENCES "media" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE product_file ADD CONSTRAINT FK_17714B14584665A FOREIGN KEY (product_id) REFERENCES "products" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE product_file ADD CONSTRAINT FK_17714B193CB796C FOREIGN KEY (file_id) REFERENCES "files" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE product_category ADD CONSTRAINT FK_CDFC73564584665A FOREIGN KEY (product_id) REFERENCES "products" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE product_category ADD CONSTRAINT FK_CDFC735612469DE2 FOREIGN KEY (category_id) REFERENCES "categories" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE "reset_password_tokens" ADD CONSTRAINT FK_F045D5AAA76ED395 FOREIGN KEY (user_id) REFERENCES "users" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -94,11 +94,11 @@ final class Version20210228201027 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE product_category DROP CONSTRAINT FK_CDFC735612469DE2');
+        $this->addSql('ALTER TABLE product_file DROP CONSTRAINT FK_17714B193CB796C');
         $this->addSql('ALTER TABLE group_user DROP CONSTRAINT FK_A4C98D39FE54D947');
         $this->addSql('ALTER TABLE group_role DROP CONSTRAINT FK_7E33D11AFE54D947');
-        $this->addSql('ALTER TABLE product_media DROP CONSTRAINT FK_CB70DA50EA9FDD75');
         $this->addSql('ALTER TABLE role_permission DROP CONSTRAINT FK_6F7DF886FED90CCA');
-        $this->addSql('ALTER TABLE product_media DROP CONSTRAINT FK_CB70DA504584665A');
+        $this->addSql('ALTER TABLE product_file DROP CONSTRAINT FK_17714B14584665A');
         $this->addSql('ALTER TABLE product_category DROP CONSTRAINT FK_CDFC73564584665A');
         $this->addSql('ALTER TABLE group_role DROP CONSTRAINT FK_7E33D11AD60322AC');
         $this->addSql('ALTER TABLE role_permission DROP CONSTRAINT FK_6F7DF886D60322AC');
@@ -111,8 +111,8 @@ final class Version20210228201027 extends AbstractMigration
         $this->addSql('DROP SEQUENCE "categories_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "email_tokens_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "features_id_seq" CASCADE');
+        $this->addSql('DROP SEQUENCE "files_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "groups_id_seq" CASCADE');
-        $this->addSql('DROP SEQUENCE "media_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "permissions_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "products_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "reset_password_tokens_id_seq" CASCADE');
@@ -122,13 +122,13 @@ final class Version20210228201027 extends AbstractMigration
         $this->addSql('DROP TABLE "categories"');
         $this->addSql('DROP TABLE "email_tokens"');
         $this->addSql('DROP TABLE "features"');
+        $this->addSql('DROP TABLE "files"');
         $this->addSql('DROP TABLE "groups"');
         $this->addSql('DROP TABLE group_user');
         $this->addSql('DROP TABLE group_role');
-        $this->addSql('DROP TABLE "media"');
         $this->addSql('DROP TABLE "permissions"');
         $this->addSql('DROP TABLE "products"');
-        $this->addSql('DROP TABLE product_media');
+        $this->addSql('DROP TABLE product_file');
         $this->addSql('DROP TABLE product_category');
         $this->addSql('DROP TABLE "reset_password_tokens"');
         $this->addSql('DROP TABLE "roles"');

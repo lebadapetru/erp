@@ -23,8 +23,9 @@
             {% block globals %}
             <script >
               window.app = {
-                url: '{{ app_url }}',
-                tinymce_api_key: '{{ tinymce_api_key }}',
+                url: '{{ appUrl }}',
+                tinymceApiKey: '{{ tinymceApiKey }}',
+                fileConfiguration: {{ fileConfiguration|json_encode|raw }},
                 user: {{ user|json_encode|raw }}
               }
             </script>

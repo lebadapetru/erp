@@ -47,7 +47,7 @@ abstract class BaseRequest
     }
 
     /*see if there's a need for wrapper in the future*/
-    private function validate(array $data, array $rules)
+    private function validate(array $data, array $rules): \Symfony\Component\Validator\ConstraintViolationListInterface
     {
         return $this->validator->validate(
             $data,
@@ -59,7 +59,8 @@ abstract class BaseRequest
     {
         return array_merge(
             $this->request->request->all(),
-            $this->request->attributes->get('_route_params')
+            $this->request->attributes->get('_route_params'),
+            $this->request->files->all()
         );
     }
 

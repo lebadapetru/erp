@@ -875,7 +875,7 @@ export default {
   setup() {
     const store = useStore()
 
-    const firstName = computed(() => startCase(toLower(window.app.user.first_name)))
+    const firstName = computed(() => startCase(toLower(window.app.user.firstName)))
 
     const openUserPanel = () => {
       store.commit('globals/showUserPanel')

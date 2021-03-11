@@ -34,3 +34,7 @@ services:
     App\EventListener\RequestTransformerListener:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 100 }
+
+    App\Service\FileUploader:
+        arguments:
+            $uploadDirectory: '%kernel.project_dir%/public/uploads'

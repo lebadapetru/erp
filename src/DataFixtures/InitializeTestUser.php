@@ -180,16 +180,22 @@ class InitializeTestUser extends Fixture
         $roleEntity = new Role(); //Admin
         $roleEntity->setName('Administrator');
         $roleEntity->setLabel('ROLE_ADMIN');
+        $roleEntity->setUpdatedAt(Carbon::now());
+        $roleEntity->setCreatedAt(Carbon::now());
 
         foreach (self::SERVICES as $SERVICE) {
             $serviceEntity = new Service();
             $serviceEntity->setName($SERVICE['name']);
             $serviceEntity->setLabel($SERVICE['label']);
             $serviceEntity->setIsActive($SERVICE['active']);
+            $serviceEntity->setUpdatedAt(Carbon::now());
+            $serviceEntity->setCreatedAt(Carbon::now());
             foreach ($SERVICE['features'] as $FEATURE) {
                 $featureEntity = new Feature();
                 $featureEntity->setName($FEATURE['name']);
                 $featureEntity->setLabel($FEATURE['label']);
+                $featureEntity->setUpdatedAt(Carbon::now());
+                $featureEntity->setCreatedAt(Carbon::now());
                 $serviceEntity->addFeature($featureEntity);
                 $manager->persist($featureEntity);
 
@@ -201,6 +207,8 @@ class InitializeTestUser extends Fixture
                         $permissionEntity = new Permission();
                         $permissionEntity->setName($PERMISSION['name']);
                         $permissionEntity->setLabel($PERMISSION['label']);
+                        $permissionEntity->setUpdatedAt(Carbon::now());
+                        $permissionEntity->setCreatedAt(Carbon::now());
                         $manager->persist($permissionEntity);
 
                         $permissionsCache[$PERMISSION['label']] = $permissionEntity;
@@ -221,7 +229,9 @@ class InitializeTestUser extends Fixture
         $userEntity->setLastName('Administrator');
         $userEntity->setEmail('admin@admin.com');
         $userEntity->setIsActive(true);
-        $userEntity->setVerifiedAt(Carbon::now()); /*TODO add carbon or some DT lib*/
+        $userEntity->setVerifiedAt(Carbon::now());
+        $userEntity->setUpdatedAt(Carbon::now());
+        $userEntity->setCreatedAt(Carbon::now());
         $userEntity->setPassword($this->passwordEncoder->encodePassword(
             $userEntity,
             'admin123'
@@ -232,6 +242,8 @@ class InitializeTestUser extends Fixture
         $groupEntity = new Group();
         $groupEntity->setName('The Administrators Group');
         $groupEntity->setLabel('GROUP_ADMIN');
+        $groupEntity->setUpdatedAt(Carbon::now());
+        $groupEntity->setCreatedAt(Carbon::now());
         $groupEntity->addUser($userEntity);
         $manager->persist($groupEntity);
 
@@ -241,11 +253,15 @@ class InitializeTestUser extends Fixture
         $userRoleEntity = new Role();
         $userRoleEntity->setName('User');
         $userRoleEntity->setLabel('ROLE_USER');
+        $userRoleEntity->setUpdatedAt(Carbon::now());
+        $userRoleEntity->setCreatedAt(Carbon::now());
         $manager->persist($userRoleEntity);
 
         $testRoleEntity = new Role();
         $testRoleEntity->setName('Test');
         $testRoleEntity->setLabel('ROLE_TEST');
+        $testRoleEntity->setUpdatedAt(Carbon::now());
+        $testRoleEntity->setCreatedAt(Carbon::now());
         $manager->persist($testRoleEntity);
 
         $userEntity = new User(); //User can only login and have limited permissions based on roles and groups
@@ -255,6 +271,8 @@ class InitializeTestUser extends Fixture
         $userEntity->setEmail('user@user.com');
         $userEntity->setIsActive(true);
         $userEntity->setVerifiedAt(Carbon::now());
+        $userEntity->setUpdatedAt(Carbon::now());
+        $userEntity->setCreatedAt(Carbon::now());
         $userEntity->setPassword($this->passwordEncoder->encodePassword(
             $userEntity,
             'user123'
@@ -265,6 +283,8 @@ class InitializeTestUser extends Fixture
         $userGroupEntity = new Group();
         $userGroupEntity->setName('The Users Group');
         $userGroupEntity->setLabel('GROUP_USER');
+        $userGroupEntity->setUpdatedAt(Carbon::now());
+        $userGroupEntity->setCreatedAt(Carbon::now());
         $userGroupEntity->addUser($userEntity);
         $userGroupEntity->addRole($testRoleEntity);
         $manager->persist($userGroupEntity);

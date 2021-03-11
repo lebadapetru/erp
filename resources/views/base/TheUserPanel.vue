@@ -283,8 +283,8 @@ export default {
   setup() {
     const store = useStore()
     const isUserPanelVisible = computed(() => store.state.globals.isUserPanelVisible)
-    const firstName = computed(() => startCase(toLower(window.app.user.first_name)))
-    const lastName = computed(() => startCase(toLower(window.app.user.last_name)))
+    const firstName = computed(() => startCase(toLower(window.app.user.firstName)))
+    const lastName = computed(() => startCase(toLower(window.app.user.lastName)))
 
     const closeUserPanel = (vm) => {
       console.log('close')

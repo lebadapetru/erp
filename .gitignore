@@ -16,6 +16,7 @@
 .idea
 node_modules
 public/build
+public/uploads
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/

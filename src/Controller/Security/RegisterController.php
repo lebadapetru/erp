@@ -47,6 +47,7 @@ class RegisterController extends AbstractController
             $entityManager->getConnection()->commit();
         } catch (\Exception $exception) {
             $entityManager->getConnection()->rollBack();
+
             throw $exception;
             /*TODO logs*/
         }

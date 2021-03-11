@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Entity\File;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,12 +25,16 @@ class MainController extends AbstractController
         $user = $this->getUser();
 
         return $this->render('app.html.twig', [
-            'app_url' => $this->getParameter('app.url'),
-            'tinymce_api_key' => $this->getParameter('tinymce.api.key'),
+            'appUrl' => $this->getParameter('app.url'),
+            'tinymceApiKey' => $this->getParameter('tinymce.api.key'),
+            'fileConfiguration' => [
+                'mimeTypes' => File::ACCEPTED_MIME_TYPES,
+                'extensions' => File::ACCEPTED_EXTENSIONS,
+            ],
             'user' => [
                 'id' => $user->getId(),
-                'first_name' => $user->getFirstName(),
-                'last_name' => $user->getLastName(),
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
                 'email' => $user->getEmail()
             ],
         ]);

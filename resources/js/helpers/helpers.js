@@ -1,0 +1,7 @@
+const allowedMimeTypes = [
+
+]
+
+const allowedExtensions = [
+
+]

@@ -55,6 +55,7 @@ class ForgotPasswordController extends AbstractController
             /*TODO logs*/
         }
 
+        /*TODO use $this->json with detail key, keep the response structure*/
         return new JsonResponse(
             'An email containing the temporary password has been sent to you',
             Response::HTTP_OK

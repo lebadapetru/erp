@@ -111,10 +111,10 @@ class Product
     private ?\DateTimeInterface $createdAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Media::class, inversedBy="products")
+     * @ORM\ManyToMany(targetEntity=File::class, inversedBy="products")
      * @Groups({"product: read", "product: write"})
      */
-    private $media;
+    private $file;
 
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="products")
@@ -124,7 +124,7 @@ class Product
 
     public function __construct()
     {
-        $this->media = new ArrayCollection();
+        $this->file = new ArrayCollection();
         $this->categories = new ArrayCollection();
     }
 
@@ -254,26 +254,26 @@ class Product
     }
 
     /**
-     * @return Collection|Media[]
+     * @return Collection|File[]
      */
-    public function getMedia(): Collection
+    public function getFile(): Collection
     {
-        return $this->media;
+        return $this->file;
     }
 
-    public function addMedia(Media $media): self
+    public function addFile(File $file): self
     {
-        if (!$this->media->contains($media)) {
-            $this->media[] = $media;
+        if (!$this->file->contains($file)) {
+            $this->file[] = $file;
         }
 
         return $this;
     }
 
-    public function removeMedia(Media $media): self
+    public function removeFile(File $file): self
     {
-        if ($this->media->contains($media)) {
-            $this->media->removeElement($media);
+        if ($this->file->contains($file)) {
+            $this->file->removeElement($file);
         }
 
         return $this;

@@ -3,7 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\MediaRepository;
+use App\Repository\FileRepository;
+use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,79 +12,117 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=MediaRepository::class)
- * @ORM\Table("`media`")
+ * @ORM\Entity(repositoryClass=FileRepository::class)
+ * @ORM\Table("`files`")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
  */
-class Media
+class File
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private string $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $extension;
+    private ?string $extension;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $mimeType;
+    private ?string $mimeType;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $size;
+    private ?int $size;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $width;
+    private ?float $width;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $height;
+    private ?float $height;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $path;
+    private ?string $path;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $mediaUrl;
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
      */
-    private $deletedAt;
+    private ?\DateTimeInterface $deletedAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private ?\DateTimeInterface $createdAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Product::class, mappedBy="media")
+     * @ORM\ManyToMany(targetEntity=Product::class, mappedBy="file")
      */
     private $products;
+
+    const ACCEPTED_MIME_TYPES = [
+        'images' => [
+            'image/jpg',
+            'image/jpeg',
+            'image/png',
+            'image/gif',
+            'image/svg+xml',
+            'image/webp',
+        ],
+        'videos' => [
+            'video/mp4',
+            'video/quicktime'
+        ],
+    ];
+
+    const ACCEPTED_EXTENSIONS = [
+        'images' => [
+            'jpg',
+            'jpeg',
+            'png',
+            'gif',
+            'svg',
+            'webp'
+        ],
+        'videos' => [
+            'mp4',
+            'mov',
+        ],
+    ];
 
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        /*TODO until it gets fixed*/
+        $this->setUpdatedAt(Carbon::now());
+        $this->setCreatedAt(Carbon::now());
     }
 
     public function getId(): ?int
@@ -223,7 +262,7 @@ class Media
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
-            $product->addMedia($this);
+            $product->addFile($this);
         }
 
         return $this;
@@ -233,8 +272,20 @@ class Media
     {
         if ($this->products->contains($product)) {
             $this->products->removeElement($product);
-            $product->removeMedia($this);
+            $product->removeFile($this);
         }
+
+        return $this;
+    }
+
+    public function getMediaUrl(): ?string
+    {
+        return $this->mediaUrl;
+    }
+
+    public function setMediaUrl(?string $mediaUrl): self
+    {
+        $this->mediaUrl = $mediaUrl;
 
         return $this;
     }
