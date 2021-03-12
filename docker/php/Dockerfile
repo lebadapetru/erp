@@ -42,6 +42,13 @@ RUN apk add --no-cache \
     php7-intl \
     nodejs \
     nodejs-npm \
+    libjpeg-turbo-dev \
+    jpeg-dev \
+    libpng-dev \
+    imagemagick \
+    imagemagick-dev \
+    ffmpeg \
+    perl-image-exiftool \
 && docker-php-ext-install \
     pdo_pgsql \
     pgsql \
@@ -52,7 +59,12 @@ RUN apk add --no-cache \
 && docker-php-ext-configure intl \
 && docker-php-ext-configure gettext \
 && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-&& docker-php-ext-enable opcache
+&& docker-php-ext-enable opcache \
+&& pecl install imagick \
+&& docker-php-ext-enable imagick
+
+# ImageMagick config
+COPY docker/php/policy.xml /etc/ImageMagick-6/policy.xml
 
 COPY ./docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 COPY ./docker/php/php.ini /usr/local/etc/php/conf.d/php.ini
