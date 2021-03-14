@@ -23,7 +23,7 @@ class VerifyEmailTokenController extends AbstractController
      * @param VerifyRequest $request
      * @param SecurityHelper $securityHelper
      * @return RedirectResponse
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function execute(VerifyRequest $request, SecurityHelper $securityHelper): RedirectResponse
     {
@@ -68,10 +68,10 @@ class VerifyEmailTokenController extends AbstractController
             $securityHelper->authenticateUser($user, $request->getRequest());
 
             $entityManager->getConnection()->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $exception) {
             $entityManager->getConnection()->rollBack();
-            throw $e;
-            /*TODO logs*/
+
+            throw $exception;
         }
 
         return new RedirectResponse('/');

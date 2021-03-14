@@ -23,7 +23,7 @@ class ForgotPasswordController extends AbstractController
      * @param SecurityHelper $securityHelper
      * @param EventDispatcherInterface $dispatcher
      * @return JsonResponse
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function execute(
         ForgotPasswordRequest $request,
@@ -49,10 +49,10 @@ class ForgotPasswordController extends AbstractController
 
             $dispatcher->dispatch(new PasswordResetEvent($user, $randomString));
             $entityManager->getConnection()->commit();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $entityManager->getConnection()->rollBack();
+
             throw $exception;
-            /*TODO logs*/
         }
 
         /*TODO use $this->json with detail key, keep the response structure*/

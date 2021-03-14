@@ -24,7 +24,7 @@ class RegisterController extends AbstractController
      * @param EventDispatcherInterface $dispatcher
      * @param SecurityHelper $securityHelper
      * @return JsonResponse
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function execute(
         RegisterRequest $request,
@@ -45,11 +45,10 @@ class RegisterController extends AbstractController
             );
 
             $entityManager->getConnection()->commit();
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $entityManager->getConnection()->rollBack();
 
             throw $exception;
-            /*TODO logs*/
         }
 
         return new JsonResponse(

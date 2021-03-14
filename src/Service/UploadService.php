@@ -6,12 +6,16 @@ namespace App\Service;
 use App\Entity\File;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class UploadService
 {
+    /**
+     * @var SluggerInterface
+     */
     private SluggerInterface $slugger;
     /**
      * @var EntityManagerInterface
@@ -26,6 +30,10 @@ class UploadService
      * @var FileStorage
      */
     private FileStorage $fileStorage;
+    /**
+     * @var Filesystem
+     */
+    private Filesystem $fileSystem;
 
     public function __construct(
         SluggerInterface $slugger,
@@ -38,6 +46,7 @@ class UploadService
         $this->entityManager = $entityManager;
         $this->parameterBag = $parameterBag;
         $this->fileStorage = $fileStorage;
+        $this->fileSystem = new Filesystem();
     }
 
     public function save(UploadedFile $temporaryFile): File
@@ -56,10 +65,14 @@ class UploadService
                 throw new BadRequestHttpException('Invalid file.');
             }
             $this->entityManager->getConnection()->commit();
-        } catch (\Exception $exception) {
+
+        } catch (\Throwable $exception) {
+            if (isset($file)) {
+                $this->fileSystem->remove(
+                    $this->fileStorage->getUploadDirectory() . '/' .$file->getName() . '.' . $file->getExtension()
+                );
+            }
             $this->entityManager->getConnection()->rollBack();
-            /*TODO remove file if failed*/
-            /*TODO add logger*/
             throw $exception;
         }
 
@@ -68,7 +81,6 @@ class UploadService
 
     public function saveImage(File $fileEntity, UploadedFile $temporaryFile)
     {
-        /* @var UploadedFile $file */
         $file = $this->fileStorage->upload(
             $temporaryFile,
             $fileEntity->getName() . '.' . $fileEntity->getExtension()
