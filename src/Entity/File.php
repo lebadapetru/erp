@@ -56,7 +56,7 @@ class File
     private ?float $height;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private ?string $path;
 
@@ -64,6 +64,11 @@ class File
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private ?string $mediaUrl;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $isProcessed = false;
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
@@ -286,6 +291,47 @@ class File
     public function setMediaUrl(?string $mediaUrl): self
     {
         $this->mediaUrl = $mediaUrl;
+
+        return $this;
+    }
+
+    public function isVideo(): bool
+    {
+        /*TODO replace with str_contains in php8*/
+        if (strpos($this->mimeType, 'video/') !== false) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isImage(): bool
+    {
+        /*TODO replace with str_contains in php8*/
+        if (strpos($this->mimeType, 'image/') !== false) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isMediaUrl(): bool
+    {
+        if (!$this->mimeType && filter_var($this->mediaUrl, FILTER_VALIDATE_URL)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isProcessed(): bool
+    {
+        return $this->isProcessed;
+    }
+
+    public function setIsProcessed(bool $isProcessed): self
+    {
+        $this->isProcessed = $isProcessed;
 
         return $this;
     }

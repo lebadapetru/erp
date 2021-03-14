@@ -63,6 +63,16 @@ RUN apk add --no-cache \
 && pecl install imagick \
 && docker-php-ext-enable imagick
 
+#RUN git clone https://github.com/Imagick/imagick
+#RUN cd imagick
+#RUN ls
+#RUN phpize && ./configure
+#RUN make
+#RUN make install
+#RUN cd ../
+#RUN rm -rf imagick
+#RUN docker-php-ext-enable imagick
+
 # ImageMagick config
 COPY docker/php/policy.xml /etc/ImageMagick-6/policy.xml
 

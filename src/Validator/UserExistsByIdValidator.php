@@ -20,7 +20,6 @@ class UserExistsByIdValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         /* @var $constraint \App\Validator\UserExistsById */
-
         $user = $this->userRepository->find($value);
 
         if (!$user) {
