@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210314005220 extends AbstractMigration
+final class Version20210317152148 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -39,6 +39,7 @@ final class Version20210314005220 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX UNIQ_BFC0DC13EA750E8 ON "features" (label)');
         $this->addSql('CREATE INDEX IDX_BFC0DC13ED5CA9E6 ON "features" (service_id)');
         $this->addSql('CREATE TABLE "files" (id INT NOT NULL, name VARCHAR(255) NOT NULL, extension VARCHAR(255) DEFAULT NULL, mime_type VARCHAR(255) DEFAULT NULL, size INT DEFAULT NULL, width DOUBLE PRECISION DEFAULT NULL, height DOUBLE PRECISION DEFAULT NULL, path VARCHAR(255) DEFAULT NULL, media_url VARCHAR(255) DEFAULT NULL, is_processed BOOLEAN NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_63540595E237E06 ON "files" (name)');
         $this->addSql('CREATE TABLE "groups" (id INT NOT NULL, name VARCHAR(255) NOT NULL, label VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_F06D3970EA750E8 ON "groups" (label)');
         $this->addSql('CREATE TABLE group_user (group_id INT NOT NULL, user_id INT NOT NULL, PRIMARY KEY(group_id, user_id))');

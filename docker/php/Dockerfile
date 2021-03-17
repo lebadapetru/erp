@@ -1,7 +1,7 @@
 ####################
 #PHP FPM target
 ####################
-FROM php:7.4-fpm-alpine as base
+FROM php:8.0-fpm-alpine as base
 
 #COPY ./ /var/www/erp
 
@@ -45,10 +45,9 @@ RUN apk add --no-cache \
     libjpeg-turbo-dev \
     jpeg-dev \
     libpng-dev \
-    imagemagick \
-    imagemagick-dev \
     ffmpeg \
     perl-image-exiftool \
+    imagemagick \
 && docker-php-ext-install \
     pdo_pgsql \
     pgsql \
@@ -59,22 +58,24 @@ RUN apk add --no-cache \
 && docker-php-ext-configure intl \
 && docker-php-ext-configure gettext \
 && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-&& docker-php-ext-enable opcache \
-&& pecl install imagick \
-&& docker-php-ext-enable imagick
+&& docker-php-ext-enable opcache
 
-#RUN git clone https://github.com/Imagick/imagick
-#RUN cd imagick
-#RUN ls
-#RUN phpize && ./configure
-#RUN make
-#RUN make install
-#RUN cd ../
-#RUN rm -rf imagick
-#RUN docker-php-ext-enable imagick
+#since we cant install imagick( the imagemagick php wrapper ) yet, with perl for php8
+#download it from github until perl updates it
+RUN set -xe \
+ && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+ && apk add --no-cache bash imagemagick-dev \
+ && git clone https://github.com/Imagick/imagick \
+ && cd imagick \
+ && git checkout master && git pull \
+ && phpize && ./configure && make && make install \
+ && cd .. && rm -Rf imagick \
+ && docker-php-ext-enable imagick \
+ && apk del .build-deps \
+ && rm -rf /tmp/* /var/cache/apk/*
 
 # ImageMagick config
-COPY docker/php/policy.xml /etc/ImageMagick-6/policy.xml
+#COPY docker/php/policy.xml /etc/ImageMagick-6/policy.xml
 
 COPY ./docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 COPY ./docker/php/php.ini /usr/local/etc/php/conf.d/php.ini

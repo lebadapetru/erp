@@ -53,8 +53,7 @@ class FileStorage
             if (is_resource($stream)) {
                 fclose($stream);
             }
-
-            if (!$result) {
+            if ($result === false) {
                 throw new UnableToWriteFile($fileLocation);
             }
         } catch (FilesystemException | UnableToWriteFile $exception) {
@@ -72,7 +71,7 @@ class FileStorage
             if ($this->fileSystem->fileExists($fileLocation)) {
                 $result = $this->fileSystem->delete($fileLocation);
 
-                if (!$result) {
+                if ($result === false) {
                     throw new FileNotFoundException($fileLocation);
                 }
             }
