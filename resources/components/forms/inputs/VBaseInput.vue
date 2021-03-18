@@ -1,5 +1,4 @@
 <template>
-  <label v-if="label.trim().length">{{ label }}</label>
   <input
       :type="type"
       :class="styleClasses"
@@ -10,6 +9,7 @@
       :autocomplete="autocomplete"
       @input="onInput"
       @blur="handleBlur"
+      @keypress="onKeyPress"
   />
   <div class="error-message" v-if="errorMessage">
     {{ capitalize(errorMessage) }}
@@ -56,7 +56,7 @@ export default {
       default: undefined
     }
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'keypress'],
   setup(props, {emit}) {
     const {
       value: inputValue,
@@ -73,8 +73,13 @@ export default {
       emit('update:modelValue', event.target.value);
     }
 
+    const onKeyPress = (event) => {
+      emit('keypress', event.target.value);
+    }
+
     return {
       onInput,
+      onKeyPress,
       handleChange,
       handleBlur,
       errorMessage,

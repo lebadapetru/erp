@@ -23,6 +23,7 @@ class UploadController extends AbstractController
         UploadService $uploadManager
     ): JsonResponse
     {
+        /*TODO set this as custom endpoint for api platform POST /files*/
         $data = $request->all();
 
         $uploadManager = $uploadManager->save($data['file']);

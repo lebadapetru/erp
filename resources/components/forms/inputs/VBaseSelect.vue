@@ -1,5 +1,4 @@
 <template>
-  <label v-if="label.trim().length">{{ label }}</label>
   <select
       :class="styleClasses"
       :value="modelValue"
@@ -14,7 +13,9 @@
         :value="option"
         :key="option"
         :selected="option === modelValue"
-    >{{ option }}</option>
+    >
+      {{ option }}
+    </option>
   </select>
 </template>
 

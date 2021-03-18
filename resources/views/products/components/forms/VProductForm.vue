@@ -14,8 +14,9 @@
               <div class="col-12">
                 <label>Title</label>
                 <VBaseInput
+                    :type="'text'"
                     placeholder="Cotton blue jeans"
-                    name="title"
+                    :name="'title'"
                     v-model="title"
                 />
               </div>
@@ -67,27 +68,57 @@
           </div>
           <div class="card-body">
             <div class="form-group row">
-              <div class="col-6">
-                <label>Price</label>
+
+              <div class="col-5">
+                <label>Original price</label>
                 <div class="input-group">
                   <div class="input-group-prepend">
                         <span class="input-group-text">
                           RON
                         </span>
                   </div>
-                  <input type="text" class="form-control" value="15" placeholder="0.00" />
+                  <VBaseInput
+                      :type="'text'"
+                      :name="'originalPrice'"
+                      v-model="originalPrice"
+                      placeholder="0.00"
+                      @keypress="allowMoneyValues"
+                  />
                 </div>
               </div>
 
-              <div class="col-6">
-                <label>Compare at price</label>
+              <div class="col-5">
+                <label>Reduced price</label>
                 <div class="input-group">
                   <div class="input-group-prepend">
                         <span class="input-group-text">
                           RON
                         </span>
                   </div>
-                  <input type="text" class="form-control" value="18" placeholder="0.00" />
+                  <VBaseInput
+                      :type="'text'"
+                      :name="'reducedPrice'"
+                      v-model="reducedPrice"
+                      placeholder="0.00"
+                      @keypress="allowMoneyValues"
+                  />
+                </div>
+              </div>
+
+              <div class="col-2">
+                <label>Discount</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="fas fa-percent fa-sm" style="color: unset;"></i>
+                      </span>
+                  </div>
+                  <VBaseInput
+                      :type="'number'"
+                      :name="'discount'"
+                      placeholder="0"
+                      v-model="discount"
+                  />
                 </div>
               </div>
             </div>
@@ -342,7 +373,10 @@ export default {
   setup() {
     const state = reactive({
       title: '',
-      description: ''
+      description: '',
+      originalPrice: 0,
+      reducedPrice: 0,
+      discount: 0,
     })
     const productForm = ref(null)
 
@@ -356,8 +390,28 @@ export default {
       console.log(data)
     }
 
+    function setInputFilter(textbox, inputFilter) {
+      ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
+        textbox.addEventListener(event, function() {
+          if (inputFilter(this.value)) {
+            this.oldValue = this.value;
+            this.oldSelectionStart = this.selectionStart;
+            this.oldSelectionEnd = this.selectionEnd;
+          } else if (this.hasOwnProperty("oldValue")) {
+            this.value = this.oldValue;
+            this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+          } else {
+            this.value = "";
+          }
+        });
+      });
+    }
+
     return {
       ...toRefs(state),
+      allowMoneyValues: (value) => {
+        setInputFilter(value)
+      },
       productForm,
       onSubmit,
       validationSchema

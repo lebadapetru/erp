@@ -38,7 +38,7 @@ export default {
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
-
+    /*TODO add htmlpurifier to sanitize the user input*/
     const {
       value: inputValue,
       errorMessage,

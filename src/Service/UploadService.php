@@ -5,6 +5,8 @@ namespace App\Service;
 
 use App\Entity\File;
 use Doctrine\ORM\EntityManagerInterface;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\UnableToDeleteFile;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -49,6 +51,7 @@ class UploadService
         try {
             $file = $this->createFileEntity($temporaryFile);
 
+            /*TODO add support for videos, media urls, audios, vts*/
             if ($file->isImage()) {
                 $this->saveImage($file, $temporaryFile);
             } elseif ($file->isVideo()) {
@@ -60,7 +63,11 @@ class UploadService
 
         } catch (\Throwable $exception) {
             if (isset($file)) {
-                $this->fileStorage->delete($file);
+                try {
+                    $this->fileStorage->delete($file);
+                } catch (FilesystemException | UnableToDeleteFile $exception) {
+                    //this is a behind the scene action, if it fails log it and let it pass
+                }
             }
             $this->entityManager->getConnection()->rollBack();
             throw $exception;

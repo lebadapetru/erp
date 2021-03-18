@@ -6,6 +6,7 @@ namespace App\Service;
 use App\Entity\File;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
+use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToWriteFile;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -54,10 +55,9 @@ class FileStorage
                 fclose($stream);
             }
             if ($result === false) {
-                throw new UnableToWriteFile($fileLocation);
+                throw new UnableToWriteFile(sprintf('Couldn\'t write the "%s" file!', $fileLocation));
             }
         } catch (FilesystemException | UnableToWriteFile $exception) {
-            $this->logger->alert(sprintf('Couldn\'t write the "%s" file!', $fileLocation));
             throw $exception;
         }
 
@@ -72,11 +72,13 @@ class FileStorage
                 $result = $this->fileSystem->delete($fileLocation);
 
                 if ($result === false) {
-                    throw new FileNotFoundException($fileLocation);
+                    throw new UnableToDeleteFile(sprintf('Couldn\'t delete the "%s" file!', $fileLocation));
                 }
             }
-        } catch (FilesystemException $e) {
-            $this->logger->alert(sprintf('Couldn\'t delete the "%s" file!', $fileLocation));
+        } catch (FileNotFoundException $exception) {
+            $this->logger->alert(sprintf('The file "%s" is missing!', $fileLocation));
+        } catch (FilesystemException | UnableToDeleteFile $exception) {
+            throw $exception;
         }
     }
 
