@@ -7,6 +7,8 @@
       :value="inputValue"
       :placeholder="placeholder"
       :autocomplete="autocomplete"
+      :min="(type === 'number') ? min : undefined"
+      :max="(type === 'number') ? max : undefined"
       @input="onInput"
       @blur="handleBlur"
       @keypress="onKeyPress"
@@ -54,6 +56,14 @@ export default {
     rules: {
       type: Object,
       default: undefined
+    },
+    min: {
+      type: Number,
+      default: undefined
+    },
+    max: {
+      type: Number,
+      default: undefined
     }
   },
   emits: ['update:modelValue', 'keypress'],
@@ -74,7 +84,7 @@ export default {
     }
 
     const onKeyPress = (event) => {
-      emit('keypress', event.target.value);
+      emit('keypress', event);
     }
 
     return {

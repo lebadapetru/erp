@@ -13,31 +13,24 @@ const events = [
 
 const UNIQUE_ID = "__vue_input_filter__";
 
-const onMounted = (el, binding, vnode) => {
-  onUnmounted(el);
-  let vm = vnode.context;
-  let callback = binding.value.callback;
+const onMounted = (el, binding) => {
+  //onUnmounted(el);
+  let callback = binding.value;
 
   el[UNIQUE_ID] = (event) => {
-    if (inputFilter(this.value)) {
-      this.oldValue = this.value;
-      this.oldSelectionStart = this.selectionStart;
-      this.oldSelectionEnd = this.selectionEnd;
-    } else if (this.hasOwnProperty("oldValue")) {
-      this.value = this.oldValue;
-      this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-    } else {
-      this.value = "";
-    }
-
-    return callback.call(vm, event);
+    console.log('listener')
+    console.log(event)
   };
 
-  document.addEventListener(clickEventType, el[UNIQUE_ID], false);
+  events.forEach((event) => {
+    document.addEventListener(event, el[UNIQUE_ID], false);
+  })
 };
 
 const onUnmounted = (el) => {
-  document.removeEventListener(clickEventType, el[UNIQUE_ID], false);
+  events.forEach((event) => {
+    document.removeEventListener(event, el[UNIQUE_ID], false);
+  })
   delete el[UNIQUE_ID];
 };
 
@@ -50,7 +43,7 @@ const onUpdated = (el, binding, vnode) => {
 
 const plugin = {
   install: (app) => {
-    app.directive('click-away', directive)
+    app.directive('input-filter', directive)
   }
 }
 

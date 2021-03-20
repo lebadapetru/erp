@@ -82,7 +82,7 @@
                       :name="'originalPrice'"
                       v-model="originalPrice"
                       placeholder="0.00"
-                      @keypress="allowMoneyValues"
+                      @keypress="currencyFilter"
                   />
                 </div>
               </div>
@@ -100,7 +100,7 @@
                       :name="'reducedPrice'"
                       v-model="reducedPrice"
                       placeholder="0.00"
-                      @keypress="allowMoneyValues"
+                      @keypress="currencyFilter"
                   />
                 </div>
               </div>
@@ -117,7 +117,8 @@
                       :type="'number'"
                       :name="'discount'"
                       placeholder="0"
-                      v-model="discount"
+                      :modelValue="discount"
+                      @update:modelValue="testex"
                   />
                 </div>
               </div>
@@ -357,6 +358,7 @@ import VSelect from "resources/components/forms/inputs/VSelect";
 import VSelectCategories from "resources/views/products/components/forms/inputs/VSelectCategories";
 import VProductFormToolbarActions from "resources/views/products/components/teleports/VProductFormToolbarActions";
 import VBaseInput from "resources/components/forms/inputs/VBaseInput";
+import { currencyFilter, integerFilter, maxFilter } from "resources/js/helpers/inputFilters";
 
 export default {
   name: "VProductForm",
@@ -390,31 +392,29 @@ export default {
       console.log(data)
     }
 
-    function setInputFilter(textbox, inputFilter) {
-      ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
-        textbox.addEventListener(event, function() {
-          if (inputFilter(this.value)) {
-            this.oldValue = this.value;
-            this.oldSelectionStart = this.selectionStart;
-            this.oldSelectionEnd = this.selectionEnd;
-          } else if (this.hasOwnProperty("oldValue")) {
-            this.value = this.oldValue;
-            this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-          } else {
-            this.value = "";
-          }
-        });
-      });
-    }
-
     return {
       ...toRefs(state),
-      allowMoneyValues: (value) => {
-        setInputFilter(value)
-      },
       productForm,
       onSubmit,
-      validationSchema
+      validationSchema,
+      currencyFilter,
+      integerFilter,
+      maxFilter,
+      testex: (event) => {
+        console.log('input')
+
+
+        const value = event
+        console.log(typeof value)
+        console.log(parseInt(value))
+        console.log(state.discount)
+
+        if (parseInt(value) <= 100) {
+          console.log('here')
+          state.discount = value
+          console.log(state.discount)
+        }
+      }
     }
   }
 }
