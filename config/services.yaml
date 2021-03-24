@@ -8,7 +8,8 @@ parameters:
     app.private_key_path: '%kernel.project_dir%/oauth2/private.key'
     app.key_permission_check: '%env(KEY_PERMISSION_CHECK)%'
     app.url: '%env(APP_URL)%'
-    app.upload_directory: '%kernel.project_dir%/public/uploads'
+    app.public_path: '%kernel.project_dir%/public'
+    app.upload_dir: '/uploads'
     tinymce.api.key: '%env(TINYMCE_API_KEY)%'
 
 services:
@@ -16,9 +17,6 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-
-        bind:
-            $publicUploadsFilesystem: '@oneup_flysystem.public_uploads_filesystem_filesystem'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

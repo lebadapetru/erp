@@ -4,7 +4,7 @@
       :class="styleClasses"
       :name="name"
       :id="name"
-      :value="inputValue"
+      :value="modelValue"
       :placeholder="placeholder"
       :autocomplete="autocomplete"
       :min="(type === 'number') ? min : undefined"
@@ -72,14 +72,14 @@ export default {
       value: inputValue,
       errorMessage,
       handleBlur,
-      handleChange,
+      handleInput,
       meta,
     } = useField(props.name, props.rules, {
       initialValue: props.modelValue,
     });
 
     const onInput = (event) => {
-      handleChange(event)
+      handleInput(event)
       emit('update:modelValue', event.target.value);
     }
 
@@ -90,7 +90,6 @@ export default {
     return {
       onInput,
       onKeyPress,
-      handleChange,
       handleBlur,
       errorMessage,
       inputValue,

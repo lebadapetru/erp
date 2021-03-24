@@ -1,4 +1,5 @@
-const currencyFilter = (event) => { //this filter should be used with onkeypress event
+const priceFilter = (event) => { //this filter should be used with onkeypress event
+  /*TODO maybe do the filtering onKeyup or input, it's easier to control, just update the result if it doesn't fit*/
   let charCode = (event.which) ? event.which : event.keyCode
   console.log(event)
   //allow only numeric, dot and certain function chars
@@ -58,16 +59,8 @@ const integerFilter = (event) => {
   return true
 }
 
-const maxFilter = (event) => {
-  console.log('max')
-  console.log(event)
-  console.log(event.target.value)
-  event.preventDefault()
-  return false
-}
 
 export {
-  currencyFilter,
   integerFilter,
-  maxFilter
+  priceFilter
 }

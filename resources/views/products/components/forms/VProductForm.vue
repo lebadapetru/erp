@@ -80,9 +80,10 @@
                   <VBaseInput
                       :type="'text'"
                       :name="'originalPrice'"
-                      v-model="originalPrice"
+                      @keypress="priceFilter"
+                      :modelValue="originalPrice"
+                      @update:modelValue="setOriginalPrice"
                       placeholder="0.00"
-                      @keypress="currencyFilter"
                   />
                 </div>
               </div>
@@ -98,9 +99,10 @@
                   <VBaseInput
                       :type="'text'"
                       :name="'reducedPrice'"
-                      v-model="reducedPrice"
                       placeholder="0.00"
-                      @keypress="currencyFilter"
+                      @keypress="priceFilter"
+                      :modelValue="reducedPrice"
+                      @update:modelValue="setReducedPrice"
                   />
                 </div>
               </div>
@@ -117,8 +119,11 @@
                       :type="'number'"
                       :name="'discount'"
                       placeholder="0"
+                      @keypress="integerFilter"
                       :modelValue="discount"
-                      @update:modelValue="testex"
+                      @update:modelValue="setDiscount"
+                      :min="0"
+                      :max="100"
                   />
                 </div>
               </div>
@@ -348,8 +353,8 @@
 </template>
 
 <script>
-import { toRefs, reactive, ref } from 'vue'
-import { object, string } from 'yup'
+import { toRefs, reactive, ref, watch } from 'vue'
+import { object, string, number, ref as yupRef } from 'yup'
 import VBaseForm from "resources/components/forms/VBaseForm";
 import VCKEditor from "resources/components/forms/inputs/VCKEditor"
 import VTinyMCE from "resources/components/forms/inputs/VTinyMCE";
@@ -358,7 +363,7 @@ import VSelect from "resources/components/forms/inputs/VSelect";
 import VSelectCategories from "resources/views/products/components/forms/inputs/VSelectCategories";
 import VProductFormToolbarActions from "resources/views/products/components/teleports/VProductFormToolbarActions";
 import VBaseInput from "resources/components/forms/inputs/VBaseInput";
-import { currencyFilter, integerFilter, maxFilter } from "resources/js/helpers/inputFilters";
+import { priceFilter, integerFilter } from "resources/js/helpers/inputFilters";
 
 export default {
   name: "VProductForm",
@@ -384,7 +389,15 @@ export default {
 
     const validationSchema = object().shape({
       title: string().trim().required('Title is required.'),
-      description: string().required('Description is required.'),
+      description: string(),
+      originalPrice: number().min(0).transform((v) => (v === '' || Number.isNaN(v) ? null : v)).nullable(),
+      reducedPrice: number().min(0).transform((v) => (v === '' || Number.isNaN(v) ? null : v)).nullable(),
+      discount: number()
+          .integer()
+          .nullable()
+          .min(0)
+          .max(100)
+          .transform((v) => (v === '' || Number.isNaN(v) ? null : v)).nullable(),
     });
 
     const onSubmit = (data) => {
@@ -392,29 +405,49 @@ export default {
       console.log(data)
     }
 
+    const setOriginalPrice = (value) => {
+      console.log('setOriginalPrice')
+      state.originalPrice = value
+    }
+    const setReducedPrice = (value) => {
+      console.log('setReducedPrice')
+      let tmpReducedPrice = (value <= state.originalPrice) ? value : state.reducedPrice
+      console.log(100 - ((tmpReducedPrice * 100) / state.originalPrice))
+      console.log(tmpReducedPrice)
+      //or ((originalPrice-reducedPrice)/originalPrice))*100
+      state.discount = 100 - ((tmpReducedPrice * 100) / state.originalPrice)
+      state.reducedPrice = tmpReducedPrice
+    }
+    const setDiscount = (value) => {
+      console.log('setDiscount')
+      state.discount = (value <= 100) ? value : state.discount
+      let tmpReducedPrice = state.originalPrice - (state.originalPrice * (state.discount / 100))
+      state.reducedPrice = (tmpReducedPrice > 0) ? (Math.round(tmpReducedPrice) == (Math.round(tmpReducedPrice * 100) / 100) ? Math.round(tmpReducedPrice) : (Math.round(tmpReducedPrice * 100) / 100)) : 0
+      console.log(tmpReducedPrice)
+      console.log((tmpReducedPrice > 0) ? (Math.round(tmpReducedPrice) == (Math.round(tmpReducedPrice * 100) / 100) ? Math.round(tmpReducedPrice) : (Math.round(tmpReducedPrice * 100) / 100)) : 0)
+
+    }
+
+    watch(() => state.originalPrice, () => {
+      if (state.originalPrice === '' || isNaN(state.originalPrice)) {
+        return
+      }
+      console.log('watcher')
+      setReducedPrice()
+      setDiscount()
+    })
+
     return {
       ...toRefs(state),
       productForm,
       onSubmit,
       validationSchema,
-      currencyFilter,
+      priceFilter,
       integerFilter,
-      maxFilter,
-      testex: (event) => {
-        console.log('input')
+      setOriginalPrice,
+      setReducedPrice,
+      setDiscount,
 
-
-        const value = event
-        console.log(typeof value)
-        console.log(parseInt(value))
-        console.log(state.discount)
-
-        if (parseInt(value) <= 100) {
-          console.log('here')
-          state.discount = value
-          console.log(state.discount)
-        }
-      }
     }
   }
 }

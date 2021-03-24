@@ -6,18 +6,18 @@ liip_imagine:
     loaders:
         flysystem_loader:
             flysystem:
-                filesystem_service: oneup_flysystem.public_uploads_filesystem_filesystem
+                filesystem_service: default.storage
     # default loader to use for all filter sets
     data_loader: flysystem_loader
 
-#    resolvers:
-#        flysystem_resolver:
-#            flysystem:
-#                filesystem_service: oneup_flysystem.public_uploads_filesystem_filesystem
-#                cache_prefix: media/cache
-#                root_url: '/uploads'
-    # default cache resolver for saving thumbnails
-    #cache: flysystem_resolver
+    resolvers:
+        flysystem_resolver:
+            flysystem:
+                filesystem_service: default.storage
+                cache_prefix: media/cache
+                root_url: '%app.upload_dir%'
+    #default cache resolver for saving thumbnails
+    cache: flysystem_resolver
 
     filter_sets:
         # the name of the "filter set"

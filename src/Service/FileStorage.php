@@ -32,11 +32,11 @@ class FileStorage
     public function __construct(
         ParameterBagInterface $parameterBag,
         LoggerInterface $logger,
-        FilesystemOperator $publicUploadsFilesystem
+        FilesystemOperator $defaultStorage
     )
     {
         $this->parameterBag = $parameterBag;
-        $this->fileSystem = $publicUploadsFilesystem;
+        $this->fileSystem = $defaultStorage;
         $this->logger = $logger;
     }
 
@@ -84,6 +84,6 @@ class FileStorage
 
     public function getUploadDirectory(): string
     {
-        return $this->parameterBag->get('app.upload_directory');
+        return $this->parameterBag->get('app.public_path') . $this->parameterBag->get('app.upload_dir');
     }
 }
