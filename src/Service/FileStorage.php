@@ -61,7 +61,7 @@ class FileStorage
             throw $exception;
         }
 
-        return new HttpsFoundationFile($this->getUploadDirectory() . '/' . $fileLocation);
+        return new HttpsFoundationFile($this->getUploadPath() . '/' . $fileLocation);
     }
 
     public function delete(File $fileEntity)
@@ -82,8 +82,8 @@ class FileStorage
         }
     }
 
-    public function getUploadDirectory(): string
+    public function getUploadPath(): string
     {
-        return $this->parameterBag->get('app.public_path') . $this->parameterBag->get('app.upload_dir');
+        return $this->parameterBag->get('kernel.project_dir') . '/public/'. $this->parameterBag->get('app.upload_dir');
     }
 }

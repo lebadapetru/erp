@@ -300,8 +300,7 @@ class File
 
     public function isVideo(): bool
     {
-        /*TODO replace with str_contains in php8*/
-        if (strpos($this->mimeType, 'video/') !== false) {
+        if (str_contains($this->mimeType, 'video/')) {
             return true;
         }
 
@@ -310,8 +309,7 @@ class File
 
     public function isImage(): bool
     {
-        /*TODO replace with str_contains in php8*/
-        if (strpos($this->mimeType, 'image/') !== false) {
+        if (str_contains($this->mimeType, 'image/')) {
             return true;
         }
 

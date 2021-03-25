@@ -15,7 +15,7 @@ liip_imagine:
             flysystem:
                 filesystem_service: default.storage
                 cache_prefix: media/cache
-                root_url: '%app.upload_dir%'
+                root_url: '%app.upload_base_url%'
     #default cache resolver for saving thumbnails
     cache: flysystem_resolver
 

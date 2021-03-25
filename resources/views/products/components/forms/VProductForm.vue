@@ -428,14 +428,14 @@ export default {
 
     }
 
-    watch(() => state.originalPrice, () => {
+    /*watch(() => state.originalPrice, () => {
       if (state.originalPrice === '' || isNaN(state.originalPrice)) {
         return
       }
       console.log('watcher')
       setReducedPrice()
       setDiscount()
-    })
+    })*/
 
     return {
       ...toRefs(state),

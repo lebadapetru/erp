@@ -8,8 +8,7 @@ class Helpers
 {
     public static function isVideo(string $mimeType): bool
     {
-        /*TODO replace with str_contains in php8*/
-        if (strpos($mimeType, 'video/') !== false) {
+        if (str_contains($mimeType, 'video/')) {
             return true;
         }
 
@@ -18,8 +17,7 @@ class Helpers
 
     public static function isImage(string $mimeType): bool
     {
-        /*TODO replace with str_contains in php8*/
-        if (strpos($mimeType, 'image/') !== false) {
+        if (str_contains($mimeType, 'image/')) {
             return true;
         }
 

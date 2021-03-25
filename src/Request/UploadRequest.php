@@ -13,6 +13,7 @@ class UploadRequest extends BaseRequest
     {
         return [
             'file' => [
+                new Assert\NotBlank(),
                 new Assert\File([
                     'maxSize' => '5M',
                     'mimeTypes' => array_merge(...array_values(File::ACCEPTED_MIME_TYPES)),
