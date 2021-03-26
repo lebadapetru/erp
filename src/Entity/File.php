@@ -9,10 +9,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Dto\FileOutput;
+use App\Dto\FileInput;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     output=FileOutput::class,
+ *     input=FileInput::class,
+ *     normalizationContext={"groups"={"file: read"}},
+ *     denormalizationContext={"groups"={"file: write"}},
+ *     attributes={}
+ * )
  * @ORM\Entity(repositoryClass=FileRepository::class)
  * @ORM\Table("`files`")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
@@ -23,48 +32,57 @@ class File
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"file: read"})
      */
     private int $id;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank()
+     * @Groups({"file: read"})
      */
     private string $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"file: read"})
      */
     private ?string $extension;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"file: read"})
      */
     private ?string $mimeType;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"file: read"})
      */
     private ?int $size;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"file: read"})
      */
     private ?float $width;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Groups({"file: read"})
      */
     private ?float $height;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"file: read"})
      */
     private ?string $path;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url()
+     * @Groups({"file: read"})
      */
     private ?string $mediaUrl;
 
@@ -75,18 +93,21 @@ class File
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
+     * @Groups({"file: read"})
      */
     private ?\DateTimeInterface $deletedAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
+     * @Groups({"file: read"})
      */
     private ?\DateTimeInterface $updatedAt;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
+     * @Groups({"file: read"})
      */
     private ?\DateTimeInterface $createdAt;
 

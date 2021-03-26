@@ -32,4 +32,13 @@ class Helpers
 
         return false;
     }
+
+    public static function isUrl(string $url): bool
+    {
+        if (filter_var($url, FILTER_VALIDATE_URL)) {
+            return true;
+        }
+
+        return false;
+    }
 }

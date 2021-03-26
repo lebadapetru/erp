@@ -14,47 +14,26 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class UploadService
 {
-    /**
-     * @var SluggerInterface
-     */
-    private SluggerInterface $slugger;
-    /**
-     * @var EntityManagerInterface
-     */
-    private EntityManagerInterface $entityManager;
-    /**
-     * @var ParameterBagInterface
-     */
-    private ParameterBagInterface $parameterBag;
-
-    /**
-     * @var FileStorage
-     */
-    private FileStorage $fileStorage;
-
     public function __construct(
-        SluggerInterface $slugger,
-        EntityManagerInterface $entityManager,
-        ParameterBagInterface $parameterBag,
-        FileStorage $fileStorage
-    )
-    {
-        $this->slugger = $slugger;
-        $this->entityManager = $entityManager;
-        $this->parameterBag = $parameterBag;
-        $this->fileStorage = $fileStorage;
-    }
+        private SluggerInterface $slugger,
+        private EntityManagerInterface $entityManager,
+        private ParameterBagInterface $parameterBag,
+        private FileStorage $fileStorage,
+        private FileDecoder $fileDecoder
+    ) {}
 
-    public function save(UploadedFile $temporaryFile): File
+    public function save(UploadedFile|string $file): File
     {
+        $temporaryFile = $this->fileDecoder->init($file, 'test.jpg');
         $this->entityManager->getConnection()->beginTransaction();
         try {
-            $file = $this->createFileEntity($temporaryFile);
+
+            $fileEntity = $this->createFileEntity($temporaryFile);
 
             /*TODO add support for videos, media urls, audios, vts*/
-            if ($file->isImage()) {
-                $this->saveImage($file, $temporaryFile);
-            } elseif ($file->isVideo()) {
+            if ($fileEntity->isImage()) {
+                $this->saveImage($fileEntity, $temporaryFile);
+            } elseif ($fileEntity->isVideo()) {
                 //} elseif (Helpers::isMediaUrl($uploadedFileMimeType)) {
             } else {
                 throw new BadRequestHttpException('Invalid file.');
@@ -62,9 +41,9 @@ class UploadService
             $this->entityManager->getConnection()->commit();
 
         } catch (\Throwable $exception) {
-            if (isset($file)) {
+            if (isset($fileEntity)) {
                 try {
-                    $this->fileStorage->delete($file);
+                    $this->fileStorage->delete($fileEntity);
                 } catch (FilesystemException | UnableToDeleteFile $exception) {
                     //this is a behind the scene action, if it fails log it and let it pass
                 }
@@ -73,7 +52,7 @@ class UploadService
             throw $exception;
         }
 
-        return $file;
+        return $fileEntity;
     }
 
     public function saveImage(File $fileEntity, UploadedFile $temporaryFile)

@@ -4,7 +4,7 @@
       :class="styleClasses"
       :name="name"
       :id="name"
-      :value="modelValue"
+      :value="inputValue"
       :placeholder="placeholder"
       :autocomplete="autocomplete"
       :min="(type === 'number') ? min : undefined"
@@ -20,6 +20,7 @@
 
 <script>
 import { useField } from 'vee-validate'
+import { watch } from 'vue'
 import capitalize from 'lodash/capitalize'
 
 export default {
@@ -86,6 +87,10 @@ export default {
     const onKeyPress = (event) => {
       emit('keypress', event);
     }
+
+    watch(() => props.modelValue, value => {
+      inputValue.value = value;
+    });
 
     return {
       onInput,
