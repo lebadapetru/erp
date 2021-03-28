@@ -48,7 +48,7 @@ export default {
     Dropzone.autoDiscover = false
     onMounted(() => {
       new Dropzone(el.value, {
-        url: "/upload",
+        url: "/api/files",
         paramName: props.name,
         maxFiles: 10,
         maxFilesize: 10, // MB

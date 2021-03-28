@@ -3,8 +3,8 @@
 
 namespace App\Service;
 
+use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use App\Entity\File;
-use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToDeleteFile;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -16,16 +16,15 @@ class UploadService
 {
     public function __construct(
         private SluggerInterface $slugger,
-        private EntityManagerInterface $entityManager,
+        private DataPersisterInterface $decoratedDataPersister,
         private ParameterBagInterface $parameterBag,
         private FileStorage $fileStorage,
         private FileDecoder $fileDecoder
     ) {}
 
-    public function save(UploadedFile|string $file): File
+    public function save(UploadedFile $temporaryFile): File
     {
-        $temporaryFile = $this->fileDecoder->init($file, 'test.jpg');
-        $this->entityManager->getConnection()->beginTransaction();
+        $this->decoratedDataPersister->getConnection()->beginTransaction();
         try {
 
             $fileEntity = $this->createFileEntity($temporaryFile);
@@ -38,7 +37,7 @@ class UploadService
             } else {
                 throw new BadRequestHttpException('Invalid file.');
             }
-            $this->entityManager->getConnection()->commit();
+            $this->decoratedDataPersister->getConnection()->commit();
 
         } catch (\Throwable $exception) {
             if (isset($fileEntity)) {
@@ -48,14 +47,14 @@ class UploadService
                     //this is a behind the scene action, if it fails log it and let it pass
                 }
             }
-            $this->entityManager->getConnection()->rollBack();
+            $this->decoratedDataPersister->getConnection()->rollBack();
             throw $exception;
         }
 
         return $fileEntity;
     }
 
-    public function saveImage(File $fileEntity, UploadedFile $temporaryFile)
+    private function saveImage(File $fileEntity, UploadedFile $temporaryFile)
     {
         $file = $this->fileStorage->upload(
             $temporaryFile,
@@ -68,23 +67,24 @@ class UploadService
         $fileEntity->setPath($file->getPath());
         $fileEntity->setIsProcessed(true);
 
-        $this->entityManager->persist($fileEntity);
-        $this->entityManager->flush();
+        $this->decoratedDataPersister->persist($fileEntity);
+        $this->decoratedDataPersister->flush();
     }
 
-    public function createFileEntity(UploadedFile $temporaryFile): File
+    private function createFileEntity(UploadedFile $temporaryFile): File
     {
-        $originalFilename = pathinfo($temporaryFile->getClientOriginalName(), PATHINFO_FILENAME);
+        $originalFileName = pathinfo($temporaryFile->getClientOriginalName(), PATHINFO_FILENAME);
+        //this one does strtolower, sanitization
+        $fileName = $this->slugger->slug($originalFileName);
         $file = new File();
-        $file->setName(
-            strtolower($this->slugger->slug($originalFilename) . '-' . uniqid())
-        );
+        $file->setOriginalName($fileName);
+        $file->setDisplayName($fileName);
         $file->setExtension($temporaryFile->guessExtension());
         $file->setMimeType($temporaryFile->getMimeType());
         $file->setSize($temporaryFile->getSize());
 
-        $this->entityManager->persist($file);
-        $this->entityManager->flush();
+        $this->decoratedDataPersister->persist($file);
+        $this->decoratedDataPersister->flush();
 
         return $file;
     }

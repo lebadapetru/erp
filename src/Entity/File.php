@@ -11,16 +11,17 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Dto\FileOutput;
-use App\Dto\FileInput;
 
 /**
  * @ApiResource(
- *     output=FileOutput::class,
- *     input=FileInput::class,
  *     normalizationContext={"groups"={"file: read"}},
  *     denormalizationContext={"groups"={"file: write"}},
- *     attributes={}
+ *     attributes={},
+ *     collectionOperations={
+ *         "post"={
+ *             "deserialize"=false
+ *             }
+ *     }
  * )
  * @ORM\Entity(repositoryClass=FileRepository::class)
  * @ORM\Table("`files`")
@@ -38,10 +39,15 @@ class File
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank()
+     * @Groups({"file: read", "file: write"})
+     */
+    private string $originalName;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Groups({"file: read"})
      */
-    private string $name;
+    private string $displayName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -116,6 +122,12 @@ class File
      */
     private $products;
 
+    /**
+     * @Assert\NotBlank()
+     * @Groups({"file: write"})
+     */
+    private mixed $file;
+
     const ACCEPTED_MIME_TYPES = [
         'images' => [
             'image/jpg',
@@ -159,14 +171,26 @@ class File
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getOriginalName(): ?string
     {
-        return $this->name;
+        return $this->originalName;
     }
 
-    public function setName(string $name): self
+    public function setOriginalName(string $originalName): self
     {
-        $this->name = $name;
+        $this->originalName = $originalName;
+
+        return $this;
+    }
+
+    public function getDisplayName(): ?string
+    {
+        return $this->displayName;
+    }
+
+    public function setDisplayName(string $displayName): self
+    {
+        $this->displayName = $displayName;
 
         return $this;
     }
@@ -357,4 +381,17 @@ class File
 
         return $this;
     }
+
+    public function setFile(mixed $file): self
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    public function getFile(): mixed
+    {
+        return $this->file;
+    }
+
 }
