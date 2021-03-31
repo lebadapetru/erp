@@ -11,43 +11,27 @@ use League\Flysystem\UnableToWriteFile;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\HttpFoundation\File\File as HttpsFoundationFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileStorage
 {
-    /**
-     * @var ParameterBagInterface
-     */
-    private ParameterBagInterface $parameterBag;
-    /**
-     * @var FilesystemOperator
-     */
-    private FilesystemOperator $fileSystem;
-    /**
-     * @var LoggerInterface
-     */
-    private LoggerInterface $logger;
 
     public function __construct(
-        ParameterBagInterface $parameterBag,
-        LoggerInterface $logger,
-        FilesystemOperator $defaultStorage
+        private ParameterBagInterface $parameterBag,
+        private LoggerInterface $logger,
+        private FilesystemOperator $defaultStorage
     )
     {
-        $this->parameterBag = $parameterBag;
-        $this->fileSystem = $defaultStorage;
-        $this->logger = $logger;
     }
 
-    public function upload(UploadedFile $uploadedFile, File $fileEntity): HttpsFoundationFile
+    public function upload(UploadedFile $uploadedFile, File $fileEntity): void
     {
-        $fileLocation = $fileEntity->getId() . '/' . $fileEntity->getName() . '.' . $fileEntity->getExtension();
+        $fileLocation = $this->getRealFileLocation($fileEntity, false);
 
         try {
             /*TODO move files to s3*/
             $stream = fopen($uploadedFile->getRealPath(), 'r');
-            $result = $this->fileSystem->writeStream(
+            $result = $this->defaultStorage->writeStream(
                 $fileLocation,
                 $stream
             );
@@ -61,15 +45,17 @@ class FileStorage
             throw $exception;
         }
 
-        return new HttpsFoundationFile($this->getUploadPath() . '/' . $fileLocation);
+        //TODO once we move to s3 storage, we won't be able to use the File class since the resource is on cloud
+        //and File accepts local resource path
+        //return new HttpsFoundationFile($this->getAbsoluteStoragePath() . '/' . $fileLocation);
     }
 
     public function delete(File $fileEntity)
     {
-        $fileLocation = $fileEntity->getId() . '/' . $fileEntity->getName() . '.' . $fileEntity->getExtension();
+        $fileLocation = $this->getRealFileLocation($fileEntity);
         try {
-            if ($this->fileSystem->fileExists($fileLocation)) {
-                $result = $this->fileSystem->delete($fileLocation);
+            if ($this->defaultStorage->fileExists($fileLocation)) {
+                $result = $this->defaultStorage->delete($fileLocation);
 
                 if ($result === false) {
                     throw new UnableToDeleteFile(sprintf('Couldn\'t delete the "%s" file!', $fileLocation));
@@ -82,8 +68,33 @@ class FileStorage
         }
     }
 
-    public function getUploadPath(): string
+    public function getRelativeStoragePath(): string
     {
-        return $this->parameterBag->get('kernel.project_dir') . '/public/'. $this->parameterBag->get('app.upload_dir');
+        return $this->parameterBag->get('app.upload_path');
+    }
+
+    public function getAbsoluteStoragePath(): string
+    {
+        return $this->parameterBag->get('kernel.project_dir') .
+            '/public/' .
+            $this->parameterBag->get('app.storage_dir') . '/' .
+            $this->parameterBag->get('app.upload_dir');
+    }
+
+    public function getFileLocation(File $fileEntity, bool $withBaseUrl = true, bool $withFile = true): string
+    {
+        return
+            ($withBaseUrl ? $this->parameterBag->get('app.url') : '') . //TODO this will be the s3 base url
+            $this->getRelativeStoragePath() . '/' .
+            $fileEntity->getId() .
+            ($withFile ? ('/' . $fileEntity->getOriginalName() . '.' . $fileEntity->getExtension()) : '');
+    }
+
+    public function getRealFileLocation(File $fileEntity, bool $withAbsolutePath = true, bool $withFile = true): string
+    {
+        return
+            ($withAbsolutePath ? $this->getAbsoluteStoragePath() : '') . '/' .//TODO this will be the s3 base url
+            $fileEntity->getId() .
+            ($withFile ? ('/' . $fileEntity->getOriginalName() . '.' . $fileEntity->getExtension()) : '');
     }
 }

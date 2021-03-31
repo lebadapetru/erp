@@ -41,4 +41,10 @@ class Helpers
 
         return false;
     }
+
+    //replace multiple slashes with only 1
+    public static function deslash(string $string): string
+    {
+        return preg_replace('~(^|[^:])//+~', '\\1/', $string);
+    }
 }

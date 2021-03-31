@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Controller\File\CreateFileAction;
 
 /**
  * @ApiResource(
@@ -19,8 +20,30 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     attributes={},
  *     collectionOperations={
  *         "post"={
- *             "deserialize"=false
+ *             "controller"=CreateFileAction::class,
+ *             "deserialize"=false,
+ *             "openapi_context"={
+ *                 "requestBody"={
+ *                     "content"={
+ *                         "multipart/form-data"={
+ *                             "schema"={
+ *                                 "type"="object",
+ *                                 "properties"={
+ *                                     "file"={
+ *                                         "type"="string",
+ *                                         "format"="binary"
+ *                                     }
+ *                                 }
+ *                             }
+ *                         }
+ *                     }
+ *                 }
  *             }
+ *         },
+ *         "get"
+ *     },
+ *     itemOperations={
+ *         "get"
  *     }
  * )
  * @ORM\Entity(repositoryClass=FileRepository::class)
@@ -123,10 +146,9 @@ class File
     private $products;
 
     /**
-     * @Assert\NotBlank()
-     * @Groups({"file: write"})
+     * TODO maybe save the uploadedFile here during saving, to use its props
      */
-    private mixed $file;
+    private mixed $uploadedFile;
 
     const ACCEPTED_MIME_TYPES = [
         'images' => [
@@ -382,16 +404,16 @@ class File
         return $this;
     }
 
-    public function setFile(mixed $file): self
+    public function setFile(mixed $uploadedFile): self
     {
-        $this->file = $file;
+        $this->uploadedFile = $uploadedFile;
 
         return $this;
     }
 
-    public function getFile(): mixed
+    public function getUploadedFile(): mixed
     {
-        return $this->file;
+        return $this->uploadedFile;
     }
 
 }

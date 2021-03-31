@@ -13,16 +13,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 abstract class BaseRequest
 {
-    private ?Request $request;
-    private ValidatorInterface $validator;
+    protected ?Request $request;
 
     public function __construct(
         RequestStack $requestStack,
-        ValidatorInterface $validator
+        private ValidatorInterface $validator
     )
     {
         $this->request = $requestStack->getCurrentRequest();
-        $this->validator = $validator;
     }
 
     abstract protected function rules(): array;
@@ -33,7 +31,6 @@ abstract class BaseRequest
             $this->getData(),
             $this->getRules()
         );
-
         $errorMessages = [];
         foreach ($violations as $violation) {
             $errorMessages[] = $violation->getMessage();

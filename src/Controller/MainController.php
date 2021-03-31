@@ -16,7 +16,7 @@ class MainController extends AbstractController
      * @Route(
      *     "/{route}",
      *     name="vue_pages",
-     *     requirements={"route"="^(?!.*api|_wdt|_profiler|login|logout|register|forgot-password|verify|favicon|build).+"},
+     *     requirements={"route"="^(?!.*api|_wdt|_profiler|login|logout|register|forgot-password|verify|favicon|build|uploads).+"},
      *     methods={"GET"})
      */
     public function index(): \Symfony\Component\HttpFoundation\Response

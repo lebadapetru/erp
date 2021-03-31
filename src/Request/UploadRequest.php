@@ -8,6 +8,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class UploadRequest extends BaseRequest
 {
+    protected function getData(): array
+    {
+        return array_merge(
+            $this->request->request->all(),
+            $this->request->files->all()
+        );
+    }
 
     protected function rules(): array
     {
