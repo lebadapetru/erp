@@ -183,9 +183,6 @@ class File
     public function __construct()
     {
         $this->products = new ArrayCollection();
-        /*TODO until it gets fixed*/
-        $this->setUpdatedAt(Carbon::now());
-        $this->setCreatedAt(Carbon::now());
     }
 
     public function getId(): ?int
