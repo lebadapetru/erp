@@ -1,19 +1,21 @@
 <template>
+  <label v-if="label">{{ label }}</label>
   <input
-      :type="type"
-      :class="styleClasses"
-      :name="name"
-      :id="name"
-      :value="inputValue"
-      :placeholder="placeholder"
-      :autocomplete="autocomplete"
-      :min="(type === 'number') ? min : undefined"
-      :max="(type === 'number') ? max : undefined"
-      @input="onInput"
-      @blur="handleBlur"
-      @keypress="onKeyPress"
+    v-bind="$attrs"
+    :type="type"
+    :class="styleClasses"
+    :name="name"
+    :id="name"
+    :value="inputValue"
+    :placeholder="placeholder"
+    :autocomplete="autocomplete"
+    :min="(type === 'number') ? min : undefined"
+    :max="(type === 'number') ? max : undefined"
+    @input="onInput"
+    @blur="handleBlur"
+    @keypress="onKeyPress"
   />
-  <div class="error-message" v-if="errorMessage">
+  <div v-if="errorMessage" class="error-message">
     {{ capitalize(errorMessage) }}
   </div>
 </template>
@@ -68,13 +70,12 @@ export default {
     }
   },
   emits: ['update:modelValue', 'keypress'],
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     const {
       value: inputValue,
       errorMessage,
       handleBlur,
       handleInput,
-      meta,
     } = useField(props.name, props.rules, {
       initialValue: props.modelValue,
     });
@@ -98,7 +99,6 @@ export default {
       handleBlur,
       errorMessage,
       inputValue,
-      meta,
       capitalize
     }
   },

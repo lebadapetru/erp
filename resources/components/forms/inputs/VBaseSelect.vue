@@ -1,25 +1,34 @@
 <template>
+  <label v-if="label">{{ label }}</label>
   <select
-      :class="styleClasses"
-      :value="modelValue"
-      v-bind="{
+    :class="styleClasses"
+    :value="modelValue"
+    v-bind="{
       ...$attrs,
-      onChange: ($event) => { $emit('update:modelValue', $event.target.value) }
+      onChange
     }"
   >
     <option value="" disabled selected>{{ placeholder }}</option>
     <option
-        v-for="option in options"
-        :value="option"
-        :key="option"
-        :selected="option === modelValue"
+      v-for="(option, index) in options"
+      :value="option.value"
+      :key="index"
+      :selected="index === modelValue"
+      :name="name"
     >
-      {{ option }}
+      {{ option.label }}
     </option>
   </select>
+  <div v-if="errorMessage" class="error-message">
+    {{ capitalize(errorMessage) }}
+  </div>
 </template>
 
 <script>
+import { useField } from 'vee-validate'
+import { watch } from 'vue'
+import capitalize from 'lodash/capitalize'
+
 export default {
   name: "VBaseSelect",
   props: {
@@ -43,6 +52,37 @@ export default {
       type: String,
       default: 'custom-select form-control'
     },
+    name: {
+      type: String,
+      required: true
+    }
+  },
+  emits: ['update:modelValue'],
+  setup(props, { emit }) {
+    const {
+      value: inputValue,
+      errorMessage,
+      handleChange,
+    } = useField(props.name, props.rules, {
+      initialValue: props.modelValue,
+    });
+
+    const onChange = (event) => {
+      handleChange(event)
+      emit('update:modelValue', event.target.value)
+    }
+
+    watch(() => props.modelValue, value => {
+      inputValue.value = value;
+    });
+
+    return {
+      onChange,
+      handleChange,
+      errorMessage,
+      inputValue,
+      capitalize
+    }
   }
 }
 </script>
