@@ -3,7 +3,8 @@
     <input
       type="checkbox"
       :name="name"
-      :checked="checked"
+      :checked="checkboxChecked"
+      :value="valueProp"
       :class="styleClasses"
       @change="onChange"
     />
@@ -16,7 +17,6 @@
 
 <script>
 import { useField } from 'vee-validate'
-import { watch } from 'vue'
 import capitalize from 'lodash/capitalize'
 
 export default {
@@ -25,9 +25,13 @@ export default {
       type: String,
       default: ''
     },
-    modelValue: {
+    checked: {
       type: Boolean,
       default: false
+    },
+    value: {
+      type: [Boolean, String, Number],
+      default: true
     },
     styleClasses: {
       type: String,
@@ -42,22 +46,23 @@ export default {
       require: true
     }
   },
-  emits: ['update:modelValue'],
+  emits: ['update:checked'],
   setup(props, { emit }) {
     const {
-      checked,
+      checked: checkboxChecked,
       value: checkboxValue,
+      valueProp,
       errorMessage,
       handleChange,
     } = useField(props.name, props.rules, {
       type: 'checkbox',
-      valueProp: props.modelValue,
-      initialValue: props.modelValue,
+      valueProp: props.value,
+      initialValue: props.checked,
     });
 
     const onChange = (event) => {
-      handleChange(event.target.checked)
-      emit('update:modelValue', event.target.checked)
+      handleChange(props.value)
+      emit('update:checked', event.target.checked)
     }
 
     return {
@@ -65,8 +70,9 @@ export default {
       handleChange,
       errorMessage,
       capitalize,
-      checked,
+      checkboxChecked,
       checkboxValue,
+      valueProp
     }
   }
 }

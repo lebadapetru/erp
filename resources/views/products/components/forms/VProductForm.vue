@@ -166,7 +166,7 @@
                   <VBaseCheckbox
                     :label="'Track quantity'"
                     :name="'isTrackQuantity'"
-                    v-model="isTrackQuantity"
+                    v-model:checked="isTrackQuantity"
                   />
                 </div>
               </div>
@@ -177,7 +177,7 @@
                   <VBaseCheckbox
                     :label="'Continue selling when out of stock'"
                     :name="'isContinueSellingOutOfStock'"
-                    v-model="isContinueSellingOutOfStock"
+                    v-model:checked="isContinueSellingOutOfStock"
                   />
                 </div>
               </div>
@@ -222,7 +222,7 @@
               <VBaseCheckbox
                 :label="'This is a physical product'"
                 :name="'isPhysicalProduct'"
-                v-model="isPhysicalProduct"
+                v-model:checked="isPhysicalProduct"
               />
             </div>
           </div>
