@@ -29,10 +29,6 @@ export default {
       type: Boolean,
       default: false
     },
-    value: {
-      type: [Boolean, String, Number],
-      default: true
-    },
     styleClasses: {
       type: String,
       default: ''
@@ -56,12 +52,12 @@ export default {
       handleChange,
     } = useField(props.name, props.rules, {
       type: 'checkbox',
-      valueProp: props.value,
+      valueProp: true,
       initialValue: props.checked,
     });
 
     const onChange = (event) => {
-      handleChange(props.value)
+      handleChange(event.target.checked)
       emit('update:checked', event.target.checked)
     }
 

@@ -236,8 +236,10 @@
                   <div class="col-8">
                     <VBaseInput
                       :label="'Weight'"
+                      :type="'number'"
+                      :min="0"
                       :name="'weight'"
-                      :placeholder="'0.0'"
+                      :placeholder="'0.00'"
                       v-model="weight"
                     />
                   </div>
@@ -471,6 +473,12 @@ export default {
         .integer()
         .min(0)
         .transform((v) => (v === '' || Number.isNaN(v) ? null : v)),
+      isPhysicalProduct: boolean(),
+      weight: number()
+        .nullable()
+        .min(0)
+        .transform((v) => (v === '' || Number.isNaN(v) ? null : v)),
+      measurementUnit: number().integer()
     });
 
     const onSubmit = (data) => {
