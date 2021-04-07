@@ -1,11 +1,13 @@
 <template>
-  <label class="checkbox">
+  <label
+    :class="styleClasses"
+  >
     <input
+      v-bind="$attrs"
       type="checkbox"
       :name="name"
       :checked="checkboxChecked"
       :value="valueProp"
-      :class="styleClasses"
       @change="onChange"
     />
     <span></span>{{ label }}
@@ -31,7 +33,7 @@ export default {
     },
     styleClasses: {
       type: String,
-      default: ''
+      default: 'checkbox'
     },
     rules: {
       type: Object,

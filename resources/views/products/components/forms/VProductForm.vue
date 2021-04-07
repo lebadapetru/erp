@@ -51,7 +51,6 @@
             <div class="form-group row">
               <div class="col-12">
                 <VDropZone/>
-                <span class="form-text text-muted">If you want your invoices addressed to a company. Leave blank to use your full name.</span>
               </div>
             </div>
           </div>
@@ -252,7 +251,6 @@
                     />
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
@@ -277,17 +275,25 @@
             <div class="form-group row">
               <div class="col-12">
                 <div class="checkbox-inline">
-                  <label class="checkbox">
-                    <input type="checkbox"/>
-                    <span></span>This product has multiple options, like different sizes or colors
-                  </label>
+                  <VBaseCheckbox
+                    :label="'This product has multiple options, like different sizes or colors'"
+                    :name="'hasVariants'"
+                    v-model:checked="hasVariants"
+                  />
                 </div>
               </div>
             </div>
+          </div>
+          <div
+            v-if="hasVariants"
+            class="card-footer"
+          >
             <div class="form-group row">
               <div class="col-6">
                 <label>Option 1</label>
-                <input type="text" class="form-control" placeholder="Size" value=""/>
+<!--                <VBaseSelect
+                  :placeholder="'Separate options with a comma'"
+                />-->
               </div>
 
               <div class="col-6">
@@ -307,18 +313,19 @@
               <h3 class="card-label">Product status & visibility</h3>
             </div>
             <div class="card-toolbar">
-                  <span class="switch switch-outline switch-icon switch-success">
-                      <label>
-                        <input type="checkbox" checked="checked" name="select"/>
-                        <span></span>
-                      </label>
-                    </span>
+              <span class="switch switch-outline switch-icon switch-success">
+                <VBaseCheckbox
+                  :name="'isPublic'"
+                  :style-classes="''"
+                  v-model:checked="isPublic"
+                />
+              </span>
             </div>
           </div>
           <div class="card-body">
             <div class="form-group row">
               <div class="col-12">
-                <VSelect/>
+                <VSelect />
                 <span class="form-text text-muted">If you want your invoices addressed to a company. Leave blank to use your full name.</span>
               </div>
             </div>
@@ -444,7 +451,14 @@ export default {
           label: 'g',
           value: 2
         }
-      ]
+      ],
+      hasVariants: false,
+      //TODO create table
+      variantOptions: [],
+      variants: [
+        {}
+      ],
+      isPublic: true
     })
     const productForm = ref(null)
 

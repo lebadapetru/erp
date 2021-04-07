@@ -24,14 +24,13 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
  *     attributes={}
  * )
  * @ApiFilter(PropertyFilter::class)
- * @ApiFilter(RangeFilter::class, properties={"price"})
+ * @ApiFilter(RangeFilter::class, properties={"originalPrice"})
  * @ApiFilter(BooleanFilter::class, properties={"isPublic"})
  * @ApiFilter(DateFilter::class, properties={"deletedAt", "updatedAt", "createdAt"})
  * @ApiFilter(NumericFilter::class, properties={"stock"})
  * @ApiFilter(SearchFilter::class, properties={
  *          "title": "partial",
  *          "description": "partial",
- *          "status": "exact",
  *          "sku": "word_start"
  *     })
  * @ORM\Entity(repositoryClass=ProductsRepository::class)
@@ -66,13 +65,6 @@ class Product
     private bool $isPublic = true;
 
     /**
-     * TODO oneToOne relation to a diff table
-     * @ORM\Column(type="integer")
-     * @Groups({"product: read", "product: write"})
-     */
-    private int $status;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"product: read", "product: write"})
      */
@@ -85,10 +77,10 @@ class Product
     private int $stock = 0;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="decimal", precision=10, scale=2)
      * @Groups({"product: read", "product: write"})
      */
-    private int $price = 0;
+    private int $originalPrice = 0;
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
@@ -114,18 +106,44 @@ class Product
      * @ORM\ManyToMany(targetEntity=File::class, inversedBy="products")
      * @Groups({"product: read", "product: write"})
      */
-    private $file;
+    private $files;
 
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="products")
      * @Groups({"product: read", "product: write"})
      */
-    private $categories; /*TODO wait for stable php 8 and symfony to use union type hinting*/
+    private $categories;
+
+    /**
+     * @ORM\Column(type="smallint")
+     * @Groups({"product: read", "product: write"})
+     */
+    private int $discount = 0;
+
+    /**
+     * @ORM\OneToOne(targetEntity=LookupProductStatus::class, inversedBy="product", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"product: read", "product: write"})
+     */
+    private $status;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Vendor::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"product: read", "product: write"})
+     */
+    private $vendor;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="products")
+     */
+    private $tags;
 
     public function __construct()
     {
-        $this->file = new ArrayCollection();
+        $this->files = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -169,12 +187,12 @@ class Product
         return $this;
     }
 
-    public function getStatus(): ?int
+    public function getStatus(): ?LookupProductStatus
     {
         return $this->status;
     }
 
-    public function setStatus(int $status): self
+    public function setStatus(LookupProductStatus $status): self
     {
         $this->status = $status;
 
@@ -205,14 +223,14 @@ class Product
         return $this;
     }
 
-    public function getPrice(): ?string
+    public function getOriginalPrice(): ?string
     {
-        return $this->price;
+        return $this->originalPrice;
     }
 
-    public function setPrice(string $price): self
+    public function setOriginalPrice(string $originalPrice): self
     {
-        $this->price = $price;
+        $this->originalPrice = $originalPrice;
 
         return $this;
     }
@@ -256,15 +274,15 @@ class Product
     /**
      * @return Collection|File[]
      */
-    public function getFile(): Collection
+    public function getFiles(): Collection
     {
-        return $this->file;
+        return $this->files;
     }
 
     public function addFile(File $file): self
     {
-        if (!$this->file->contains($file)) {
-            $this->file[] = $file;
+        if (!$this->files->contains($file)) {
+            $this->files[] = $file;
         }
 
         return $this;
@@ -272,8 +290,8 @@ class Product
 
     public function removeFile(File $file): self
     {
-        if ($this->file->contains($file)) {
-            $this->file->removeElement($file);
+        if ($this->files->contains($file)) {
+            $this->files->removeElement($file);
         }
 
         return $this;
@@ -299,6 +317,54 @@ class Product
     public function removeCategory(Category $category): self
     {
         $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    public function getDiscount(): ?int
+    {
+        return $this->discount;
+    }
+
+    public function setDiscount(int $discount): self
+    {
+        $this->discount = $discount;
+
+        return $this;
+    }
+
+    public function getVendor(): ?Vendor
+    {
+        return $this->vendor;
+    }
+
+    public function setVendor(Vendor $vendor): self
+    {
+        $this->vendor = $vendor;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        $this->tags->removeElement($tag);
 
         return $this;
     }

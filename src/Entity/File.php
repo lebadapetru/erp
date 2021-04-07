@@ -116,6 +116,7 @@ class File
     private ?string $mediaUrl;
 
     /**
+     * @TODO consider moving this to a status lookup table, a file can have different statuses
      * @ORM\Column(type="boolean")
      */
     private bool $isProcessed = false;
@@ -141,7 +142,7 @@ class File
     private ?\DateTimeInterface $createdAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Product::class, mappedBy="file")
+     * @ORM\ManyToMany(targetEntity=Product::class, mappedBy="files")
      */
     private $products;
 
