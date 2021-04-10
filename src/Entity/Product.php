@@ -121,11 +121,10 @@ class Product
     private int $discount = 0;
 
     /**
-     * @ORM\OneToOne(targetEntity=LookupProductStatus::class, inversedBy="product", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="integer")
      * @Groups({"product: read", "product: write"})
      */
-    private $status;
+    private int $statusId;
 
     /**
      * @ORM\OneToOne(targetEntity=Vendor::class, cascade={"persist", "remove"})
@@ -187,14 +186,14 @@ class Product
         return $this;
     }
 
-    public function getStatus(): ?LookupProductStatus
+    public function getStatusId(): ?int
     {
-        return $this->status;
+        return $this->statusId;
     }
 
-    public function setStatus(LookupProductStatus $status): self
+    public function setStatusId(int $statusId): self
     {
-        $this->status = $status;
+        $this->statusId = $statusId;
 
         return $this;
     }

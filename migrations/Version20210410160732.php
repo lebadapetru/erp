@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210328205026 extends AbstractMigration
+final class Version20210410160732 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -30,7 +30,9 @@ final class Version20210328205026 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE "reset_password_tokens_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "roles_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "services_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE "tags_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "users_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE "vendors_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE TABLE "categories" (id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, is_public BOOLEAN NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE "email_tokens" (id INT NOT NULL, user_id INT NOT NULL, token VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_D7C0C27E5F37A13B ON "email_tokens" (token)');
@@ -51,13 +53,17 @@ final class Version20210328205026 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_7E33D11AD60322AC ON group_role (role_id)');
         $this->addSql('CREATE TABLE "permissions" (id INT NOT NULL, name VARCHAR(255) NOT NULL, label VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_2DEDCC6FEA750E8 ON "permissions" (label)');
-        $this->addSql('CREATE TABLE "products" (id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, is_public BOOLEAN NOT NULL, status INT NOT NULL, sku VARCHAR(255) DEFAULT NULL, stock INT NOT NULL, price INT NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE "products" (id INT NOT NULL, vendor_id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, is_public BOOLEAN NOT NULL, sku VARCHAR(255) DEFAULT NULL, stock INT NOT NULL, original_price NUMERIC(10, 2) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, discount SMALLINT NOT NULL, status_id INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_B3BA5A5AF603EE73 ON "products" (vendor_id)');
         $this->addSql('CREATE TABLE product_file (product_id INT NOT NULL, file_id INT NOT NULL, PRIMARY KEY(product_id, file_id))');
         $this->addSql('CREATE INDEX IDX_17714B14584665A ON product_file (product_id)');
         $this->addSql('CREATE INDEX IDX_17714B193CB796C ON product_file (file_id)');
         $this->addSql('CREATE TABLE product_category (product_id INT NOT NULL, category_id INT NOT NULL, PRIMARY KEY(product_id, category_id))');
         $this->addSql('CREATE INDEX IDX_CDFC73564584665A ON product_category (product_id)');
         $this->addSql('CREATE INDEX IDX_CDFC735612469DE2 ON product_category (category_id)');
+        $this->addSql('CREATE TABLE product_tag (product_id INT NOT NULL, tag_id INT NOT NULL, PRIMARY KEY(product_id, tag_id))');
+        $this->addSql('CREATE INDEX IDX_E3A6E39C4584665A ON product_tag (product_id)');
+        $this->addSql('CREATE INDEX IDX_E3A6E39CBAD26311 ON product_tag (tag_id)');
         $this->addSql('CREATE TABLE "reset_password_tokens" (id INT NOT NULL, user_id INT NOT NULL, token VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_F045D5AA5F37A13B ON "reset_password_tokens" (token)');
         $this->addSql('CREATE INDEX IDX_F045D5AAA76ED395 ON "reset_password_tokens" (user_id)');
@@ -68,22 +74,27 @@ final class Version20210328205026 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_6F7DF886FED90CCA ON role_permission (permission_id)');
         $this->addSql('CREATE TABLE "services" (id INT NOT NULL, name VARCHAR(255) NOT NULL, label VARCHAR(255) NOT NULL, is_active BOOLEAN NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_7332E169EA750E8 ON "services" (label)');
+        $this->addSql('CREATE TABLE "tags" (id INT NOT NULL, name VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE "users" (id INT NOT NULL, username VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, first_name VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, is_active BOOLEAN NOT NULL, verified_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9F85E0677 ON "users" (username)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9E7927C74 ON "users" (email)');
         $this->addSql('CREATE TABLE user_role (user_id INT NOT NULL, role_id INT NOT NULL, PRIMARY KEY(user_id, role_id))');
         $this->addSql('CREATE INDEX IDX_2DE8C6A3A76ED395 ON user_role (user_id)');
         $this->addSql('CREATE INDEX IDX_2DE8C6A3D60322AC ON user_role (role_id)');
+        $this->addSql('CREATE TABLE "vendors" (id INT NOT NULL, name VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('ALTER TABLE "email_tokens" ADD CONSTRAINT FK_D7C0C27EA76ED395 FOREIGN KEY (user_id) REFERENCES "users" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE "features" ADD CONSTRAINT FK_BFC0DC13ED5CA9E6 FOREIGN KEY (service_id) REFERENCES "services" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE group_user ADD CONSTRAINT FK_A4C98D39FE54D947 FOREIGN KEY (group_id) REFERENCES "groups" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE group_user ADD CONSTRAINT FK_A4C98D39A76ED395 FOREIGN KEY (user_id) REFERENCES "users" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE group_role ADD CONSTRAINT FK_7E33D11AFE54D947 FOREIGN KEY (group_id) REFERENCES "groups" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE group_role ADD CONSTRAINT FK_7E33D11AD60322AC FOREIGN KEY (role_id) REFERENCES "roles" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE "products" ADD CONSTRAINT FK_B3BA5A5AF603EE73 FOREIGN KEY (vendor_id) REFERENCES "vendors" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE product_file ADD CONSTRAINT FK_17714B14584665A FOREIGN KEY (product_id) REFERENCES "products" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE product_file ADD CONSTRAINT FK_17714B193CB796C FOREIGN KEY (file_id) REFERENCES "files" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE product_category ADD CONSTRAINT FK_CDFC73564584665A FOREIGN KEY (product_id) REFERENCES "products" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE product_category ADD CONSTRAINT FK_CDFC735612469DE2 FOREIGN KEY (category_id) REFERENCES "categories" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE product_tag ADD CONSTRAINT FK_E3A6E39C4584665A FOREIGN KEY (product_id) REFERENCES "products" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE product_tag ADD CONSTRAINT FK_E3A6E39CBAD26311 FOREIGN KEY (tag_id) REFERENCES "tags" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE "reset_password_tokens" ADD CONSTRAINT FK_F045D5AAA76ED395 FOREIGN KEY (user_id) REFERENCES "users" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE role_permission ADD CONSTRAINT FK_6F7DF886D60322AC FOREIGN KEY (role_id) REFERENCES "roles" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE role_permission ADD CONSTRAINT FK_6F7DF886FED90CCA FOREIGN KEY (permission_id) REFERENCES "permissions" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -102,14 +113,17 @@ final class Version20210328205026 extends AbstractMigration
         $this->addSql('ALTER TABLE role_permission DROP CONSTRAINT FK_6F7DF886FED90CCA');
         $this->addSql('ALTER TABLE product_file DROP CONSTRAINT FK_17714B14584665A');
         $this->addSql('ALTER TABLE product_category DROP CONSTRAINT FK_CDFC73564584665A');
+        $this->addSql('ALTER TABLE product_tag DROP CONSTRAINT FK_E3A6E39C4584665A');
         $this->addSql('ALTER TABLE group_role DROP CONSTRAINT FK_7E33D11AD60322AC');
         $this->addSql('ALTER TABLE role_permission DROP CONSTRAINT FK_6F7DF886D60322AC');
         $this->addSql('ALTER TABLE user_role DROP CONSTRAINT FK_2DE8C6A3D60322AC');
         $this->addSql('ALTER TABLE "features" DROP CONSTRAINT FK_BFC0DC13ED5CA9E6');
+        $this->addSql('ALTER TABLE product_tag DROP CONSTRAINT FK_E3A6E39CBAD26311');
         $this->addSql('ALTER TABLE "email_tokens" DROP CONSTRAINT FK_D7C0C27EA76ED395');
         $this->addSql('ALTER TABLE group_user DROP CONSTRAINT FK_A4C98D39A76ED395');
         $this->addSql('ALTER TABLE "reset_password_tokens" DROP CONSTRAINT FK_F045D5AAA76ED395');
         $this->addSql('ALTER TABLE user_role DROP CONSTRAINT FK_2DE8C6A3A76ED395');
+        $this->addSql('ALTER TABLE "products" DROP CONSTRAINT FK_B3BA5A5AF603EE73');
         $this->addSql('DROP SEQUENCE "categories_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "email_tokens_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "features_id_seq" CASCADE');
@@ -120,7 +134,9 @@ final class Version20210328205026 extends AbstractMigration
         $this->addSql('DROP SEQUENCE "reset_password_tokens_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "roles_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "services_id_seq" CASCADE');
+        $this->addSql('DROP SEQUENCE "tags_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "users_id_seq" CASCADE');
+        $this->addSql('DROP SEQUENCE "vendors_id_seq" CASCADE');
         $this->addSql('DROP TABLE "categories"');
         $this->addSql('DROP TABLE "email_tokens"');
         $this->addSql('DROP TABLE "features"');
@@ -132,11 +148,14 @@ final class Version20210328205026 extends AbstractMigration
         $this->addSql('DROP TABLE "products"');
         $this->addSql('DROP TABLE product_file');
         $this->addSql('DROP TABLE product_category');
+        $this->addSql('DROP TABLE product_tag');
         $this->addSql('DROP TABLE "reset_password_tokens"');
         $this->addSql('DROP TABLE "roles"');
         $this->addSql('DROP TABLE role_permission');
         $this->addSql('DROP TABLE "services"');
+        $this->addSql('DROP TABLE "tags"');
         $this->addSql('DROP TABLE "users"');
         $this->addSql('DROP TABLE user_role');
+        $this->addSql('DROP TABLE "vendors"');
     }
 }
