@@ -80,7 +80,7 @@ class Product
      * @ORM\Column(type="decimal", precision=10, scale=2)
      * @Groups({"product: read", "product: write"})
      */
-    private int $originalPrice = 0;
+    private float $originalPrice = 0;
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
@@ -127,16 +127,15 @@ class Product
     private int $statusId;
 
     /**
-     * @ORM\OneToOne(targetEntity=Vendor::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     * @Groups({"product: read", "product: write"})
-     */
-    private $vendor;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="products")
      */
     private $tags;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Vendor::class, inversedBy="product", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $vendor;
 
     public function __construct()
     {
@@ -222,12 +221,12 @@ class Product
         return $this;
     }
 
-    public function getOriginalPrice(): ?string
+    public function getOriginalPrice(): float
     {
         return $this->originalPrice;
     }
 
-    public function setOriginalPrice(string $originalPrice): self
+    public function setOriginalPrice(float $originalPrice): self
     {
         $this->originalPrice = $originalPrice;
 
@@ -332,18 +331,6 @@ class Product
         return $this;
     }
 
-    public function getVendor(): ?Vendor
-    {
-        return $this->vendor;
-    }
-
-    public function setVendor(Vendor $vendor): self
-    {
-        $this->vendor = $vendor;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Tag[]
      */
@@ -364,6 +351,18 @@ class Product
     public function removeTag(Tag $tag): self
     {
         $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    public function getVendor(): ?Vendor
+    {
+        return $this->vendor;
+    }
+
+    public function setVendor(Vendor $vendor): self
+    {
+        $this->vendor = $vendor;
 
         return $this;
     }

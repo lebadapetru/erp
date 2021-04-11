@@ -3,17 +3,16 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\VendorRepository;
+use App\Repository\VariantRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=VendorRepository::class)
- * @ORM\Table("`vendors`")
+ * @ORM\Entity(repositoryClass=VariantRepository::class)
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
  */
-class Vendor
+class Variant
 {
     /**
      * @ORM\Id
@@ -23,12 +22,22 @@ class Vendor
     private int $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $name;
+    private ?string $title;
 
     /**
-     * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
+     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     */
+    private ?float $originalPrice;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $discount;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private ?\DateTimeInterface $deletedAt;
 
@@ -44,25 +53,43 @@ class Vendor
      */
     private ?\DateTimeInterface $createdAt;
 
-    /**
-     * TODO this need to be products, one vendor to many products
-     * @ORM\OneToOne(targetEntity=Product::class, mappedBy="vendor", cascade={"persist", "remove"})
-     */
-    private $product;
-
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(?string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getOriginalPrice(): ?float
+    {
+        return $this->originalPrice;
+    }
+
+    public function setOriginalPrice(?float $originalPrice): self
+    {
+        $this->originalPrice = $originalPrice;
+
+        return $this;
+    }
+
+    public function getDiscount(): ?int
+    {
+        return $this->discount;
+    }
+
+    public function setDiscount(?int $discount): self
+    {
+        $this->discount = $discount;
 
         return $this;
     }
@@ -99,23 +126,6 @@ class Vendor
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getProduct(): ?Product
-    {
-        return $this->product;
-    }
-
-    public function setProduct(Product $product): self
-    {
-        // set the owning side of the relation if necessary
-        if ($product->getVendor() !== $this) {
-            $product->setVendor($this);
-        }
-
-        $this->product = $product;
 
         return $this;
     }
