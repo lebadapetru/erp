@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\VendorRepository;
+use App\Repository\LookupMeasurementUnitRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,11 +11,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=VendorRepository::class)
- * @ORM\Table("`vendors`")
+ * @ORM\Entity(repositoryClass=LookupMeasurementUnitRepository::class)
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
+ * @ORM\Table("`lookup_measurement_units`")
  */
-class Vendor
+class LookupMeasurementUnit
 {
     /**
      * @ORM\Id
@@ -30,7 +30,12 @@ class Vendor
     private string $name;
 
     /**
-     * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
+     * @ORM\Column(type="string", length=255)
+     */
+    private string $symbol;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private ?\DateTimeInterface $deletedAt;
 
@@ -47,12 +52,25 @@ class Vendor
     private ?\DateTimeInterface $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="vendor")
+     * @ORM\ManyToOne(targetEntity=LookupMeasurementUnit::class, inversedBy="children")
+     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\JoinColumn(name="parent", referencedColumnName="id")
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity=LookupMeasurementUnit::class, mappedBy="parent")
+     */
+    private $children;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="weightUnit")
      */
     private $products;
 
     public function __construct()
     {
+        $this->children = new ArrayCollection();
         $this->products = new ArrayCollection();
     }
 
@@ -69,6 +87,18 @@ class Vendor
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSymbol(): ?string
+    {
+        return $this->symbol;
+    }
+
+    public function setSymbol(string $symbol): self
+    {
+        $this->symbol = $symbol;
 
         return $this;
     }
@@ -109,6 +139,48 @@ class Vendor
         return $this;
     }
 
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getChildren(): Collection
+    {
+        return $this->children;
+    }
+
+    public function addChild(self $child): self
+    {
+        if (!$this->children->contains($child)) {
+            $this->children[] = $child;
+            $child->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChild(self $child): self
+    {
+        if ($this->children->removeElement($child)) {
+            // set the owning side to null (unless already changed)
+            if ($child->getParent() === $this) {
+                $child->setParent(null);
+            }
+        }
+
+        return $this;
+    }
+
     /**
      * @return Collection|Product[]
      */
@@ -121,7 +193,7 @@ class Vendor
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
-            $product->setVendor($this);
+            $product->setWeightUnit($this);
         }
 
         return $this;
@@ -131,8 +203,8 @@ class Vendor
     {
         if ($this->products->removeElement($product)) {
             // set the owning side to null (unless already changed)
-            if ($product->getVendor() === $this) {
-                $product->setVendor(null);
+            if ($product->getWeightUnit() === $this) {
+                $product->setWeightUnit(null);
             }
         }
 

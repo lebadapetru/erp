@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\VendorRepository;
+use App\Repository\LookupProductStatusRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,11 +11,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=VendorRepository::class)
- * @ORM\Table("`vendors`")
+ * @ORM\Entity(repositoryClass=LookupProductStatusRepository::class)
+ * @ORM\Table("`lookup_product_statuses`")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
  */
-class Vendor
+class LookupProductStatus
 {
     /**
      * @ORM\Id
@@ -30,7 +30,7 @@ class Vendor
     private string $name;
 
     /**
-     * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private ?\DateTimeInterface $deletedAt;
 
@@ -47,7 +47,7 @@ class Vendor
     private ?\DateTimeInterface $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="vendor")
+     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="status")
      */
     private $products;
 
@@ -121,7 +121,7 @@ class Vendor
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
-            $product->setVendor($this);
+            $product->setStatus($this);
         }
 
         return $this;
@@ -131,8 +131,8 @@ class Vendor
     {
         if ($this->products->removeElement($product)) {
             // set the owning side to null (unless already changed)
-            if ($product->getVendor() === $this) {
-                $product->setVendor(null);
+            if ($product->getStatus() === $this) {
+                $product->setStatus(null);
             }
         }
 

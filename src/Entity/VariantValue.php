@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\VendorRepository;
+use App\Repository\VariantValueRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,11 +11,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=VendorRepository::class)
- * @ORM\Table("`vendors`")
+ * @ORM\Entity(repositoryClass=VariantValueRepository::class)
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
+ * @ORM\Table("`variant_values`")
  */
-class Vendor
+class VariantValue
 {
     /**
      * @ORM\Id
@@ -30,7 +30,7 @@ class Vendor
     private string $name;
 
     /**
-     * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private ?\DateTimeInterface $deletedAt;
 
@@ -47,13 +47,19 @@ class Vendor
     private ?\DateTimeInterface $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="vendor")
+     * @ORM\ManyToOne(targetEntity=VariantOption::class, inversedBy="variantValues")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $products;
+    private $variantOption;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Variant::class, mappedBy="variantValues")
+     */
+    private $variants;
 
     public function __construct()
     {
-        $this->products = new ArrayCollection();
+        $this->variants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,31 +115,40 @@ class Vendor
         return $this;
     }
 
-    /**
-     * @return Collection|Product[]
-     */
-    public function getProducts(): Collection
+    public function getVariantOption(): ?VariantOption
     {
-        return $this->products;
+        return $this->variantOption;
     }
 
-    public function addProduct(Product $product): self
+    public function setVariantOption(?VariantOption $variantOption): self
     {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-            $product->setVendor($this);
+        $this->variantOption = $variantOption;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Variant[]
+     */
+    public function getVariants(): Collection
+    {
+        return $this->variants;
+    }
+
+    public function addVariant(Variant $variant): self
+    {
+        if (!$this->variants->contains($variant)) {
+            $this->variants[] = $variant;
+            $variant->addVariantValue($this);
         }
 
         return $this;
     }
 
-    public function removeProduct(Product $product): self
+    public function removeVariant(Variant $variant): self
     {
-        if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getVendor() === $this) {
-                $product->setVendor(null);
-            }
+        if ($this->variants->removeElement($variant)) {
+            $variant->removeVariantValue($this);
         }
 
         return $this;

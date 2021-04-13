@@ -121,27 +121,44 @@ class Product
     private int $discount = 0;
 
     /**
-     * @ORM\Column(type="integer")
-     * @Groups({"product: read", "product: write"})
-     */
-    private int $statusId;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="products")
      */
     private $tags;
 
     /**
-     * @ORM\OneToOne(targetEntity=Vendor::class, inversedBy="product", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity=Variant::class, mappedBy="product", orphanRemoval=true)
+     */
+    private $variants;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=LookupProductStatus::class, inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $status;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Vendor::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
      */
     private $vendor;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $weight;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=LookupMeasurementUnit::class, inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $weightUnit;
 
     public function __construct()
     {
         $this->files = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->variants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -181,18 +198,6 @@ class Product
     public function setIsPublic(bool $isPublic): self
     {
         $this->isPublic = $isPublic;
-
-        return $this;
-    }
-
-    public function getStatusId(): ?int
-    {
-        return $this->statusId;
-    }
-
-    public function setStatusId(int $statusId): self
-    {
-        $this->statusId = $statusId;
 
         return $this;
     }
@@ -355,14 +360,80 @@ class Product
         return $this;
     }
 
+    /**
+     * @return Collection|Variant[]
+     */
+    public function getVariants(): Collection
+    {
+        return $this->variants;
+    }
+
+    public function addVariant(Variant $variant): self
+    {
+        if (!$this->variants->contains($variant)) {
+            $this->variants[] = $variant;
+            $variant->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVariant(Variant $variant): self
+    {
+        if ($this->variants->removeElement($variant)) {
+            // set the owning side to null (unless already changed)
+            if ($variant->getProduct() === $this) {
+                $variant->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getStatus(): ?LookupProductStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?LookupProductStatus $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
     public function getVendor(): ?Vendor
     {
         return $this->vendor;
     }
 
-    public function setVendor(Vendor $vendor): self
+    public function setVendor(?Vendor $vendor): self
     {
         $this->vendor = $vendor;
+
+        return $this;
+    }
+
+    public function getWeight(): ?int
+    {
+        return $this->weight;
+    }
+
+    public function setWeight(?int $weight): self
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
+    public function getWeightUnit(): ?LookupMeasurementUnit
+    {
+        return $this->weightUnit;
+    }
+
+    public function setWeightUnit(?LookupMeasurementUnit $weightUnit): self
+    {
+        $this->weightUnit = $weightUnit;
 
         return $this;
     }
