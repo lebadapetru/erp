@@ -51,6 +51,12 @@ class LookupProductStatus
      */
     private $products;
 
+    const STATUSES = [
+        1 => 'Draft', //Default & is_public can only be false
+        2 => 'Order', //trigger an additional form to be completed before checkout
+        3 => 'Active', //product ready
+    ];
+
     public function __construct()
     {
         $this->products = new ArrayCollection();

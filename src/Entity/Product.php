@@ -143,15 +143,10 @@ class Product
     private $vendor;
 
     /**
+     * TODO in kg for now
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $weight;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=LookupMeasurementUnit::class, inversedBy="products")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $weightUnit;
+    private ?int $weight;
 
     public function __construct()
     {
@@ -422,18 +417,6 @@ class Product
     public function setWeight(?int $weight): self
     {
         $this->weight = $weight;
-
-        return $this;
-    }
-
-    public function getWeightUnit(): ?LookupMeasurementUnit
-    {
-        return $this->weightUnit;
-    }
-
-    public function setWeightUnit(?LookupMeasurementUnit $weightUnit): self
-    {
-        $this->weightUnit = $weightUnit;
 
         return $this;
     }

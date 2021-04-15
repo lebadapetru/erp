@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210413222603 extends AbstractMigration
+final class Version20210415125855 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -25,7 +25,6 @@ final class Version20210413222603 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE "features_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "files_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "groups_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE "lookup_measurement_units_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "lookup_product_statuses_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "permissions_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "products_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
@@ -56,14 +55,12 @@ final class Version20210413222603 extends AbstractMigration
         $this->addSql('CREATE TABLE group_role (group_id INT NOT NULL, role_id INT NOT NULL, PRIMARY KEY(group_id, role_id))');
         $this->addSql('CREATE INDEX IDX_7E33D11AFE54D947 ON group_role (group_id)');
         $this->addSql('CREATE INDEX IDX_7E33D11AD60322AC ON group_role (role_id)');
-        $this->addSql('CREATE TABLE "lookup_measurement_units" (id INT NOT NULL, name VARCHAR(255) NOT NULL, symbol VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, parent INT DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE "lookup_product_statuses" (id INT NOT NULL, name VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE "permissions" (id INT NOT NULL, name VARCHAR(255) NOT NULL, label VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_2DEDCC6FEA750E8 ON "permissions" (label)');
-        $this->addSql('CREATE TABLE "products" (id INT NOT NULL, status_id INT NOT NULL, vendor_id INT NOT NULL, weight_unit_id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, is_public BOOLEAN NOT NULL, sku VARCHAR(255) DEFAULT NULL, stock INT NOT NULL, original_price NUMERIC(10, 2) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, discount SMALLINT NOT NULL, weight INT DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE "products" (id INT NOT NULL, status_id INT NOT NULL, vendor_id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, is_public BOOLEAN NOT NULL, sku VARCHAR(255) DEFAULT NULL, stock INT NOT NULL, original_price NUMERIC(10, 2) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, discount SMALLINT NOT NULL, weight INT DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_B3BA5A5A6BF700BD ON "products" (status_id)');
         $this->addSql('CREATE INDEX IDX_B3BA5A5AF603EE73 ON "products" (vendor_id)');
-        $this->addSql('CREATE INDEX IDX_B3BA5A5A7794469 ON "products" (weight_unit_id)');
         $this->addSql('CREATE TABLE product_file (product_id INT NOT NULL, file_id INT NOT NULL, PRIMARY KEY(product_id, file_id))');
         $this->addSql('CREATE INDEX IDX_17714B14584665A ON product_file (product_id)');
         $this->addSql('CREATE INDEX IDX_17714B193CB796C ON product_file (file_id)');
@@ -107,7 +104,6 @@ final class Version20210413222603 extends AbstractMigration
         $this->addSql('ALTER TABLE group_role ADD CONSTRAINT FK_7E33D11AD60322AC FOREIGN KEY (role_id) REFERENCES "roles" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE "products" ADD CONSTRAINT FK_B3BA5A5A6BF700BD FOREIGN KEY (status_id) REFERENCES "lookup_product_statuses" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE "products" ADD CONSTRAINT FK_B3BA5A5AF603EE73 FOREIGN KEY (vendor_id) REFERENCES "vendors" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE "products" ADD CONSTRAINT FK_B3BA5A5A7794469 FOREIGN KEY (weight_unit_id) REFERENCES "lookup_measurement_units" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE product_file ADD CONSTRAINT FK_17714B14584665A FOREIGN KEY (product_id) REFERENCES "products" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE product_file ADD CONSTRAINT FK_17714B193CB796C FOREIGN KEY (file_id) REFERENCES "files" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE product_category ADD CONSTRAINT FK_CDFC73564584665A FOREIGN KEY (product_id) REFERENCES "products" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -133,7 +129,6 @@ final class Version20210413222603 extends AbstractMigration
         $this->addSql('ALTER TABLE product_file DROP CONSTRAINT FK_17714B193CB796C');
         $this->addSql('ALTER TABLE group_user DROP CONSTRAINT FK_A4C98D39FE54D947');
         $this->addSql('ALTER TABLE group_role DROP CONSTRAINT FK_7E33D11AFE54D947');
-        $this->addSql('ALTER TABLE "products" DROP CONSTRAINT FK_B3BA5A5A7794469');
         $this->addSql('ALTER TABLE "products" DROP CONSTRAINT FK_B3BA5A5A6BF700BD');
         $this->addSql('ALTER TABLE role_permission DROP CONSTRAINT FK_6F7DF886FED90CCA');
         $this->addSql('ALTER TABLE product_file DROP CONSTRAINT FK_17714B14584665A');
@@ -158,7 +153,6 @@ final class Version20210413222603 extends AbstractMigration
         $this->addSql('DROP SEQUENCE "features_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "files_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "groups_id_seq" CASCADE');
-        $this->addSql('DROP SEQUENCE "lookup_measurement_units_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "lookup_product_statuses_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "permissions_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "products_id_seq" CASCADE');
@@ -178,7 +172,6 @@ final class Version20210413222603 extends AbstractMigration
         $this->addSql('DROP TABLE "groups"');
         $this->addSql('DROP TABLE group_user');
         $this->addSql('DROP TABLE group_role');
-        $this->addSql('DROP TABLE "lookup_measurement_units"');
         $this->addSql('DROP TABLE "lookup_product_statuses"');
         $this->addSql('DROP TABLE "permissions"');
         $this->addSql('DROP TABLE "products"');
