@@ -1,4 +1,5 @@
 <template>
+  <label v-if="label">{{ label }}</label>
   <select
       ref="el"
       class="vue-select2 form-control"
@@ -20,8 +21,16 @@ import Swal from "sweetalert2";
 
 export default {
   name: "VSelect2",
-  emits: ['item-added'],
+  emits: ['itemAdded'],
   props: {
+    label: {
+      type: String,
+      default: ''
+    },
+    itemTitle: {
+      type: String,
+      default: 'item'
+    },
     placeholder: {
       type: String,
       default: 'Search for items'
@@ -45,6 +54,9 @@ export default {
     addItemCallback: {
       type: Function,
       required: false
+    },
+    onCategoryAdded: {
+      type: Event
     }
   },
   setup(props, {emit}) {
@@ -79,7 +91,7 @@ export default {
           if (event.params.data?.newTag && props.addItemCallback !== undefined) {
             Swal.fire({
               title: 'Are you sure?',
-              text: `You want to create the '${event.params.data.text}' category?`,
+              text: `You want to create the '${event.params.data.text}' ${props.itemTitle}?`,
               icon: 'info',
               showCancelButton: true,
               buttonsStyling: false,
@@ -93,9 +105,10 @@ export default {
               heightAuto: false
             }).then((result) => {
               if (result.isConfirmed) {
-                props.addItemCallback.call(this, event.params.data).then((response) => {
+                props.addItemCallback(event.params.data).then((response) => {
                   console.log(response)
-                  emit('item-added')
+                  emit(`${props.itemTitle}Added`)
+                  console.log(`${props.itemTitle}Added`)
                 })
               } else {
                 $(`.vue-select2 option[value='${event.params.data.id}']`).remove()

@@ -1,8 +1,8 @@
-function useCategoryRepository() {
-  const url = '/api/categories'
+function useTagRepository() {
+  const url = '/api/tags'
 
-  const createCategory = async (category) => {
-    return await httpClient.post(url, category)
+  const createTag = async (tag) => {
+    return await httpClient.post(url, tag)
       .then((response) => {
         console.log('added')
         console.log(response)
@@ -10,10 +10,10 @@ function useCategoryRepository() {
       })
   }
 
-  const readCategories = () => {
+  const readTags = () => {
     return httpClient.get(url)
       .then((response) => {
-        console.log('readCategories')
+        console.log('readTags')
         console.log(response.data)
         return response.data
       })
@@ -23,9 +23,9 @@ function useCategoryRepository() {
   }
 
   return {
-    createCategory,
-    readCategories
+    createTag,
+    readTags
   }
 }
 
-export { useCategoryRepository }
+export { useTagRepository }

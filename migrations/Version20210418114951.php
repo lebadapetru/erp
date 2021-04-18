@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210415125909 extends AbstractMigration
+final class Version20210418114951 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -36,6 +36,13 @@ final class Version20210415125909 extends AbstractMigration
                 (NEXTVAL(\'variant_options_id_seq\'), \'Color\', null, NOW(), NOW()),
                 (NEXTVAL(\'variant_options_id_seq\'), \'Material\', null, NOW(), NOW())
             ');
+
+        $this->addSql('
+            INSERT INTO 
+                "vendors" (id, name, deleted_at, updated_at, created_at) 
+            VALUES 
+                (NEXTVAL(\'vendors_id_seq\'), \'Client name\' , null, NOW(), NOW())
+            ');
     }
 
     public function down(Schema $schema) : void
@@ -45,5 +52,8 @@ final class Version20210415125909 extends AbstractMigration
 
         $this->addSql('TRUNCATE "variant_options" CASCADE');
         $this->addSql('ALTER SEQUENCE "variant_options_id_seq" RESTART WITH 1');
+
+        $this->addSql('TRUNCATE "vendors" CASCADE');
+        $this->addSql('ALTER SEQUENCE "vendors_id_seq" RESTART WITH 1');
     }
 }

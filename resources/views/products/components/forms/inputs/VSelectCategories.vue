@@ -5,6 +5,7 @@
       :has-tags="true"
       :has-multiple="true"
       :options="categories"
+      :item-title="`category`"
       :add-item-callback="parseAndCreateCategories"
       @item-added="readAndParseCategories()"
   />
@@ -38,7 +39,7 @@ export default {
     readAndParseCategories()
 
     const parseAndCreateCategories = (category) => {
-      createCategory({
+      return createCategory({
         title: category?.text
       })
     }

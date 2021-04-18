@@ -80,8 +80,7 @@
                     :type="'text'"
                     :name="'originalPrice'"
                     @keypress="priceFilter"
-                    :modelValue="originalPrice"
-                    @update:modelValue="setOriginalPrice"
+                    v-model:model-value="originalPrice"
                     placeholder="0.00"
                   />
                 </div>
@@ -100,8 +99,7 @@
                     :name="'reducedPrice'"
                     placeholder="0.00"
                     @keypress="priceFilter"
-                    :modelValue="reducedPrice"
-                    @update:modelValue="setReducedPrice"
+                    v-model:model-value="reducedPrice"
                   />
                 </div>
               </div>
@@ -119,8 +117,7 @@
                     :name="'discount'"
                     placeholder="0"
                     @keypress="integerFilter"
-                    :modelValue="discount"
-                    @update:modelValue="setDiscount"
+                    v-model:model-value="discount"
                     :min="0"
                     :max="100"
                   />
@@ -248,6 +245,7 @@
                       :name="'measurementUnit'"
                       :options="measurementUnits"
                       v-model="measurementUnit"
+                      disabled="true"
                     />
                   </div>
                 </div>
@@ -291,9 +289,9 @@
             <div class="form-group row">
               <div class="col-6">
                 <label>Option 1</label>
-<!--                <VBaseSelect
-                  :placeholder="'Separate options with a comma'"
-                />-->
+                <!--                <VBaseSelect
+                                  :placeholder="'Separate options with a comma'"
+                                />-->
               </div>
 
               <div class="col-6">
@@ -325,7 +323,7 @@
           <div class="card-body">
             <div class="form-group row">
               <div class="col-12">
-                <VSelect />
+                <VSelect/>
                 <span class="form-text text-muted">If you want your invoices addressed to a company. Leave blank to use your full name.</span>
               </div>
             </div>
@@ -360,8 +358,12 @@
           <div class="card-body">
             <div class="form-group row">
               <div class="col-12">
-                <label>Vendor</label>
-                <VSelect/>
+                <VBaseSelect
+                  :label="'Vendor'"
+                  :name="'vendor'"
+                  :options="vendors"
+                  v-model="vendor"
+                />
               </div>
             </div>
           </div>
@@ -380,7 +382,7 @@
               <h6 class="card-label">Tags</h6>
             </div>
 
-            <VSelect/>
+            <VSelectTags/>
           </div>
         </div>
         <!--end::Organization-->
@@ -397,7 +399,7 @@
 </template>
 
 <script>
-import { toRefs, reactive, ref, watch } from 'vue'
+import { toRefs, reactive, ref, computed } from 'vue'
 import { object, string, number, boolean, ref as yupRef } from 'yup'
 import VBaseForm from "resources/components/forms/VBaseForm";
 import VCKEditor from "resources/components/forms/inputs/VCKEditor"
@@ -405,11 +407,13 @@ import VTinyMCE from "resources/components/forms/inputs/VTinyMCE";
 import VDropZone from "resources/components/forms/inputs/VDropZone";
 import VSelect from "resources/components/forms/inputs/VSelect";
 import VSelectCategories from "resources/views/products/components/forms/inputs/VSelectCategories";
+import VSelectTags from "resources/views/products/components/forms/inputs/VSelectTags";
 import VProductFormToolbarActions from "resources/views/products/components/teleports/VProductFormToolbarActions";
 import VBaseInput from "resources/components/forms/inputs/VBaseInput";
 import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox";
 import { priceFilter, integerFilter } from "resources/js/helpers/inputFilters";
 import VBaseSelect from "resources/components/forms/inputs/VBaseSelect";
+import { useStore } from 'vuex'
 
 export default {
   name: "VProductForm",
@@ -424,14 +428,10 @@ export default {
     VDropZone,
     VSelect,
     VSelectCategories,
+    VSelectTags,
   },
   setup() {
     const state = reactive({
-      title: '',
-      description: '',
-      originalPrice: 0,
-      reducedPrice: 0,
-      discount: 0,
       sku: '',
       barcode: '',
       isTrackQuantity: true,
@@ -453,14 +453,66 @@ export default {
         }
       ],
       hasVariants: false,
-      //TODO create table
       variantOptions: [],
       variants: [
         {}
       ],
-      isPublic: true
+      isPublic: true,
+      vendors: [],
+      vendor: ''
     })
     const productForm = ref(null)
+
+    const store = useStore();
+
+    let title = computed({
+      get: () => store.getters["product/getTitle"],
+      set: (value) => store.commit('product/setTitle', value)
+    })
+
+    let description = computed({
+      get: () => store.getters["product/getDescription"],
+      set: (value) => store.commit("product/setDescription", value)
+    })
+
+    let originalPrice = computed({
+      get: () => store.getters["product/getOriginalPrice"],
+      set: (value) => {
+        store.commit("product/setOriginalPrice", value)
+      }
+    })
+
+    let cra = computed({
+      get: () => store.getters["product/getOriginalPrice"],
+      set: (value) => {
+        store.commit("product/setOriginalPrice", value)
+      }
+    })
+
+    let reducedPrice = computed({
+      get: () => store.getters["product/getReducedPrice"],
+      set: (value) => {
+        let originalPrice = cra.value
+        let tmpReducedPrice = (value <= originalPrice) ? value : originalPrice
+        //or ((originalPrice-reducedPrice)/originalPrice))*100
+        store.commit("product/setDiscount", 100 - ((tmpReducedPrice * 100) / originalPrice))
+        store.commit("product/setReducedPrice", tmpReducedPrice)
+      }
+    })
+
+    let discount = computed({
+      get: () => store.getters["product/getDiscount"],
+      set: (value) => {
+        console.log(originalPrice)
+        console.log(cra)
+        console.log(reducedPrice)
+        let tmpDiscount = (value <= 100) ? value : 100
+        store.commit("product/setDiscount", tmpDiscount)
+        let originalPrice = cra.value
+        let tmpReducedPrice = originalPrice - (originalPrice * (tmpDiscount / 100))
+        reducedPrice.value = (tmpReducedPrice > 0) ? (Math.round(tmpReducedPrice) == (Math.round(tmpReducedPrice * 100) / 100) ? Math.round(tmpReducedPrice) : (Math.round(tmpReducedPrice * 100) / 100)) : 0
+      }
+    })
 
     const validationSchema = object().shape({
       title: string().trim().required('Title is required.'),
@@ -492,7 +544,6 @@ export default {
         .nullable()
         .min(0)
         .transform((v) => (v === '' || Number.isNaN(v) ? null : v)),
-      measurementUnit: number().integer()
     });
 
     const onSubmit = (data) => {
@@ -500,49 +551,18 @@ export default {
       console.log(data)
     }
 
-    const setOriginalPrice = (value) => {
-      console.log('setOriginalPrice')
-      state.originalPrice = value
-    }
-    const setReducedPrice = (value) => {
-      console.log('setReducedPrice')
-      let tmpReducedPrice = (value <= state.originalPrice) ? value : state.reducedPrice
-      console.log(100 - ((tmpReducedPrice * 100) / state.originalPrice))
-      console.log(tmpReducedPrice)
-      //or ((originalPrice-reducedPrice)/originalPrice))*100
-      state.discount = 100 - ((tmpReducedPrice * 100) / state.originalPrice)
-      state.reducedPrice = tmpReducedPrice
-    }
-    const setDiscount = (value) => {
-      console.log('setDiscount')
-      state.discount = (value <= 100) ? value : state.discount
-      let tmpReducedPrice = state.originalPrice - (state.originalPrice * (state.discount / 100))
-      state.reducedPrice = (tmpReducedPrice > 0) ? (Math.round(tmpReducedPrice) == (Math.round(tmpReducedPrice * 100) / 100) ? Math.round(tmpReducedPrice) : (Math.round(tmpReducedPrice * 100) / 100)) : 0
-      console.log(tmpReducedPrice)
-      console.log((tmpReducedPrice > 0) ? (Math.round(tmpReducedPrice) == (Math.round(tmpReducedPrice * 100) / 100) ? Math.round(tmpReducedPrice) : (Math.round(tmpReducedPrice * 100) / 100)) : 0)
-
-    }
-
-    /*watch(() => state.originalPrice, () => {
-      if (state.originalPrice === '' || isNaN(state.originalPrice)) {
-        return
-      }
-      console.log('watcher')
-      setReducedPrice()
-      setDiscount()
-    })*/
-
     return {
+      title,
+      description,
+      originalPrice,
+      reducedPrice,
+      discount,
       ...toRefs(state),
       productForm,
       onSubmit,
       validationSchema,
       priceFilter,
       integerFilter,
-      setOriginalPrice,
-      setReducedPrice,
-      setDiscount,
-
     }
   }
 }

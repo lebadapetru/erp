@@ -67,6 +67,11 @@ class Variant
      */
     private $product;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private int $quantity = 0;
+
     public function __construct()
     {
         $this->variantValues = new ArrayCollection();
@@ -181,6 +186,18 @@ class Variant
     public function setProduct(?Product $product): self
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
 
         return $this;
     }

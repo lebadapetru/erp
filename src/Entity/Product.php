@@ -27,7 +27,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
  * @ApiFilter(RangeFilter::class, properties={"originalPrice"})
  * @ApiFilter(BooleanFilter::class, properties={"isPublic"})
  * @ApiFilter(DateFilter::class, properties={"deletedAt", "updatedAt", "createdAt"})
- * @ApiFilter(NumericFilter::class, properties={"stock"})
+ * @ApiFilter(NumericFilter::class, properties={"quantity"})
  * @ApiFilter(SearchFilter::class, properties={
  *          "title": "partial",
  *          "description": "partial",
@@ -74,7 +74,7 @@ class Product
      * @ORM\Column(type="integer")
      * @Groups({"product: read", "product: write"})
      */
-    private int $stock = 0;
+    private int $quantity = 0;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
@@ -148,6 +148,16 @@ class Product
      */
     private ?int $weight;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $isContinueSellingOutOfStock = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $isPhysicalProduct = true;
+
     public function __construct()
     {
         $this->files = new ArrayCollection();
@@ -209,14 +219,14 @@ class Product
         return $this;
     }
 
-    public function getStock(): ?int
+    public function getQuantity(): ?int
     {
-        return $this->stock;
+        return $this->quantity;
     }
 
-    public function setStock(int $stock): self
+    public function setQuantity(int $quantity): self
     {
-        $this->stock = $stock;
+        $this->quantity = $quantity;
 
         return $this;
     }
@@ -417,6 +427,30 @@ class Product
     public function setWeight(?int $weight): self
     {
         $this->weight = $weight;
+
+        return $this;
+    }
+
+    public function getIsContinueSellingOutOfStock(): ?bool
+    {
+        return $this->isContinueSellingOutOfStock;
+    }
+
+    public function setIsContinueSellingOutOfStock(bool $isContinueSellingOutOfStock): self
+    {
+        $this->isContinueSellingOutOfStock = $isContinueSellingOutOfStock;
+
+        return $this;
+    }
+
+    public function getIsPhysicalProduct(): ?bool
+    {
+        return $this->isPhysicalProduct;
+    }
+
+    public function setIsPhysicalProduct(bool $isPhysicalProduct): self
+    {
+        $this->isPhysicalProduct = $isPhysicalProduct;
 
         return $this;
     }
