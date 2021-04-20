@@ -21,11 +21,15 @@ import Swal from "sweetalert2";
 
 export default {
   name: "VSelect2",
-  emits: ['itemAdded'],
+  emits: ['itemAdded', 'categoryAdded', 'variantOptionAdded'],
   props: {
     label: {
       type: String,
       default: ''
+    },
+    name: {
+      type: String,
+      required: true
     },
     itemTitle: {
       type: String,
@@ -54,9 +58,6 @@ export default {
     addItemCallback: {
       type: Function,
       required: false
-    },
-    onCategoryAdded: {
-      type: Event
     }
   },
   setup(props, {emit}) {
@@ -71,7 +72,7 @@ export default {
           multiple: props.hasMultiple,
           tags: props.hasTags && props.addItemCallback,
           allowClear: props.allowClear,
-          tokenSeparators: [',', ' '],
+          tokenSeparators: props.hasMultiple ? [',', ' '] : null,
           data: props.options,
           createTag: function (params) {
             /*TODO creation constraints based on user permissions*/

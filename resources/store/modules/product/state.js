@@ -11,19 +11,6 @@ const state = () => ({
   quantity: 0,
   isPhysicalProduct: true,
   weight: 0,
-  measurementUnit: 1,
-  //TODO add a setting to let user choose the measurement system
-  //create a table for them
-  measurementUnits: [
-    {
-      label: 'kg',
-      value: 1
-    },
-    {
-      label: 'g',
-      value: 2
-    }
-  ],
   hasVariants: false,
   variantOptions: [],
   variants: [

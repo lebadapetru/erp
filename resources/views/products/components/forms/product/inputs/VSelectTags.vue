@@ -1,6 +1,7 @@
 <template>
   <VSelect2
     v-if="tags"
+    :name="'tags'"
     :placeholder="`Search for tags`"
     :has-tags="true"
     :has-multiple="true"
