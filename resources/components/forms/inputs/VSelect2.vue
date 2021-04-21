@@ -21,7 +21,7 @@ import Swal from "sweetalert2";
 
 export default {
   name: "VSelect2",
-  emits: ['itemAdded', 'categoryAdded', 'variantOptionAdded'],
+  emits: ['itemAdded'],
   props: {
     label: {
       type: String,
@@ -108,8 +108,7 @@ export default {
               if (result.isConfirmed) {
                 props.addItemCallback(event.params.data).then((response) => {
                   console.log(response)
-                  emit(`${props.itemTitle}Added`)
-                  console.log(`${props.itemTitle}Added`)
+                  emit(`itemAdded`)
                 })
               } else {
                 $(`.vue-select2 option[value='${event.params.data.id}']`).remove()

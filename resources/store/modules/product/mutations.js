@@ -14,6 +14,10 @@ const mutations = {
   setHasVariants: (state, value) => state.hasVariants = value,
   setVariantOptions: (state, value) => state.variantOptions = value,
   setIsPublic: (state, value) => state.isPublic = value,
+  setStatusOptions: (state, value) => state.statusOptions = value,
+  setStatus: (state, value) => state.status = value,
+  setVendorOptions: (state, value) => state.vendorOptions = value,
+  setVendor: (state, value) => state.vendor = value,
 }
 
 

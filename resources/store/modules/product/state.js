@@ -13,13 +13,15 @@ const state = () => ({
   weight: 0,
   hasVariants: false,
   variantOptions: [],
-  variants: [
-    {}
-  ],
+  variants: [],
   isPublic: true,
-  vendors: [],
-  vendor: '',
+  statusOptions: [],
+  status: 1,
+  vendorOptions: [],
+  vendor: 1,
+  categoryOptions: [],
   categories: [],
+  tagOptions: [],
   tags: [],
 })
 

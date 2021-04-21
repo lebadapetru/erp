@@ -14,6 +14,10 @@ const getters = {
   getHasVariants: (state) => state.hasVariants,
   getVariantOptions: (state) => state.variantOptions,
   getIsPublic: (state) => state.isPublic,
+  getStatusOptions: (state) => state.statusOptions,
+  getStatus: (state) => state.status,
+  getVendorOptions: (state) => state.vendorOptions,
+  getVendor: (state) => state.vendor,
 }
 
 export default getters

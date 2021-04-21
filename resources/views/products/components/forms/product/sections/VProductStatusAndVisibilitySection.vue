@@ -19,8 +19,9 @@
       <div class="form-group row">
         <div class="col-12">
           <VBaseSelect
-            :name="status"
-            :options="statuses"
+            :name="'status'"
+            :options="statusOptions"
+            v-model="status"
           />
           <span class="form-text text-muted">If you want your invoices addressed to a company. Leave blank to use your full name.</span>
         </div>
@@ -61,17 +62,18 @@ export default {
   setup() {
     const store = useStore()
 
+    store.dispatch("product/readAndParseLookupProductStatus")
+
     return {
       isPublic: computed({
         get: () => store.getters["product/getIsPublic"],
         set: (value) => store.commit("product/setIsPublic", value)
       }),
-      statuses: [
-        {
-          label: 'Test',
-          value: 1
-        }
-      ]
+      statusOptions: computed(() => store.getters["product/getStatusOptions"]),
+      status: computed({
+        get: () => store.getters["product/getStatus"],
+        set: (value) => store.commit("product/setStatus", value)
+      }),
     }
   }
 }

@@ -8,7 +8,7 @@
     :has-tags="true"
     :item-title="`variantOption`"
     :add-item-callback="parseAndCreateVariantOption"
-    @variant-option-added="readAndParseVariantOptions()"
+    @item-added="readAndParseVariantOptions()"
   />
 <!-- TODO  @variant-option-added might not need a custom event emit since only the parent listen to it -->
 <!-- TODO  @variant-option-added renders the component and the new added item it's no longer selected -->

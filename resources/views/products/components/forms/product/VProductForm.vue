@@ -16,46 +16,7 @@
       </div>
       <div class="col-xl-4">
         <VProductStatusAndVisibilitySection />
-        <!--begin::Organization-->
-        <div class="card card-custom mt-4">
-          <div class="card-header">
-            <div class="card-title">
-              <h3 class="card-label">Organization</h3>
-            </div>
-            <div class="card-toolbar">
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="form-group row">
-              <div class="col-12">
-                <VBaseSelect
-                  :label="'Vendor'"
-                  :name="'vendor'"
-                  :options="vendors"
-                  v-model="vendor"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="card-footer">
-            <div class="card-title">
-              <h6 class="card-label">Categories</h6>
-            </div>
-
-            <VSelectCategories />
-
-            <span class="form-text text-muted">Add this product to a category so it’s easy to find in your store.</span>
-          </div>
-
-          <div class="card-footer">
-            <div class="card-title">
-              <h6 class="card-label">Tags</h6>
-            </div>
-
-            <VSelectTags />
-          </div>
-        </div>
-        <!--end::Organization-->
+        <VOrganizationSection />
       </div>
     </div>
     <VProductFormToolbarActions
@@ -91,6 +52,7 @@ import VShippingSection from "resources/views/products/components/forms/product/
 import VVariantsSection from "resources/views/products/components/forms/product/sections/VVariantsSection";
 import VProductStatusAndVisibilitySection
   from "resources/views/products/components/forms/product/sections/VProductStatusAndVisibilitySection";
+import VOrganizationSection from "resources/views/products/components/forms/product/sections/VOrganizationSection";
 
 export default {
   name: "VProductForm",
@@ -113,13 +75,10 @@ export default {
     VShippingSection,
     VVariantsSection,
     VProductStatusAndVisibilitySection,
+    VOrganizationSection,
   },
   setup() {
-    const state = reactive({
-      isPublic: true,
-      vendors: [],
-      vendor: ''
-    })
+    const state = reactive({})
     const productForm = ref(null)
 
     const store = useStore();

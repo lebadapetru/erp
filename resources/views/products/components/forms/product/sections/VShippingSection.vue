@@ -37,8 +37,9 @@
             <div class="col-4">
               <VBaseSelect
                 :label="'Measurement unit'"
+                :placeholder="'kg'"
                 :name="'measurementUnit'"
-                :options="measurementUnits"
+                :options="[]"
                 disabled="true"
               />
             </div>
@@ -82,16 +83,6 @@ export default {
         get: () => store.getters["product/getWeight"],
         set: (value) => store.commit("product/setWeight", value)
       }),
-      measurementUnits: [
-        {
-          label: 'kg',
-          value: 1
-        },
-        {
-          label: 'g',
-          value: 2
-        }
-      ],
     }
   }
 }
