@@ -18,6 +18,10 @@ const mutations = {
   setStatus: (state, value) => state.status = value,
   setVendorOptions: (state, value) => state.vendorOptions = value,
   setVendor: (state, value) => state.vendor = value,
+  setCategoryOptions: (state, value) => state.categoryOptions = value,
+  setCategories: (state, value) => state.categories = value,
+  setTagOptions: (state, value) => state.tagOptions = value,
+  setTags: (state, value) => state.tags = value,
 }
 
 

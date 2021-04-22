@@ -1,21 +1,21 @@
 <template>
   <VSelect2
-      v-if="categories"
+      v-if="categoryOptions"
       :name="'categories'"
       :placeholder="`Search for categories`"
       :has-tags="true"
       :has-multiple="true"
-      :options="categories"
+      :options="categoryOptions"
       :item-title="`category`"
-      :add-item-callback="parseAndCreateCategories"
-      @item-added="readAndParseCategories()"
+      :add-item-callback="parseAndCreateCategoryOption"
+      @item-added="readAndParseCategoryOptions()"
   />
 </template>
 
 <script>
 import VSelect2 from "resources/components/forms/inputs/VSelect2";
-import { useCategoryRepository } from "resources/js/repository/CategoryRepository"
-import { reactive, toRefs } from 'vue'
+import { useStore } from "vuex";
+import { computed } from "vue";
 
 export default {
   name: "VSelectCategories",
@@ -23,32 +23,25 @@ export default {
     VSelect2
   },
   setup() {
-    const state = reactive({
-      categories: []
-    })
+    const store = useStore()
 
-    const { readCategories, createCategory } = useCategoryRepository()
-
-    const readAndParseCategories = () => {
-      readCategories().then((categories) => {
-        state.categories = categories.map(category => ({
-          id: category.id,
-          text: category.title,
-        }))
-      })
+    let readAndParseCategoryOptions = () => {
+      store.dispatch("product/readAndParseCategoryOptions")
     }
-    readAndParseCategories()
+    readAndParseCategoryOptions()
 
-    const parseAndCreateCategories = (category) => {
-      return createCategory({
-        title: category?.text
-      })
+    let parseAndCreateCategoryOption = async (category) => {
+      await store.dispatch("product/parseAndCreateCategoryOption", category)
     }
 
     return {
-      ...toRefs(state),
-      parseAndCreateCategories,
-      readAndParseCategories
+      categoryOptions: computed(() => store.getters["product/getCategoryOptions"]),
+      categories: computed({
+        get: () => store.getters["product/getCategories"],
+        set: (value) => store.commit("product/setCategories", value),
+      }),
+      readAndParseCategoryOptions,
+      parseAndCreateCategoryOption,
     }
   }
 }

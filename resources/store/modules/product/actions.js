@@ -1,6 +1,8 @@
 import { createVariantOption, readVariantOptions } from "resources/js/api/VariantOption"
-import { readLookupProductStatus } from "resources/js/api/LookupProductStatus";
-import { readVendor } from "resources/js/api/Vendors";
+import { readLookupProductStatuses } from "resources/js/api/LookupProductStatus";
+import { readVendors } from "resources/js/api/Vendor";
+import { createCategory, readCategories } from "resources/js/api/Category";
+import { createTag, readTags } from "resources/js/api/Tag";
 
 const actions = {
   readAndParseVariantOptions: ({ commit }) => {
@@ -20,7 +22,7 @@ const actions = {
     })
   },
   readAndParseLookupProductStatus: ({ commit }) => {
-    return readLookupProductStatus().then((response) => {
+    return readLookupProductStatuses().then((response) => {
       let statusOptions = response.data.map(statusOption => ({
         value: statusOption.id,
         label: statusOption.name,
@@ -30,7 +32,7 @@ const actions = {
     })
   },
   readAndParseVendorOptions: ({ commit }) => {
-    return readVendor().then((response) => {
+    return readVendors().then((response) => {
       let vendorOptions = response.data.map(vendorOption => ({
         value: vendorOption.id,
         label: vendorOption.name,
@@ -38,7 +40,39 @@ const actions = {
 
       commit('setVendorOptions', vendorOptions)
     })
-  }
+  },
+  readAndParseCategoryOptions: ({ commit }) => {
+    readCategories().then((response) => {
+      let categoryOptions = response.data.map(categoryOption => ({
+        id: categoryOption.id,
+        text: categoryOption.title,
+      }))
+
+      commit('setCategoryOptions', categoryOptions)
+    })
+  },
+  parseAndCreateCategoryOption: async ({}, category) => {
+    /*TODO maybe after creation, directly update the state? */
+    return await createCategory({
+      name: category.text
+    })
+  },
+  readAndParseTagOptions: ({ commit }) => {
+    readTags().then((response) => {
+      let tagOptions = response.data.map(tagOption => ({
+        id: tagOption.id,
+        text: tagOption.name,
+      }))
+
+      commit('setTagOptions', tagOptions)
+    })
+  },
+  parseAndCreateTagOption: async ({}, tag) => {
+    /*TODO maybe after creation, directly update the state? */
+    return await createTag({
+      name: tag.text
+    })
+  },
 }
 
 export default actions

@@ -18,6 +18,10 @@ const getters = {
   getStatus: (state) => state.status,
   getVendorOptions: (state) => state.vendorOptions,
   getVendor: (state) => state.vendor,
+  getCategoryOptions: (state) => state.categoryOptions,
+  getCategories: (state) => state.categories,
+  getTagOptions: (state) => state.tagOptions,
+  getTags: (state) => state.tags,
 }
 
 export default getters

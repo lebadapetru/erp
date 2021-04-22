@@ -57,13 +57,11 @@ export default {
   setup() {
     const store = useStore()
 
-    let hasVariants = computed({
-      get: () => store.getters["product/getHasVariants"],
-      set: (value) => store.commit("product/setHasVariants", value)
-    })
-
     return {
-      hasVariants,
+      hasVariants: computed({
+        get: () => store.getters["product/getHasVariants"],
+        set: (value) => store.commit("product/setHasVariants", value)
+      }),
     }
   }
 }

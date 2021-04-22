@@ -1,21 +1,22 @@
 <template>
   <VSelect2
-    v-if="tags"
+    v-if="tagOptions"
     :name="'tags'"
     :placeholder="`Search for tags`"
     :has-tags="true"
     :has-multiple="true"
-    :options="tags"
+    :options="tagOptions"
     :item-title="`tag`"
-    :add-item-callback="parseAndCreateTags"
-    @item-added="readAndParseTags()"
+    :add-item-callback="parseAndCreateTagOption"
+    @item-added="readAndParseTagOptions()"
   />
 </template>
 
 <script>
 import VSelect2 from "resources/components/forms/inputs/VSelect2";
 import { useTagRepository } from "resources/js/repository/TagRepository"
-import { reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs } from 'vue'
+import { useStore } from "vuex";
 
 export default {
   name: "VSelectTags",
@@ -23,32 +24,25 @@ export default {
     VSelect2
   },
   setup() {
-    const state = reactive({
-      tags: []
-    })
+    const store = useStore()
 
-    const { readTags, createTag } = useTagRepository()
-
-    const readAndParseTags = () => {
-      readTags().then((tags) => {
-        state.tags = tags.map(tag => ({
-          id: tag.id,
-          text: tag.title,
-        }))
-      })
+    let readAndParseTagOptions = () => {
+      store.dispatch("product/readAndParseTagOptions")
     }
-    readAndParseTags()
+    readAndParseTagOptions()
 
-    const parseAndCreateTags = (tag) => {
-      return createTag({
-        title: tag?.text
-      })
+    let parseAndCreateTagOption = async (category) => {
+      await store.dispatch("product/parseAndCreateTagOption", category)
     }
 
     return {
-      ...toRefs(state),
-      parseAndCreateTags,
-      readAndParseTags
+      tagOptions: computed(() => store.getters["product/getTagOptions"]),
+      tags: computed({
+        get: () => store.getters["product/getTags"],
+        set: (value) => store.commit("product/setTags", value),
+      }),
+      readAndParseTagOptions,
+      parseAndCreateTagOption,
     }
   }
 }

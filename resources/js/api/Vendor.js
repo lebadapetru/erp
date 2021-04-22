@@ -2,10 +2,10 @@ import { apiUrl } from "resources/js/api/index";
 
 const url = apiUrl + '/vendors'
 
-const readVendor = () => {
+const readVendors = () => {
   return httpClient.get(url)
 }
 
 export {
-  readVendor,
+  readVendors,
 }

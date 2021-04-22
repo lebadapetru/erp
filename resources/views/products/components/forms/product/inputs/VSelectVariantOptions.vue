@@ -38,8 +38,7 @@ export default {
     let parseAndCreateVariantOption = async (variant) => {
       await store.dispatch("product/parseAndCreateVariantOption", variant)
     }
-    console.log('variantOptions')
-    console.log(variantOptions)
+
     return {
       variantOptions,
       readAndParseVariantOptions,
