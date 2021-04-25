@@ -14,10 +14,12 @@ class CreateFileAction
         private UploadService $uploadService
     ) {}
 
+    /**
+     * @throws \Throwable
+     * @throws \League\Flysystem\FilesystemException
+     */
     public function __invoke(UploadRequest $request): File
     {
-        $uploadedFile = $request->all()['file'];
-
-        return $this->uploadService->save($uploadedFile);
+        return $this->uploadService->save($request->all());
     }
 }

@@ -10,20 +10,19 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210418114936 extends AbstractMigration
+final class Version20210425134616 extends AbstractMigration
 {
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return '';
     }
 
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SEQUENCE "categories_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "email_tokens_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "features_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE "files_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "groups_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "lookup_product_statuses_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "permissions_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
@@ -44,9 +43,10 @@ final class Version20210418114936 extends AbstractMigration
         $this->addSql('CREATE TABLE "features" (id INT NOT NULL, service_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, label VARCHAR(255) NOT NULL, parent INT DEFAULT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_BFC0DC13EA750E8 ON "features" (label)');
         $this->addSql('CREATE INDEX IDX_BFC0DC13ED5CA9E6 ON "features" (service_id)');
-        $this->addSql('CREATE TABLE "files" (id INT NOT NULL, original_name VARCHAR(255) NOT NULL, display_name VARCHAR(255) NOT NULL, extension VARCHAR(255) DEFAULT NULL, mime_type VARCHAR(255) DEFAULT NULL, size INT DEFAULT NULL, width DOUBLE PRECISION DEFAULT NULL, height DOUBLE PRECISION DEFAULT NULL, path VARCHAR(255) DEFAULT NULL, media_url VARCHAR(255) DEFAULT NULL, is_processed BOOLEAN NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE "files" (id UUID NOT NULL, original_name VARCHAR(255) NOT NULL, display_name VARCHAR(255) NOT NULL, extension VARCHAR(255) DEFAULT NULL, mime_type VARCHAR(255) DEFAULT NULL, size INT DEFAULT NULL, width DOUBLE PRECISION DEFAULT NULL, height DOUBLE PRECISION DEFAULT NULL, path VARCHAR(255) DEFAULT NULL, media_url VARCHAR(255) DEFAULT NULL, is_processed BOOLEAN NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_635405954561530 ON "files" (original_name)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_6354059D5499347 ON "files" (display_name)');
+        $this->addSql('COMMENT ON COLUMN "files".id IS \'(DC2Type:uuid)\'');
         $this->addSql('CREATE TABLE "groups" (id INT NOT NULL, name VARCHAR(255) NOT NULL, label VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_F06D3970EA750E8 ON "groups" (label)');
         $this->addSql('CREATE TABLE group_user (group_id INT NOT NULL, user_id INT NOT NULL, PRIMARY KEY(group_id, user_id))');
@@ -61,9 +61,10 @@ final class Version20210418114936 extends AbstractMigration
         $this->addSql('CREATE TABLE "products" (id INT NOT NULL, status_id INT NOT NULL, vendor_id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, is_public BOOLEAN NOT NULL, sku VARCHAR(255) DEFAULT NULL, quantity INT NOT NULL, original_price NUMERIC(10, 2) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, discount SMALLINT NOT NULL, weight INT DEFAULT NULL, is_continue_selling_out_of_stock BOOLEAN NOT NULL, is_physical_product BOOLEAN NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_B3BA5A5A6BF700BD ON "products" (status_id)');
         $this->addSql('CREATE INDEX IDX_B3BA5A5AF603EE73 ON "products" (vendor_id)');
-        $this->addSql('CREATE TABLE product_file (product_id INT NOT NULL, file_id INT NOT NULL, PRIMARY KEY(product_id, file_id))');
+        $this->addSql('CREATE TABLE product_file (product_id INT NOT NULL, file_id UUID NOT NULL, PRIMARY KEY(product_id, file_id))');
         $this->addSql('CREATE INDEX IDX_17714B14584665A ON product_file (product_id)');
         $this->addSql('CREATE INDEX IDX_17714B193CB796C ON product_file (file_id)');
+        $this->addSql('COMMENT ON COLUMN product_file.file_id IS \'(DC2Type:uuid)\'');
         $this->addSql('CREATE TABLE product_category (product_id INT NOT NULL, category_id INT NOT NULL, PRIMARY KEY(product_id, category_id))');
         $this->addSql('CREATE INDEX IDX_CDFC73564584665A ON product_category (product_id)');
         $this->addSql('CREATE INDEX IDX_CDFC735612469DE2 ON product_category (category_id)');
@@ -121,7 +122,7 @@ final class Version20210418114936 extends AbstractMigration
         $this->addSql('ALTER TABLE variant_variant_value ADD CONSTRAINT FK_4493A08766F0FA2A FOREIGN KEY (variant_value_id) REFERENCES "variant_values" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
@@ -151,7 +152,6 @@ final class Version20210418114936 extends AbstractMigration
         $this->addSql('DROP SEQUENCE "categories_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "email_tokens_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "features_id_seq" CASCADE');
-        $this->addSql('DROP SEQUENCE "files_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "groups_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "lookup_product_statuses_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "permissions_id_seq" CASCADE');

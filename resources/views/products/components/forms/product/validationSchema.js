@@ -1,4 +1,4 @@
-import { boolean, number, object, string } from "yup";
+import { boolean, number, object, string, array } from "yup";
 
 const validationSchema = object().shape({
   title: string().trim().required('Title is required.'),
@@ -30,6 +30,9 @@ const validationSchema = object().shape({
     .nullable()
     .min(0)
     .transform((v) => (v === '' || Number.isNaN(v) ? null : v)),
+  file: array().of(
+    object() //TODO maybe specify the .shape()
+  )
 });
 
 export default validationSchema

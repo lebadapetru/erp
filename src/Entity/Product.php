@@ -16,6 +16,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -77,10 +78,10 @@ class Product
     private int $quantity = 0;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
+     * @ORM\Column(type="float")
      * @Groups({"product: read", "product: write"})
      */
-    private float $originalPrice = 0;
+    private string $originalPrice = '0.00';
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)

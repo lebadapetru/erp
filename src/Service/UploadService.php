@@ -7,26 +7,28 @@ use App\Entity\File;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToDeleteFile;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Uid\UuidV4;
 
 class UploadService
 {
     public function __construct(
         private SluggerInterface $slugger,
         private EntityManagerInterface $entityManager,
-        private ParameterBagInterface $parameterBag,
         private FileStorage $fileStorage,
-        private FileDecoder $fileDecoder
     ) {}
 
-    public function save(UploadedFile $temporaryFile): File
+    public function save(array $data): File
     {
+        /**@var UploadedFile $temporaryFile*/
+        $temporaryFile = $data['file'];
+        /**@var UuidV4 $uuid*/
+        $uuid = $data['id'] ? UuidV4::fromString($data['id']) : UuidV4::v4();
         $this->entityManager->getConnection()->beginTransaction();
         try {
-            $fileEntity = $this->createFileEntity($temporaryFile);
+            $fileEntity = $this->createFileEntity($temporaryFile, $uuid);
 
             /*TODO add support for videos, media urls, audios, vts*/
             if ($fileEntity->isImage()) {
@@ -73,12 +75,12 @@ class UploadService
         $this->entityManager->flush();
     }
 
-    private function createFileEntity(UploadedFile $temporaryFile): File
+    private function createFileEntity(UploadedFile $temporaryFile, ?UuidV4 $uuid = null): File
     {
         $originalFileName = pathinfo($temporaryFile->getClientOriginalName(), PATHINFO_FILENAME);
         //this one does strtolower, sanitization
         $fileName = $this->slugger->slug($originalFileName) . '-' . uniqid();
-        $file = new File();
+        $file = new File($uuid);
         $file->setOriginalName($fileName);
         $file->setDisplayName($fileName);
         $file->setExtension($temporaryFile->guessExtension());

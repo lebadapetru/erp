@@ -34,7 +34,7 @@ export default {
   setup() {
 
     return {
-      logoSource: window.app.url + '/build/media/logos/logo-light.png'
+      logoSource: app.url + '/build/media/logos/logo-light.png'
     }
   }
 }

@@ -19,13 +19,20 @@ class UploadRequest extends BaseRequest
     protected function rules(): array
     {
         return [
+            'id' => [
+                new Assert\Uuid([
+                    'versions' => [
+                        Assert\Uuid::V4_RANDOM
+                    ]
+                ])
+            ],
             'file' => [
                 new Assert\NotBlank(),
                 new Assert\File([
                     'maxSize' => '5M',
                     'mimeTypes' => array_merge(...array_values(File::ACCEPTED_MIME_TYPES)),
                 ]),
-            ]
+            ],
         ];
     }
 }

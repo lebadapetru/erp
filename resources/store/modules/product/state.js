@@ -23,6 +23,7 @@ const state = () => ({
   categories: [],
   tagOptions: [],
   tags: [],
+  files: []
 })
 
 export default state

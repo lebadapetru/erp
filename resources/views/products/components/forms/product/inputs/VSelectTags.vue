@@ -14,8 +14,7 @@
 
 <script>
 import VSelect2 from "resources/components/forms/inputs/VSelect2";
-import { useTagRepository } from "resources/js/repository/TagRepository"
-import { computed, reactive, toRefs } from 'vue'
+import { computed } from 'vue'
 import { useStore } from "vuex";
 
 export default {

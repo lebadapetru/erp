@@ -17,7 +17,7 @@ class UserChecker implements UserCheckerInterface
             return;
         }
 
-        if (!$user->isActive()) {
+        if (!$user->getIsActive()) {
             // the message passed to this exception is meant to be displayed to the user
             throw new HttpException(Response::HTTP_FORBIDDEN, 'Your account is inactive.');
         }
@@ -30,7 +30,7 @@ class UserChecker implements UserCheckerInterface
         }
 
         // user account is expired, the user may be notified
-        if (!$user->isActive()) {
+        if (!$user->getIsActive()) {
             throw new HttpException(Response::HTTP_FORBIDDEN, 'Your account is inactive.');
         }
     }

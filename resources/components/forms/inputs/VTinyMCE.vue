@@ -63,7 +63,7 @@ export default {
       handleChange,
       errorMessage,
       capitalize,
-      apiKey: window.app.tinymceApiKey,
+      apiKey: app.tinymceApiKey,
       config: {
         branding: false,
         menubar: true,

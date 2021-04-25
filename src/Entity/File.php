@@ -4,12 +4,12 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\FileRepository;
-use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Controller\File\CreateFileAction;
 
@@ -29,6 +29,9 @@ use App\Controller\File\CreateFileAction;
  *                             "schema"={
  *                                 "type"="object",
  *                                 "properties"={
+ *                                      "id"={
+ *                                         "type"="uuid"
+ *                                     },
  *                                     "file"={
  *                                         "type"="string",
  *                                         "format"="binary"
@@ -54,11 +57,10 @@ class File
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     * @Groups({"file: read"})
+     * @ORM\Column(type="uuid", unique=true)
+     * @Groups({"file: read", "file: write"})
      */
-    private int $id;
+    private UuidV4 $id;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
@@ -181,12 +183,13 @@ class File
         ],
     ];
 
-    public function __construct()
+    public function __construct(UuidV4 $uuidV4)
     {
         $this->products = new ArrayCollection();
+        $this->id = $uuidV4 ?: UuidV4::v4();
     }
 
-    public function getId(): ?int
+    public function getId(): UuidV4
     {
         return $this->id;
     }

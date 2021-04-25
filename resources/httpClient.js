@@ -6,7 +6,7 @@ import Swal from 'sweetalert2'
 let token = document.head.querySelector('meta[name="csrf-token"]')
 
 const httpClient = axios.create({
-  baseURL: window.app.url,
+  baseURL: app.url,
   withCredentials: true,
   headers: {
     Accept: 'application/json',

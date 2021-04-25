@@ -31,17 +31,7 @@
 import { toRefs, reactive, ref } from 'vue'
 import validationSchema from "./validationSchema"
 import VBaseForm from "resources/components/forms/VBaseForm";
-import VCKEditor from "resources/components/forms/inputs/VCKEditor"
-import VTinyMCE from "resources/components/forms/inputs/VTinyMCE";
-import VDropZone from "resources/components/forms/inputs/VDropZone";
-import VSelect from "resources/components/forms/inputs/VSelect";
-import VSelectCategories from "resources/views/products/components/forms/product/inputs/VSelectCategories";
-import VSelectTags from "resources/views/products/components/forms/product/inputs/VSelectTags";
 import VProductFormToolbarActions from "resources/views/products/components/teleports/VProductFormToolbarActions";
-import VBaseInput from "resources/components/forms/inputs/VBaseInput";
-import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox";
-import { priceFilter, integerFilter } from "resources/js/helpers/inputFilters";
-import VBaseSelect from "resources/components/forms/inputs/VBaseSelect";
 import { useStore } from 'vuex'
 import VTitleAndDescriptionSection
   from "resources/views/products/components/forms/product/sections/VTitleAndDescriptionSection";
@@ -57,17 +47,8 @@ import VOrganizationSection from "resources/views/products/components/forms/prod
 export default {
   name: "VProductForm",
   components: {
-    VBaseSelect,
     VBaseForm,
-    VBaseInput,
-    VBaseCheckbox,
     VProductFormToolbarActions,
-    VCKEditor,
-    VTinyMCE,
-    VDropZone,
-    VSelect,
-    VSelectCategories,
-    VSelectTags,
     VTitleAndDescriptionSection,
     VMediaSection,
     VPriceSection,
@@ -88,6 +69,10 @@ export default {
     const onSubmit = (data) => {
       console.log('final submit')
       console.log(data)
+      httpClient.post('/api/products', data).then((response) => {
+        console.log('sent')
+        console.log(response)
+      })
     }
 
     return {
@@ -95,8 +80,6 @@ export default {
       productForm,
       onSubmit,
       validationSchema,
-      priceFilter,
-      integerFilter,
     }
   }
 }

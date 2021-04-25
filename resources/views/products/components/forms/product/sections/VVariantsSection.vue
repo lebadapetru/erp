@@ -32,6 +32,7 @@
 
         <div class="col-6">
           <label>Value</label>
+          <!-- TODO create a multi tag input/use select2/find a plugin -->
           <input type="text" class="form-control" placeholder="Separate options with a comma" value=""/>
         </div>
       </div>
