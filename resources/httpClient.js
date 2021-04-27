@@ -9,8 +9,8 @@ const httpClient = axios.create({
   baseURL: app.url,
   withCredentials: true,
   headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
+    accept: 'application/ld+json',
+    'content-type': 'application/json',
     'X-CSRF-TOKEN': token ? token.content : null
   }
 })

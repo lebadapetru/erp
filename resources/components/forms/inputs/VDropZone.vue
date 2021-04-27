@@ -41,7 +41,7 @@ export default {
   props: {
     name: {
       type: String,
-      default: 'file'
+      default: 'files'
     },
     multiple: {
       type: Boolean,
@@ -55,16 +55,17 @@ export default {
     const {
       value: inputValue,
       errorMessage,
-      handleBlur,
       handleInput,
     } = useField(props.name, null);
 
     Dropzone.autoDiscover = false
     onMounted(() => {
+      //TODO setup chunking
+      //TODO custom file block display for cropping and other edits
       new Dropzone(el.value, {
         url: "/api/files",
         headers: {
-          accept: 'application/ld+json'
+          accept: httpClient.defaults.headers.accept
         },
         paramName: props.name,
         maxFiles: 10,
@@ -91,7 +92,9 @@ export default {
           console.log('sending')
         },
         success: function (file, response) {
-          files.value.push(response)
+          //TODO why does it come as string instead of json
+          files.value.push(JSON.parse(response)['@id'])
+          //TODO save the whole response object for each file, into vuex state
           handleInput(files)
         },
         error: function (file, error) {

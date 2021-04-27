@@ -7,8 +7,8 @@ import { createTag, readTags } from "resources/js/api/Tag";
 const actions = {
   readAndParseVariantOptions: ({ commit }) => {
     return readVariantOptions().then((response) => {
-      let variantOptions = response.data.map(variantOption => ({
-        id: variantOption.id,
+      let variantOptions = response.data['hydra:member'].map(variantOption => ({
+        id: variantOption['@id'],
         text: variantOption.name,
       }))
 
@@ -23,8 +23,8 @@ const actions = {
   },
   readAndParseLookupProductStatus: ({ commit }) => {
     return readLookupProductStatuses().then((response) => {
-      let statusOptions = response.data.map(statusOption => ({
-        value: statusOption.id,
+      let statusOptions = response.data['hydra:member'].map(statusOption => ({
+        value: statusOption['@id'],
         label: statusOption.name,
       }))
 
@@ -33,8 +33,8 @@ const actions = {
   },
   readAndParseVendorOptions: ({ commit }) => {
     return readVendors().then((response) => {
-      let vendorOptions = response.data.map(vendorOption => ({
-        value: vendorOption.id,
+      let vendorOptions = response.data['hydra:member'].map(vendorOption => ({
+        value: vendorOption['@id'],
         label: vendorOption.name,
       }))
 
@@ -43,8 +43,8 @@ const actions = {
   },
   readAndParseCategoryOptions: ({ commit }) => {
     readCategories().then((response) => {
-      let categoryOptions = response.data.map(categoryOption => ({
-        id: categoryOption.id,
+      let categoryOptions = response.data['hydra:member'].map(categoryOption => ({
+        id: categoryOption['@id'],
         text: categoryOption.title,
       }))
 
@@ -59,8 +59,8 @@ const actions = {
   },
   readAndParseTagOptions: ({ commit }) => {
     readTags().then((response) => {
-      let tagOptions = response.data.map(tagOption => ({
-        id: tagOption.id,
+      let tagOptions = response.data['hydra:member'].map(tagOption => ({
+        id: tagOption['@id'],
         text: tagOption.name,
       }))
 

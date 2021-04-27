@@ -26,7 +26,7 @@ class UploadRequest extends BaseRequest
                     ]
                 ])
             ],
-            'file' => [
+            'files' => [
                 new Assert\NotBlank(),
                 new Assert\File([
                     'maxSize' => '5M',

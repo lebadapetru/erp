@@ -78,7 +78,7 @@ class Product
     private int $quantity = 0;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=10, scale=2)
      * @Groups({"product: read", "product: write"})
      */
     private string $originalPrice = '0.00';
@@ -123,39 +123,46 @@ class Product
 
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="products")
+     * @Groups({"product: read", "product: write"})
      */
     private $tags;
 
     /**
      * @ORM\OneToMany(targetEntity=Variant::class, mappedBy="product", orphanRemoval=true)
+     * @Groups({"product: read", "product: write"})
      */
     private $variants;
 
     /**
      * @ORM\ManyToOne(targetEntity=LookupProductStatus::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"product: read", "product: write"})
      */
     private $status;
 
     /**
      * @ORM\ManyToOne(targetEntity=Vendor::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"product: read", "product: write"})
      */
     private $vendor;
 
     /**
      * TODO in kg for now
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"product: read", "product: write"})
      */
     private ?int $weight;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"product: read", "product: write"})
      */
     private bool $isContinueSellingOutOfStock = false;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"product: read", "product: write"})
      */
     private bool $isPhysicalProduct = true;
 

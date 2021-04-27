@@ -23,7 +23,7 @@ class UploadService
     public function save(array $data): File
     {
         /**@var UploadedFile $temporaryFile*/
-        $temporaryFile = $data['file'];
+        $temporaryFile = $data['files'];
         /**@var UuidV4 $uuid*/
         $uuid = $data['id'] ? UuidV4::fromString($data['id']) : UuidV4::v4();
         $this->entityManager->getConnection()->beginTransaction();

@@ -64,8 +64,6 @@ export default {
 
     const store = useStore();
 
-
-
     const onSubmit = (data) => {
       console.log('final submit')
       console.log(data)
