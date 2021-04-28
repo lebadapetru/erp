@@ -42,8 +42,7 @@ class RequestTransformerListener
     private function transform(Request $request): bool
     {
         $data = \json_decode($request->getContent(), true);
-        $data = array_walk_recursive($data, 'trim');
-
+        array_walk_recursive($data, 'trim');
         if (\json_last_error() !== \JSON_ERROR_NONE) {
             return false;
         }

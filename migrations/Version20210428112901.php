@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210425134616 extends AbstractMigration
+final class Version20210428112901 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -24,9 +24,9 @@ final class Version20210425134616 extends AbstractMigration
         $this->addSql('CREATE SEQUENCE "email_tokens_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "features_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "groups_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE "lookup_file_statuses_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "lookup_product_statuses_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "permissions_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE "products_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "reset_password_tokens_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "roles_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE "services_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
@@ -43,9 +43,10 @@ final class Version20210425134616 extends AbstractMigration
         $this->addSql('CREATE TABLE "features" (id INT NOT NULL, service_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, label VARCHAR(255) NOT NULL, parent INT DEFAULT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_BFC0DC13EA750E8 ON "features" (label)');
         $this->addSql('CREATE INDEX IDX_BFC0DC13ED5CA9E6 ON "features" (service_id)');
-        $this->addSql('CREATE TABLE "files" (id UUID NOT NULL, original_name VARCHAR(255) NOT NULL, display_name VARCHAR(255) NOT NULL, extension VARCHAR(255) DEFAULT NULL, mime_type VARCHAR(255) DEFAULT NULL, size INT DEFAULT NULL, width DOUBLE PRECISION DEFAULT NULL, height DOUBLE PRECISION DEFAULT NULL, path VARCHAR(255) DEFAULT NULL, media_url VARCHAR(255) DEFAULT NULL, is_processed BOOLEAN NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE "files" (id UUID NOT NULL, status_id INT NOT NULL, original_name VARCHAR(255) NOT NULL, display_name VARCHAR(255) NOT NULL, extension VARCHAR(255) DEFAULT NULL, mime_type VARCHAR(255) DEFAULT NULL, size INT DEFAULT NULL, width DOUBLE PRECISION DEFAULT NULL, height DOUBLE PRECISION DEFAULT NULL, path VARCHAR(255) DEFAULT NULL, media_url VARCHAR(255) DEFAULT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_635405954561530 ON "files" (original_name)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_6354059D5499347 ON "files" (display_name)');
+        $this->addSql('CREATE INDEX IDX_63540596BF700BD ON "files" (status_id)');
         $this->addSql('COMMENT ON COLUMN "files".id IS \'(DC2Type:uuid)\'');
         $this->addSql('CREATE TABLE "groups" (id INT NOT NULL, name VARCHAR(255) NOT NULL, label VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_F06D3970EA750E8 ON "groups" (label)');
@@ -55,22 +56,29 @@ final class Version20210425134616 extends AbstractMigration
         $this->addSql('CREATE TABLE group_role (group_id INT NOT NULL, role_id INT NOT NULL, PRIMARY KEY(group_id, role_id))');
         $this->addSql('CREATE INDEX IDX_7E33D11AFE54D947 ON group_role (group_id)');
         $this->addSql('CREATE INDEX IDX_7E33D11AD60322AC ON group_role (role_id)');
-        $this->addSql('CREATE TABLE "lookup_product_statuses" (id INT NOT NULL, name VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE "lookup_file_statuses" (id INT NOT NULL, name VARCHAR(255) NOT NULL, label VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_2B076963EA750E8 ON "lookup_file_statuses" (label)');
+        $this->addSql('CREATE TABLE "lookup_product_statuses" (id INT NOT NULL, name VARCHAR(255) NOT NULL, label VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_B629BE34EA750E8 ON "lookup_product_statuses" (label)');
         $this->addSql('CREATE TABLE "permissions" (id INT NOT NULL, name VARCHAR(255) NOT NULL, label VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_2DEDCC6FEA750E8 ON "permissions" (label)');
-        $this->addSql('CREATE TABLE "products" (id INT NOT NULL, status_id INT NOT NULL, vendor_id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, is_public BOOLEAN NOT NULL, sku VARCHAR(255) DEFAULT NULL, quantity INT NOT NULL, original_price NUMERIC(10, 2) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, discount SMALLINT NOT NULL, weight INT DEFAULT NULL, is_continue_selling_out_of_stock BOOLEAN NOT NULL, is_physical_product BOOLEAN NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE "products" (id UUID NOT NULL, status_id INT NOT NULL, vendor_id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, is_public BOOLEAN NOT NULL, sku VARCHAR(255) DEFAULT NULL, quantity INT NOT NULL, original_price NUMERIC(10, 2) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, discount SMALLINT NOT NULL, weight INT DEFAULT NULL, is_continue_selling_out_of_stock BOOLEAN NOT NULL, is_physical_product BOOLEAN NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_B3BA5A5A6BF700BD ON "products" (status_id)');
         $this->addSql('CREATE INDEX IDX_B3BA5A5AF603EE73 ON "products" (vendor_id)');
-        $this->addSql('CREATE TABLE product_file (product_id INT NOT NULL, file_id UUID NOT NULL, PRIMARY KEY(product_id, file_id))');
+        $this->addSql('COMMENT ON COLUMN "products".id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE TABLE product_file (product_id UUID NOT NULL, file_id UUID NOT NULL, PRIMARY KEY(product_id, file_id))');
         $this->addSql('CREATE INDEX IDX_17714B14584665A ON product_file (product_id)');
         $this->addSql('CREATE INDEX IDX_17714B193CB796C ON product_file (file_id)');
+        $this->addSql('COMMENT ON COLUMN product_file.product_id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN product_file.file_id IS \'(DC2Type:uuid)\'');
-        $this->addSql('CREATE TABLE product_category (product_id INT NOT NULL, category_id INT NOT NULL, PRIMARY KEY(product_id, category_id))');
+        $this->addSql('CREATE TABLE product_category (product_id UUID NOT NULL, category_id INT NOT NULL, PRIMARY KEY(product_id, category_id))');
         $this->addSql('CREATE INDEX IDX_CDFC73564584665A ON product_category (product_id)');
         $this->addSql('CREATE INDEX IDX_CDFC735612469DE2 ON product_category (category_id)');
-        $this->addSql('CREATE TABLE product_tag (product_id INT NOT NULL, tag_id INT NOT NULL, PRIMARY KEY(product_id, tag_id))');
+        $this->addSql('COMMENT ON COLUMN product_category.product_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE TABLE product_tag (product_id UUID NOT NULL, tag_id INT NOT NULL, PRIMARY KEY(product_id, tag_id))');
         $this->addSql('CREATE INDEX IDX_E3A6E39C4584665A ON product_tag (product_id)');
         $this->addSql('CREATE INDEX IDX_E3A6E39CBAD26311 ON product_tag (tag_id)');
+        $this->addSql('COMMENT ON COLUMN product_tag.product_id IS \'(DC2Type:uuid)\'');
         $this->addSql('CREATE TABLE "reset_password_tokens" (id INT NOT NULL, user_id INT NOT NULL, token VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_F045D5AA5F37A13B ON "reset_password_tokens" (token)');
         $this->addSql('CREATE INDEX IDX_F045D5AAA76ED395 ON "reset_password_tokens" (user_id)');
@@ -91,14 +99,16 @@ final class Version20210425134616 extends AbstractMigration
         $this->addSql('CREATE TABLE "variant_options" (id INT NOT NULL, name VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE "variant_values" (id INT NOT NULL, variant_option_id INT NOT NULL, name VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_2FFDEB304438C63C ON "variant_values" (variant_option_id)');
-        $this->addSql('CREATE TABLE "variants" (id INT NOT NULL, product_id INT NOT NULL, title VARCHAR(255) DEFAULT NULL, original_price NUMERIC(10, 2) DEFAULT NULL, discount INT DEFAULT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, quantity INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE "variants" (id INT NOT NULL, product_id UUID NOT NULL, title VARCHAR(255) DEFAULT NULL, original_price NUMERIC(10, 2) DEFAULT NULL, discount INT DEFAULT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, quantity INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_B39853E14584665A ON "variants" (product_id)');
+        $this->addSql('COMMENT ON COLUMN "variants".product_id IS \'(DC2Type:uuid)\'');
         $this->addSql('CREATE TABLE variant_variant_value (variant_id INT NOT NULL, variant_value_id INT NOT NULL, PRIMARY KEY(variant_id, variant_value_id))');
         $this->addSql('CREATE INDEX IDX_4493A0873B69A9AF ON variant_variant_value (variant_id)');
         $this->addSql('CREATE INDEX IDX_4493A08766F0FA2A ON variant_variant_value (variant_value_id)');
         $this->addSql('CREATE TABLE "vendors" (id INT NOT NULL, name VARCHAR(255) NOT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('ALTER TABLE "email_tokens" ADD CONSTRAINT FK_D7C0C27EA76ED395 FOREIGN KEY (user_id) REFERENCES "users" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE "features" ADD CONSTRAINT FK_BFC0DC13ED5CA9E6 FOREIGN KEY (service_id) REFERENCES "services" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE "files" ADD CONSTRAINT FK_63540596BF700BD FOREIGN KEY (status_id) REFERENCES "lookup_file_statuses" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE group_user ADD CONSTRAINT FK_A4C98D39FE54D947 FOREIGN KEY (group_id) REFERENCES "groups" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE group_user ADD CONSTRAINT FK_A4C98D39A76ED395 FOREIGN KEY (user_id) REFERENCES "users" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE group_role ADD CONSTRAINT FK_7E33D11AFE54D947 FOREIGN KEY (group_id) REFERENCES "groups" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -130,6 +140,7 @@ final class Version20210425134616 extends AbstractMigration
         $this->addSql('ALTER TABLE product_file DROP CONSTRAINT FK_17714B193CB796C');
         $this->addSql('ALTER TABLE group_user DROP CONSTRAINT FK_A4C98D39FE54D947');
         $this->addSql('ALTER TABLE group_role DROP CONSTRAINT FK_7E33D11AFE54D947');
+        $this->addSql('ALTER TABLE "files" DROP CONSTRAINT FK_63540596BF700BD');
         $this->addSql('ALTER TABLE "products" DROP CONSTRAINT FK_B3BA5A5A6BF700BD');
         $this->addSql('ALTER TABLE role_permission DROP CONSTRAINT FK_6F7DF886FED90CCA');
         $this->addSql('ALTER TABLE product_file DROP CONSTRAINT FK_17714B14584665A');
@@ -153,9 +164,9 @@ final class Version20210425134616 extends AbstractMigration
         $this->addSql('DROP SEQUENCE "email_tokens_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "features_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "groups_id_seq" CASCADE');
+        $this->addSql('DROP SEQUENCE "lookup_file_statuses_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "lookup_product_statuses_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "permissions_id_seq" CASCADE');
-        $this->addSql('DROP SEQUENCE "products_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "reset_password_tokens_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "roles_id_seq" CASCADE');
         $this->addSql('DROP SEQUENCE "services_id_seq" CASCADE');
@@ -172,6 +183,7 @@ final class Version20210425134616 extends AbstractMigration
         $this->addSql('DROP TABLE "groups"');
         $this->addSql('DROP TABLE group_user');
         $this->addSql('DROP TABLE group_role');
+        $this->addSql('DROP TABLE "lookup_file_statuses"');
         $this->addSql('DROP TABLE "lookup_product_statuses"');
         $this->addSql('DROP TABLE "permissions"');
         $this->addSql('DROP TABLE "products"');

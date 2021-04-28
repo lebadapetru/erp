@@ -4,6 +4,7 @@
 namespace App\Service;
 
 use App\Entity\File;
+use App\Entity\LookupFileStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToDeleteFile;
@@ -24,15 +25,15 @@ class UploadService
     {
         /**@var UploadedFile $temporaryFile*/
         $temporaryFile = $data['files'];
-        /**@var UuidV4 $uuid*/
-        $uuid = $data['id'] ? UuidV4::fromString($data['id']) : UuidV4::v4();
+        /**@var UuidV4 $id*/
+        $id = $data['id'] ? UuidV4::fromString($data['id']) : UuidV4::v4();
         $this->entityManager->getConnection()->beginTransaction();
         try {
-            $fileEntity = $this->createFileEntity($temporaryFile, $uuid);
+            $fileEntity = $this->createFileEntity($temporaryFile, $id);
 
             /*TODO add support for videos, media urls, audios, vts*/
             if ($fileEntity->isImage()) {
-                $this->saveImage($fileEntity, $temporaryFile);
+                $this->saveImage($fileEntity);
             } elseif ($fileEntity->isVideo()) {
                 //} elseif (Helpers::isMediaUrl($uploadedFileMimeType)) {
             } else {
@@ -55,10 +56,9 @@ class UploadService
         return $fileEntity;
     }
 
-    private function saveImage(File $fileEntity, UploadedFile $temporaryFile)
+    private function saveImage(File $fileEntity)
     {
         $this->fileStorage->upload(
-            $temporaryFile,
             $fileEntity
         );
         $image = new \Imagick(
@@ -69,23 +69,41 @@ class UploadService
         $fileEntity->setPath(
             $this->fileStorage->getFileLocation($fileEntity, false, false)
         );
-        $fileEntity->setIsProcessed(true);
+
+        //set to processed
+        $fileEntity->setStatus(
+            $this->entityManager
+                ->getRepository(LookupFileStatus::class)
+                ->findOneBy([
+                    'label' => LookupFileStatus::STATUSES[2]
+                ])
+        );
 
         $this->entityManager->persist($fileEntity);
         $this->entityManager->flush();
     }
 
-    private function createFileEntity(UploadedFile $temporaryFile, ?UuidV4 $uuid = null): File
+    private function createFileEntity(UploadedFile $temporaryFile, ?UuidV4 $id = null): File
     {
         $originalFileName = pathinfo($temporaryFile->getClientOriginalName(), PATHINFO_FILENAME);
         //this one does strtolower, sanitization
         $fileName = $this->slugger->slug($originalFileName) . '-' . uniqid();
-        $file = new File($uuid);
+        $file = new File($id);
         $file->setOriginalName($fileName);
         $file->setDisplayName($fileName);
         $file->setExtension($temporaryFile->guessExtension());
         $file->setMimeType($temporaryFile->getMimeType());
         $file->setSize($temporaryFile->getSize());
+        $file->setUploadedFile($temporaryFile);
+
+        //set to processing
+        $file->setStatus(
+            $this->entityManager
+                ->getRepository(LookupFileStatus::class)
+                ->findOneBy([
+                    'label' => LookupFileStatus::STATUSES[1]
+                ])
+        );
 
         $this->entityManager->persist($file);
         $this->entityManager->flush();

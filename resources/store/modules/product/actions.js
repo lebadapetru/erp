@@ -54,7 +54,7 @@ const actions = {
   parseAndCreateCategoryOption: async ({}, category) => {
     /*TODO maybe after creation, directly update the state? */
     return await createCategory({
-      name: category.text
+      title: category.text
     })
   },
   readAndParseTagOptions: ({ commit }) => {

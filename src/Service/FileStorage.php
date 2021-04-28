@@ -24,10 +24,11 @@ class FileStorage
     {
     }
 
-    public function upload(UploadedFile $uploadedFile, File $fileEntity): void
+    public function upload(File $fileEntity): void
     {
         $fileLocation = $this->getRealFileLocation($fileEntity, false);
-
+        /**@var UploadedFile $uploadedFile*/
+        $uploadedFile = $fileEntity->getUploadedFile();
         try {
             /*TODO move files to s3*/
             $stream = fopen($uploadedFile->getRealPath(), 'r');

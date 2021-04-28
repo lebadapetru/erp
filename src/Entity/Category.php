@@ -12,8 +12,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={"category: read"}},
- *     denormalizationContext={"groups"={"category: write"}},
+ *     normalizationContext={"groups"={"category:read"}},
+ *     denormalizationContext={"groups"={"category:write"}},
  *     attributes={}
  * )
  * @ORM\Entity(repositoryClass=CategoriesRepository::class)
@@ -26,51 +26,51 @@ class Category
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"category: read", "category: write"})
+     * @Groups({"category:read"})
      */
     private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"category: read", "category: write"})
+     * @Groups({"category:read", "category:write"})
      */
     private string $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"category: read", "category: write"})
+     * @Groups({"category:read", "category:write"})
      */
     private ?string $description;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"category: read", "category: write"})
+     * @Groups({"category:read", "category:write"})
      */
     private bool $isPublic = true;
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
-     * @Groups({"category: read"})
+     * @Groups({"category:read"})
      */
     private ?\DateTimeInterface $deletedAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
-     * @Groups({"category: read"})
+     * @Groups({"category:read"})
      */
     private ?\DateTimeInterface $updatedAt;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
-     * @Groups({"category: read"})
+     * @Groups({"category:read"})
      */
     private ?\DateTimeInterface $createdAt;
 
     /**
      * @ORM\ManyToMany(targetEntity=Product::class, mappedBy="categories")
-     * @Groups({"category: read", "category: write"})
+     * @Groups({"category:read", "category:write"})
      */
     private $products;
 

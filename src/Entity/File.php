@@ -15,8 +15,8 @@ use App\Controller\File\CreateFileAction;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={"file: read"}},
- *     denormalizationContext={"groups"={"file: write"}},
+ *     normalizationContext={"groups"={"file:read"}},
+ *     denormalizationContext={"groups"={"file:write"}},
  *     attributes={},
  *     collectionOperations={
  *         "post"={
@@ -58,88 +58,82 @@ class File
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
-     * @Groups({"file: read", "file: write"})
+     * @Groups({"file:read", "file:write"})
      */
     private UuidV4 $id;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Groups({"file: read", "file: write"})
+     * @Groups({"file:read", "file:write"})
      */
     private string $originalName;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Groups({"file: read"})
+     * @Groups({"file:read"})
      */
     private string $displayName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"file: read"})
+     * @Groups({"file:read"})
      */
     private ?string $extension;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"file: read"})
+     * @Groups({"file:read"})
      */
     private ?string $mimeType;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"file: read"})
+     * @Groups({"file:read"})
      */
     private ?int $size;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"file: read"})
+     * @Groups({"file:read"})
      */
     private ?float $width;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"file: read"})
+     * @Groups({"file:read"})
      */
     private ?float $height;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"file: read"})
+     * @Groups({"file:read"})
      */
     private ?string $path;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url()
-     * @Groups({"file: read"})
+     * @Groups({"file:read"})
      */
     private ?string $mediaUrl;
 
     /**
-     * @TODO consider moving this to a status lookup table, a file can have different statuses
-     * @ORM\Column(type="boolean")
-     */
-    private bool $isProcessed = false;
-
-    /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
-     * @Groups({"file: read"})
+     * @Groups({"file:read"})
      */
     private ?\DateTimeInterface $deletedAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
-     * @Groups({"file: read"})
+     * @Groups({"file:read"})
      */
     private ?\DateTimeInterface $updatedAt;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
-     * @Groups({"file: read"})
+     * @Groups({"file:read"})
      */
     private ?\DateTimeInterface $createdAt;
 
@@ -148,10 +142,13 @@ class File
      */
     private $products;
 
-    /**
-     * TODO maybe save the uploadedFile here during saving, to use its props
-     */
     private mixed $uploadedFile;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=LookupFileStatus::class, inversedBy="files")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $status;
 
     const ACCEPTED_MIME_TYPES = [
         'images' => [
@@ -183,10 +180,10 @@ class File
         ],
     ];
 
-    public function __construct(UuidV4 $uuidV4)
+    public function __construct(UuidV4 $id = null)
     {
         $this->products = new ArrayCollection();
-        $this->id = $uuidV4 ?: UuidV4::v4();
+        $this->id = $id ?: UuidV4::v4();
     }
 
     public function getId(): UuidV4
@@ -393,19 +390,7 @@ class File
         return false;
     }
 
-    public function isProcessed(): bool
-    {
-        return $this->isProcessed;
-    }
-
-    public function setIsProcessed(bool $isProcessed): self
-    {
-        $this->isProcessed = $isProcessed;
-
-        return $this;
-    }
-
-    public function setFile(mixed $uploadedFile): self
+    public function setUploadedFile(mixed $uploadedFile): self
     {
         $this->uploadedFile = $uploadedFile;
 
@@ -415,6 +400,19 @@ class File
     public function getUploadedFile(): mixed
     {
         return $this->uploadedFile;
+    }
+
+    public function getStatus(): ?LookupFileStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?LookupFileStatus $status): self
+    {
+        //TODO on creation set to default
+        $this->status = $status;
+
+        return $this;
     }
 
 }

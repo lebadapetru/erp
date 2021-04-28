@@ -16,7 +16,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @ApiResource(
@@ -42,10 +42,10 @@ class Product
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true)
+     * @Groups({"product:read", "product:write"})
      */
-    private int $id;
+    private UuidV4 $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -166,15 +166,16 @@ class Product
      */
     private bool $isPhysicalProduct = true;
 
-    public function __construct()
+    public function __construct(UuidV4 $id = null)
     {
         $this->files = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->variants = new ArrayCollection();
+        $this->id = $id ?: UuidV4::v4();
     }
 
-    public function getId(): ?int
+    public function getId(): UuidV4
     {
         return $this->id;
     }

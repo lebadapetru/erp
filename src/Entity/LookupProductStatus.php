@@ -30,6 +30,11 @@ class LookupProductStatus
     private string $name;
 
     /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private string $label;
+
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private ?\DateTimeInterface $deletedAt;
@@ -51,10 +56,11 @@ class LookupProductStatus
      */
     private $products;
 
+
     const STATUSES = [
-        1 => 'Draft', //Default & is_public can only be false
-        2 => 'Order', //trigger an additional form to be completed before checkout
-        3 => 'Active', //product ready
+        1 => 'draft', //Default & is_public can only be false
+        2 => 'order', //trigger an additional form to be completed before checkout
+        3 => 'active', //product ready
     ];
 
     public function __construct()
@@ -141,6 +147,18 @@ class LookupProductStatus
                 $product->setStatus(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLabel(): ?string
+    {
+        return $this->label;
+    }
+
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
 
         return $this;
     }

@@ -81,8 +81,9 @@ export default {
     });
 
     const onInput = (event) => {
-      handleInput(event)
-      emit('update:modelValue', event.target.value);
+      const value = (props.type === 'number') ? parseInt(event.target.value) : event.target.value
+      handleInput(value)
+      emit('update:modelValue', value);
     }
 
     const onKeyPress = (event) => {

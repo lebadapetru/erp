@@ -65,7 +65,11 @@ export default {
     });
 
     function onSubmit(values) {
-      httpClient.post('/login', values).then(() => {
+      httpClient.post('/login', values, {
+        headers: {
+          accept: 'application/json',
+        }
+      }).then(() => {
          window.location.href = '/';
       })
     }
