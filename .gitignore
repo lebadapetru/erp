@@ -16,6 +16,8 @@
 .idea
 node_modules
 public/build
+/public/storage/upload/*
+!/public/storage/upload/.gitkeep
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
