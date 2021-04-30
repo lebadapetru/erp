@@ -114,10 +114,6 @@ export default {
       console.log(el.value.dropzone)
     })
 
-    onUnmounted(() => {
-      el.value.dropzone.destroy()
-    })
-
     return {
       el,
       capitalize,

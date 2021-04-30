@@ -28,8 +28,7 @@
     "@tinymce/tinymce-vue": "^4.0.0",
     "@vee-validate/rules": "^4.2.4",
     "axios": "^0.21.1",
-    "bootstrap": "^4.5.3",
-    "bootstrap-vue": "^2.18.1",
+    "bootstrap": "^4.6.0",
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
     "dropzone": "^5.7.5",
@@ -43,7 +42,6 @@
     "vee-validate": "^4.0.0-beta.19",
     "vue": "^3.0.7",
     "vue-router": "^4.0.3",
-    "vue-select": "git+https://github.com/sagalbot/vue-select.git#feat/vue-3-compat",
     "vuex": "^4.0.0-rc.1",
     "yup": "^0.29.3"
   }
