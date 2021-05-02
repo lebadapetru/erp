@@ -28,11 +28,10 @@
 </template>
 
 <script>
-import { toRefs, reactive, ref } from 'vue'
+import { toRefs, ref } from 'vue'
 import validationSchema from "./validationSchema"
 import VBaseForm from "resources/components/forms/VBaseForm";
-import VProductFormToolbarActions from "resources/views/products/components/teleports/VProductFormToolbarActions";
-import { useStore } from 'vuex'
+import VProductFormToolbarActions from "resources/views/products/components/teleports/VProductFormToolbar";
 import VTitleAndDescriptionSection
   from "resources/views/products/components/forms/product/sections/VTitleAndDescriptionSection";
 import VMediaSection from "resources/views/products/components/forms/product/sections/VMediaSection";
@@ -43,6 +42,8 @@ import VVariantsSection from "resources/views/products/components/forms/product/
 import VProductStatusAndVisibilitySection
   from "resources/views/products/components/forms/product/sections/VProductStatusAndVisibilitySection";
 import VOrganizationSection from "resources/views/products/components/forms/product/sections/VOrganizationSection";
+import { createProduct } from "resources/js/api/Product";
+import Swal from "sweetalert2";
 
 export default {
   name: "VProductForm",
@@ -59,22 +60,28 @@ export default {
     VOrganizationSection,
   },
   setup() {
-    const state = reactive({})
     const productForm = ref(null)
 
-    const store = useStore();
-
     const onSubmit = (data) => {
-      console.log('final submit')
-      console.log(data)
-      httpClient.post('/api/products', data).then((response) => {
-        console.log('sent')
-        console.log(response)
+      //TODO in the future if additional business logic is needed before product creation
+      //TODO move this into a vuex action
+      createProduct(data).then(() => {
+        Swal.fire({
+          text: 'The product has been created!',
+          icon: "success",
+          buttonsStyling: false,
+          confirmButtonText: "Ok, got it!",
+          customClass: {
+            confirmButton: "btn font-weight-bold btn-light-primary"
+          },
+          heightAuto: false
+        }).then(() => {
+          //TODO based on the submit type, redirect or do something else
+        })
       })
     }
 
     return {
-      ...toRefs(state),
       productForm,
       onSubmit,
       validationSchema,

@@ -7,6 +7,7 @@ use App\Entity\File;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToWriteFile;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -24,7 +25,7 @@ class FileStorage
     {
     }
 
-    public function upload(File $fileEntity): void
+    public function write(File $fileEntity): void
     {
         $fileLocation = $this->getRealFileLocation($fileEntity, false);
         /**@var UploadedFile $uploadedFile*/
@@ -69,6 +70,48 @@ class FileStorage
         }
     }
 
+    public function read(File $fileEntity)
+    {
+        $fileLocation = $this->getRealFileLocation($fileEntity);
+        try {
+            if ($this->defaultStorage->fileExists($fileLocation)) {
+                $result = $this->defaultStorage->readStream($fileLocation);
+
+                if ($result === false) {
+                    throw new UnableToDeleteFile(sprintf('Couldn\'t read the "%s" file!', $fileLocation));
+                }
+
+                return $result;
+            }
+
+            return null;
+        } catch (FileNotFoundException $exception) {
+            $this->logger->alert(sprintf('The file "%s" is missing!', $fileLocation));
+        } catch (FilesystemException | UnableToReadFile $exception) {
+            throw $exception;
+        }
+    }
+
+    public function readFromPath(string $path)
+    {
+        try {
+            if ($this->defaultStorage->fileExists($path)) {
+                $result = $this->defaultStorage->readStream($path);
+                if ($result === false) {
+                    throw new UnableToDeleteFile(sprintf('Couldn\'t read the "%s" file!', $fileLocation));
+                }
+
+                return $result;
+            }
+
+            return null;
+        } catch (FileNotFoundException $exception) {
+            $this->logger->alert(sprintf('The file "%s" is missing!', $fileLocation));
+        } catch (FilesystemException | UnableToReadFile $exception) {
+            throw $exception;
+        }
+    }
+
     public function getRelativeStoragePath(): string
     {
         return $this->parameterBag->get('app.upload_path');
@@ -87,15 +130,15 @@ class FileStorage
         return
             ($withBaseUrl ? $this->parameterBag->get('app.url') : '') . //TODO this will be the s3 base url
             $this->getRelativeStoragePath() . '/' .
-            $fileEntity->getId() .
-            ($withFile ? ('/' . $fileEntity->getOriginalName() . '.' . $fileEntity->getExtension()) : '');
+            $fileEntity->getId() . '/' .
+            ($withFile ? ($fileEntity->getOriginalName() . '.' . $fileEntity->getExtension()) : '');
     }
 
     public function getRealFileLocation(File $fileEntity, bool $withAbsolutePath = true, bool $withFile = true): string
     {
         return
-            ($withAbsolutePath ? $this->getAbsoluteStoragePath() : '') . '/' .//TODO this will be the s3 base url
-            $fileEntity->getId() .
-            ($withFile ? ('/' . $fileEntity->getOriginalName() . '.' . $fileEntity->getExtension()) : '');
+            ($withAbsolutePath ? $this->getAbsoluteStoragePath() . '/'  : '') . //TODO this will be the s3 base url
+            $fileEntity->getId() . '/' .
+            ($withFile ? ( $fileEntity->getOriginalName() . '.' . $fileEntity->getExtension()) : '');
     }
 }

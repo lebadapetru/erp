@@ -3,6 +3,7 @@ import { readLookupProductStatuses } from "resources/js/api/LookupProductStatus"
 import { readVendors } from "resources/js/api/Vendor";
 import { createCategory, readCategories } from "resources/js/api/Category";
 import { createTag, readTags } from "resources/js/api/Tag";
+import { createProduct, readProducts } from "resources/js/api/Product";
 
 const actions = {
   readAndParseVariantOptions: ({ commit }) => {
@@ -73,6 +74,11 @@ const actions = {
       name: tag.text
     })
   },
+  readAndParseProducts: ({commit}) => {
+    return readProducts().then((response) => {
+      commit('setProducts', response.data['hydra:member'])
+    })
+  }
 }
 
 export default actions

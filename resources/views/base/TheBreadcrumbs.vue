@@ -4,7 +4,7 @@
   <!--end::Page Title-->
   <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
   <!--begin::Breadcrumb-->
-  <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
+  <ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm mr-5">
     <li
         v-for="(route, index) in currentRoute.matched"
         :key="index"

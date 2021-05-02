@@ -39,9 +39,17 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 100 }
 
+    Liip\ImagineBundle\Service\FilterService:
+        alias: 'liip_imagine.service.filter'
+
     # symfony will autowire the main collection data provider, resulting in recursion.
     # prevent it by specifying which data provider to use
     App\DataProvider\FileDataProvider:
+        bind:
+            $collectionDataProvider: '@api_platform.doctrine.orm.default.collection_data_provider'
+            $itemDataProvider: '@api_platform.doctrine.orm.default.item_data_provider'
+
+    App\DataProvider\ProductDataProvider:
         bind:
             $collectionDataProvider: '@api_platform.doctrine.orm.default.collection_data_provider'
             $itemDataProvider: '@api_platform.doctrine.orm.default.item_data_provider'

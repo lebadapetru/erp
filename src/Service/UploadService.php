@@ -58,7 +58,7 @@ class UploadService
 
     private function saveImage(File $fileEntity)
     {
-        $this->fileStorage->upload(
+        $this->fileStorage->write(
             $fileEntity
         );
         $image = new \Imagick(

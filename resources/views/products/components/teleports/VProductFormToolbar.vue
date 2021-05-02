@@ -1,38 +1,41 @@
 <template>
   <teleport
-      v-if="targetForm"
-      to="#toolbar"
+    v-if="targetForm"
+    to="#toolbar"
   >
     <!--begin::Button-->
-    <a href="#" class="btn btn-default font-weight-bold">
+    <router-link
+      :to="{name: 'Products'}"
+      class="btn btn-default font-weight-bold"
+    >
       <i class="ki ki-long-arrow-back icon-xs"></i>
       Back
-    </a>
+    </router-link>
     <!--end::Button-->
     <!--begin::Dropdown-->
     <div
-        class="btn-group ml-2"
-        :class="{'show': isSubmitDropdownVisible}"
+      class="btn-group ml-2"
+      :class="{'show': isSubmitDropdownVisible}"
     >
       <button
-          type="button"
-          class="btn btn-primary font-weight-bold"
-          @click="onSave()"
+        type="button"
+        class="btn btn-primary font-weight-bold"
+        @click="onSave()"
       >Save Product
       </button>
       <button
-          type="button"
-          class="btn btn-primary font-weight-bold dropdown-toggle dropdown-toggle-split"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          :aria-expanded="isSubmitDropdownVisible"
-          @click="toggleSubmitDropdown"
-          id="kt_submit_menu_toggle"
+        type="button"
+        class="btn btn-primary font-weight-bold dropdown-toggle dropdown-toggle-split"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        :aria-expanded="isSubmitDropdownVisible"
+        @click="toggleSubmitDropdown"
+        id="kt_submit_menu_toggle"
       ></button>
       <div
-          class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right"
-          :class="{'show': isSubmitDropdownVisible}"
-          v-click-away="{callback: hideSubmitDropdown, trigger: '#kt_submit_menu_toggle'}"
+        class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right"
+        :class="{'show': isSubmitDropdownVisible}"
+        v-click-away="{callback: hideSubmitDropdown, trigger: '#kt_submit_menu_toggle'}"
       >
         <ul class="navi py-5">
           <li class="navi-item">
@@ -78,8 +81,6 @@ export default {
     }
   },
   setup(props) {
-    console.log(props.targetForm)
-
     const isSubmitDropdownVisible = ref(false)
 
     const toggleSubmitDropdown = () => {
