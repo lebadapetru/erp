@@ -65,6 +65,7 @@ class File
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Groups({"file:read", "file:write"})
+     * TODO rename this to realName, it is more intuitive
      */
     private string $originalName;
 
@@ -152,12 +153,12 @@ class File
 
     const ACCEPTED_MIME_TYPES = [
         'images' => [
-            'image/jpg',
-            'image/jpeg',
-            'image/png',
-            'image/gif',
-            'image/svg+xml',
-            'image/webp',
+            'jpg' => 'image/jpg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'svg' => 'image/svg+xml',
+            'webp' => 'image/webp',
         ],
         'videos' => [
             'video/mp4',
@@ -415,4 +416,13 @@ class File
         return $this;
     }
 
+    public function getFileFullDisplayName(): string
+    {
+        return $this->displayName . '.' . $this->extension;
+    }
+
+    public function getFileFullOriginalName(): string
+    {
+        return $this->originalName . '.' . $this->extension;
+    }
 }

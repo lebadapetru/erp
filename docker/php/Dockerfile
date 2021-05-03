@@ -48,6 +48,8 @@ RUN apk add --no-cache \
     ffmpeg \
     perl-image-exiftool \
     imagemagick \
+    optipng \
+    jpegoptim \
 && docker-php-ext-install \
     pdo_pgsql \
     pgsql \

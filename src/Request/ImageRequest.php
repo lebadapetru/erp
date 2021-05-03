@@ -19,10 +19,18 @@ class ImageRequest extends BaseRequest
                     ]
                 ])
             ],
-            //TODO regex for x and 1200x800 cases
-            'size' => new Assert\NotBlank(),
-            //TODO change output name and file type based on extension
-            'name' => new Assert\NotBlank()
+            'size' => [
+                new Assert\NotBlank(),
+                new Assert\Regex([
+                    'pattern' => '/^(\d+)?x(\d+)?$/i'
+                ]),
+            ],
+            'name' => [
+                new Assert\NotBlank(),
+                new Assert\Regex([
+                    'pattern' => '/^[\w,\s-]+\.[A-Za-z]{3,4}$/'
+                ])
+            ],
         ];
     }
 }

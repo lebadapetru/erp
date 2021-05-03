@@ -10,6 +10,7 @@ use App\Service\FileStorage;
 use App\Service\ImageService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ImageController extends AbstractController
@@ -23,9 +24,20 @@ class ImageController extends AbstractController
         FileStorage $fileStorage,
     )
     {
+        //TODO png filter takes too long, find why?
+        //TODO add webp, gif, svg support
         $data = $request->all();
 
-        $size = explode('x', $data['size']);
+        $imageName = pathinfo($data['name'], PATHINFO_FILENAME);
+        $imageExtension = pathinfo($data['name'], PATHINFO_EXTENSION);
+        $filter = match ($imageExtension) {
+            'jpg', 'jpeg' => 'jpg',
+            'png' => 'png',
+            default => throw new BadRequestHttpException('The image format is not supported.'),
+        };
+
+        preg_match('/^(\d+)?x(\d+)?$/i', $data['size'], $size);
+        unset($size[0]);
         $config = [
             'scale' => [
                 'dim' => $size
@@ -33,7 +45,7 @@ class ImageController extends AbstractController
         ];
         $entityManager = $this->getDoctrine()->getManager();
         $file = $entityManager->getRepository(File::class)->find($data['id']);
-        $path = $imageService->getPath($file, 'my_thumb', $config);
+        $path = $imageService->getPath($file, $filter, $config);
 
         return new StreamedResponse(
             function () use ($path, $file, $fileStorage) {
@@ -44,7 +56,8 @@ class ImageController extends AbstractController
             },
             200,
             [
-                'Content-Type' => $file->getMimeType()
+                'Content-Type' => File::ACCEPTED_MIME_TYPES['images'][$imageExtension]
+
             ]
         );
     }
