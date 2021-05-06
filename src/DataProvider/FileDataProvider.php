@@ -10,9 +10,7 @@ use ApiPlatform\Core\DataProvider\DenormalizedIdentifiersAwareItemDataProviderIn
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Entity\File;
-use App\Service\FileStorage;
 use App\Service\ImageService;
-use Liip\ImagineBundle\Service\FilterService;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class FileDataProvider implements ContextAwareCollectionDataProviderInterface, RestrictedDataProviderInterface, DenormalizedIdentifiersAwareItemDataProviderInterface
@@ -20,9 +18,7 @@ class FileDataProvider implements ContextAwareCollectionDataProviderInterface, R
     public function __construct(
         private CollectionDataProviderInterface $collectionDataProvider,
         private ItemDataProviderInterface $itemDataProvider,
-        private FilterService $filterService,
         private ParameterBagInterface $parameterBag,
-        private FileStorage $fileStorage,
         private ImageService $imageService,
     ) {}
     
@@ -32,9 +28,8 @@ class FileDataProvider implements ContextAwareCollectionDataProviderInterface, R
         $files = $this->collectionDataProvider->getCollection($resourceClass, $operationName, $context);
         foreach ($files as $file) {
             $url = $this->imageService->getUrl($file);
-            dd($url);
-            $file->setPath(
-              $this->parameterBag->get('app.url') . $file->getPath()
+            $file->setUrl(
+              $this->parameterBag->get('app.url') . $url
             );
         }
 
@@ -50,9 +45,10 @@ class FileDataProvider implements ContextAwareCollectionDataProviderInterface, R
             return null;
         }
 
-        /*$file->setPath(
-            $this->parameterBag->get('app.url') . $file->getPath()
-        );*/
+        $url = $this->imageService->getUrl($file);
+        $file->setUrl(
+            $this->parameterBag->get('app.url') . $url
+        );
 
         return $file;
     }

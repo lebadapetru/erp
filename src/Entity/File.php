@@ -64,14 +64,13 @@ class File
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Groups({"file:read", "file:write"})
-     * TODO rename this to realName, it is more intuitive
+     * @Groups({"file:read"})
      */
-    private string $originalName;
+    private string $realName;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Groups({"file:read"})
+     * @Groups({"file:read", "file:write"})
      */
     private string $displayName;
 
@@ -114,7 +113,7 @@ class File
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url()
-     * @Groups({"file:read"})
+     * @Groups({"file:read", "file:write"})
      */
     private ?string $mediaUrl;
 
@@ -138,11 +137,6 @@ class File
      */
     private ?\DateTimeInterface $createdAt;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Product::class, mappedBy="files")
-     */
-    private $products;
-
     private mixed $uploadedFile;
 
     /**
@@ -150,6 +144,16 @@ class File
      * @ORM\JoinColumn(nullable=false)
      */
     private $status;
+
+    /**
+     * @Groups({"file:read"})
+     */
+    private ?string $url = null;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ProductFile::class, mappedBy="files")
+     */
+    private $productFiles;
 
     const ACCEPTED_MIME_TYPES = [
         'images' => [
@@ -183,8 +187,8 @@ class File
 
     public function __construct(UuidV4 $id = null)
     {
-        $this->products = new ArrayCollection();
         $this->id = $id ?: UuidV4::v4();
+        $this->productFiles = new ArrayCollection();
     }
 
     public function getId(): UuidV4
@@ -192,14 +196,14 @@ class File
         return $this->id;
     }
 
-    public function getOriginalName(): ?string
+    public function getRealName(): ?string
     {
-        return $this->originalName;
+        return $this->realName;
     }
 
-    public function setOriginalName(string $originalName): self
+    public function setRealName(string $realName): self
     {
-        $this->originalName = $originalName;
+        $this->realName = $realName;
 
         return $this;
     }
@@ -324,34 +328,6 @@ class File
         return $this;
     }
 
-    /**
-     * @return Collection|Product[]
-     */
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
-
-    public function addProduct(Product $product): self
-    {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-            $product->addFile($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): self
-    {
-        if ($this->products->contains($product)) {
-            $this->products->removeElement($product);
-            $product->removeFile($this);
-        }
-
-        return $this;
-    }
-
     public function getMediaUrl(): ?string
     {
         return $this->mediaUrl;
@@ -421,8 +397,50 @@ class File
         return $this->displayName . '.' . $this->extension;
     }
 
-    public function getFileFullOriginalName(): string
+    public function getFileFullRealName(): string
     {
-        return $this->originalName . '.' . $this->extension;
+        return $this->realName . '.' . $this->extension;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(string $url): self
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProductFile[]
+     */
+    public function getProductFiles(): Collection
+    {
+        return $this->productFiles;
+    }
+
+    public function addProductFile(ProductFile $productFile): self
+    {
+        if (!$this->productFiles->contains($productFile)) {
+            $this->productFiles[] = $productFile;
+            $productFile->setFiles($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductFile(ProductFile $productFile): self
+    {
+        if ($this->productFiles->removeElement($productFile)) {
+            // set the owning side to null (unless already changed)
+            if ($productFile->getFiles() === $this) {
+                $productFile->setFiles(null);
+            }
+        }
+
+        return $this;
     }
 }

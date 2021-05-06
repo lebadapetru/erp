@@ -18,11 +18,11 @@ class ImageController extends AbstractController
     /**
      * @Route("/image/{id}/scale/{size}/{name}", name="image", methods={"GET"})
      */
-    public function index(
+    public function scale(
         ImageRequest $request,
         ImageService $imageService,
         FileStorage $fileStorage,
-    )
+    ): StreamedResponse
     {
         //TODO png filter takes too long, find why?
         //TODO add webp, gif, svg support
@@ -33,6 +33,7 @@ class ImageController extends AbstractController
         $filter = match ($imageExtension) {
             'jpg', 'jpeg' => 'jpg',
             'png' => 'png',
+            'webp' => 'webp',
             default => throw new BadRequestHttpException('The image format is not supported.'),
         };
 

@@ -8,6 +8,7 @@ use App\Entity\LookupFileStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToDeleteFile;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -19,6 +20,8 @@ class UploadService
         private SluggerInterface $slugger,
         private EntityManagerInterface $entityManager,
         private FileStorage $fileStorage,
+        private ParameterBagInterface $parameterBag,
+        private ImageService $imageService,
     ) {}
 
     public function save(array $data): File
@@ -89,12 +92,17 @@ class UploadService
         //this one does strtolower, sanitization
         $fileName = $this->slugger->slug($originalFileName) . '-' . uniqid();
         $file = new File($id);
-        $file->setOriginalName($fileName);
+        $file->setRealName($fileName);
         $file->setDisplayName($fileName);
         $file->setExtension($temporaryFile->guessExtension());
         $file->setMimeType($temporaryFile->getMimeType());
         $file->setSize($temporaryFile->getSize());
         $file->setUploadedFile($temporaryFile);
+
+        $url = $this->imageService->getUrl($file);
+        $file->setUrl(
+            $this->parameterBag->get('app.url') . $url
+        );
 
         //set to processing
         $file->setStatus(

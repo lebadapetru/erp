@@ -32,3 +32,8 @@ liip_imagine:
             filters:
             post_processors:
                 jpegoptim: { strip_all: true, max: 70, progressive: true }
+
+        webp:
+            format: webp
+            quality: 70
+

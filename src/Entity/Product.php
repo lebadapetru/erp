@@ -104,12 +104,6 @@ class Product
     private ?\DateTimeInterface $createdAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity=File::class, inversedBy="products")
-     * @Groups({"product: read", "product: write"})
-     */
-    private $files;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="products")
      * @Groups({"product: read", "product: write"})
      */
@@ -166,13 +160,19 @@ class Product
      */
     private bool $isPhysicalProduct = true;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ProductFile::class, mappedBy="products")
+     * @Groups({"product: read", "product: write"})
+     */
+    private $productFiles;
+
     public function __construct(UuidV4 $id = null)
     {
-        $this->files = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->variants = new ArrayCollection();
         $this->id = $id ?: UuidV4::v4();
+        $this->productFiles = new ArrayCollection();
     }
 
     public function getId(): UuidV4
@@ -284,32 +284,6 @@ class Product
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|File[]
-     */
-    public function getFiles(): Collection
-    {
-        return $this->files;
-    }
-
-    public function addFile(File $file): self
-    {
-        if (!$this->files->contains($file)) {
-            $this->files[] = $file;
-        }
-
-        return $this;
-    }
-
-    public function removeFile(File $file): self
-    {
-        if ($this->files->contains($file)) {
-            $this->files->removeElement($file);
-        }
 
         return $this;
     }
@@ -460,6 +434,36 @@ class Product
     public function setIsPhysicalProduct(bool $isPhysicalProduct): self
     {
         $this->isPhysicalProduct = $isPhysicalProduct;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProductFile[]
+     */
+    public function getProductFiles(): Collection
+    {
+        return $this->productFiles;
+    }
+
+    public function addProductFile(ProductFile $productFile): self
+    {
+        if (!$this->productFiles->contains($productFile)) {
+            $this->productFiles[] = $productFile;
+            $productFile->setProducts($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductFile(ProductFile $productFile): self
+    {
+        if ($this->productFiles->removeElement($productFile)) {
+            // set the owning side to null (unless already changed)
+            if ($productFile->getProducts() === $this) {
+                $productFile->setProducts(null);
+            }
+        }
 
         return $this;
     }

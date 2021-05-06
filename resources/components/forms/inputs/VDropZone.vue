@@ -52,6 +52,10 @@ export default {
     const el = ref(null)
     const files = ref([])
 
+    const mimeTypes = Object.values(app.fileConfiguration.mimeTypes).map(type=> {
+      return Object.values(type)
+    }).flat().join(',')
+
     const {
       value: inputValue,
       errorMessage,
@@ -79,7 +83,7 @@ export default {
         addRemoveLinks: true,
         autoQueue: true,
         autoProcessQueue: true,
-        acceptedFiles: Object.values(app.fileConfiguration.mimeTypes).flat().join(','),
+        acceptedFiles: mimeTypes,
         params: function (file, xhr) { //send additional params beside the file object
           console.log(file)
           console.log(xhr)
@@ -93,7 +97,9 @@ export default {
         },
         success: function (file, response) {
           //TODO why does it come as string instead of json
-          files.value.push(JSON.parse(response)['@id'])
+          files.value.push({
+            files: JSON.parse(response)['@id']
+          })
           //TODO save the whole response object for each file, into vuex state
           handleInput(files)
         },
