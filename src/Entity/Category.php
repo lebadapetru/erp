@@ -32,7 +32,7 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"category:read", "category:write"})
+     * @Groups({"category:read", "category:write", "product:read"})
      */
     private string $title;
 

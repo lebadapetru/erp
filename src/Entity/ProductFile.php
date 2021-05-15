@@ -5,8 +5,8 @@ namespace App\Entity;
 use App\Repository\ProductFileRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Uid\UuidV4;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
  * @ORM\Entity(repositoryClass=ProductFileRepository::class)
@@ -27,18 +27,21 @@ class ProductFile
 
     /**
      * @ORM\ManyToOne(targetEntity=File::class, inversedBy="productFiles")
-     * @Groups({"product: read", "product: write"})
+     * @Groups("product:read", "product:write")
+     * @SerializedName("file")
      */
     private $files;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups("product:read", "product:write")
      */
     private ?int $position;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
+     * @Groups("product:read")
      */
     private \DateTimeInterface $addedAt;
 

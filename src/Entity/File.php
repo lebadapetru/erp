@@ -15,7 +15,7 @@ use App\Controller\File\CreateFileAction;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"={"file:read"}},
+ *     normalizationContext={"skip_null_values" = false, "groups"={"file:read"}},
  *     denormalizationContext={"groups"={"file:write"}},
  *     attributes={},
  *     collectionOperations={
@@ -64,80 +64,80 @@ class File
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Groups({"file:read"})
+     * @Groups({"file:read", "product:read"})
      */
     private string $realName;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Groups({"file:read", "file:write"})
+     * @Groups({"file:read", "file:write", "product:read"})
      */
     private string $displayName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"file:read"})
+     * @Groups({"file:read", "product:read"})
      */
     private ?string $extension;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"file:read"})
+     * @Groups({"file:read", "product:read"})
      */
     private ?string $mimeType;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"file:read"})
+     * @Groups({"file:read", "product:read"})
      */
     private ?int $size;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"file:read"})
+     * @Groups({"file:read", "product:read"})
      */
     private ?float $width;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Groups({"file:read"})
+     * @Groups({"file:read", "product:read"})
      */
     private ?float $height;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"file:read"})
+     * @Groups({"file:read", "product:read"})
      */
     private ?string $path;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url()
-     * @Groups({"file:read", "file:write"})
+     * @Groups({"file:read", "file:write", "product:read"})
      */
     private ?string $mediaUrl;
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
-     * @Groups({"file:read"})
+     * @Groups({"file:read", "product:read"})
      */
     private ?\DateTimeInterface $deletedAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
-     * @Groups({"file:read"})
+     * @Groups({"file:read", "product:read"})
      */
     private ?\DateTimeInterface $updatedAt;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
-     * @Groups({"file:read"})
+     * @Groups({"file:read", "product:read"})
      */
     private ?\DateTimeInterface $createdAt;
 
-    private mixed $uploadedFile;
+    private mixed $uploadedFile = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=LookupFileStatus::class, inversedBy="files")
@@ -146,12 +146,12 @@ class File
     private $status;
 
     /**
-     * @Groups({"file:read"})
+     * @Groups({"file:read", "product:read"})
      */
     private ?string $url = null;
 
     /**
-     * @ORM\OneToMany(targetEntity=ProductFile::class, mappedBy="files")
+     * @ORM\OneToMany(targetEntity=ProductFile::class, mappedBy="files", cascade="persist")
      */
     private $productFiles;
 

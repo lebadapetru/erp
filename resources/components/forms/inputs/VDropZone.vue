@@ -98,7 +98,8 @@ export default {
         success: function (file, response) {
           //TODO why does it come as string instead of json
           files.value.push({
-            files: JSON.parse(response)['@id']
+            file: JSON.parse(response)['@id'],
+            position: null
           })
           //TODO save the whole response object for each file, into vuex state
           handleInput(files)
