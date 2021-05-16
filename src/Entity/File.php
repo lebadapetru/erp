@@ -12,9 +12,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Controller\File\CreateFileAction;
+use App\Dto\FileOutput;
 
 /**
  * @ApiResource(
+ *     output=FileOutput::class,
  *     normalizationContext={"skip_null_values" = false, "groups"={"file:read"}},
  *     denormalizationContext={"groups"={"file:write"}},
  *     attributes={},
