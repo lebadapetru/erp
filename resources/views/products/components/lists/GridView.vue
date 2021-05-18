@@ -4,7 +4,7 @@
     v-for="product in products"
     :key="product['@id']"
   >
-    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
       <ProductBlock
         v-if="product"
         :product="product"
