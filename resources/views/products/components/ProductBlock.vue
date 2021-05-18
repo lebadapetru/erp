@@ -85,15 +85,19 @@
         <!--end::Pic-->
         <!--begin::Title-->
         <div class="d-flex flex-column">
-          <a href="#" class="text-dark font-weight-bold text-hover-primary font-size-h4 mb-0">Air B</a>
+          <a href="#" class="text-dark font-weight-bold text-hover-primary font-size-h4 mb-0">
+            {{ product.title }}
+          </a>
           <span class="text-muted font-weight-bold">Head of Development</span>
         </div>
         <!--end::Title-->
       </div>
       <!--end::User-->
       <!--begin::Desc-->
-      <p class="mb-7">I distinguish three main text objectives. First, your objective
-        <a href="#" class="text-primary pr-1">#xrs-54pq</a></p>
+      <p class="mb-7">
+        {{ product.shortDescription }}
+        <a href="#" class="text-primary pr-1">...</a>
+      </p>
       <!--end::Desc-->
       <!--begin::Info-->
       <div class="mb-7">

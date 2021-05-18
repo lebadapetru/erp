@@ -17,6 +17,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
 use Symfony\Component\Serializer\Annotation\SerializedName;
+use function Symfony\Component\String\b;
 use Symfony\Component\Uid\UuidV4;
 
 /**
@@ -49,120 +50,125 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      */
     private string $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      */
     private ?string $description;
 
     /**
+     * @Groups({"product:read"})
+     */
+    private ?string $shortDescription;
+
+    /**
      * @ORM\Column(type="boolean")
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      */
     private bool $isPublic = true;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      */
     private ?string $sku;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      */
     private int $quantity = 0;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      */
     private string $originalPrice = '0.00';
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
-     * @Groups("product:read")
+     * @Groups({"product:read"})
      */
     private ?\DateTimeInterface $deletedAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
-     * @Groups("product:read")
+     * @Groups({"product:read"})
      */
     private ?\DateTimeInterface $updatedAt;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
-     * @Groups("product:read")
+     * @Groups({"product:read"})
      */
     private ?\DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="smallint")
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      */
     private int $discount = 0;
 
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="products")
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      */
     private $categories;
 
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="products")
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      */
     private $tags;
 
     /**
      * @ORM\OneToMany(targetEntity=Variant::class, mappedBy="product", orphanRemoval=true)
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      */
     private $variants;
 
     /**
      * @ORM\ManyToOne(targetEntity=LookupProductStatus::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      */
     private $status;
 
     /**
      * @ORM\ManyToOne(targetEntity=Vendor::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      */
     private $vendor;
 
     /**
      * TODO in kg for now
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      */
     private ?int $weight;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      */
     private bool $isContinueSellingOutOfStock = false;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      */
     private bool $isPhysicalProduct = true;
 
     /**
      * @ORM\OneToMany(targetEntity=ProductFile::class, mappedBy="products", cascade="persist")
-     * @Groups("product:read", "product:write")
+     * @Groups({"product:read", "product:write"})
      * @SerializedName("files")
      */
     private $productFiles;
@@ -203,6 +209,11 @@ class Product
         $this->description = $description;
 
         return $this;
+    }
+
+    public function getShortDescription(): ?string
+    {
+        return b($this->description)->slice(0, 128);
     }
 
     public function getIsPublic(): ?bool

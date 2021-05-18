@@ -22,11 +22,13 @@ class ProductFile
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="productFiles")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $products;
 
     /**
      * @ORM\ManyToOne(targetEntity=File::class, inversedBy="productFiles")
+     * @ORM\JoinColumn(nullable=false)
      * @Groups("product:read", "product:write")
      * @SerializedName("file")
      */
