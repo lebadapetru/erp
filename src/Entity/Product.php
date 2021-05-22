@@ -45,6 +45,7 @@ class Product
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
+     * @Groups({"product:read"})
      */
     private UuidV4 $id;
 

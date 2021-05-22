@@ -5,6 +5,7 @@ import store from './store'
 import "./httpClient"; /*TODO create plugin*/
 import vueClickAway from './assets/js/vendors/plugins/vue-click-away'
 import vuePerfectScrollbar from "./assets/js/vendors/plugins/vue-perfect-scrollbar";
+import 'bootstrap'
 
 createApp(App)
   .use(store)

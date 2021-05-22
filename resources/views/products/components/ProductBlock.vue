@@ -4,60 +4,22 @@
     <!--begin::Body-->
     <div class="card-body pt-4">
       <!--begin::Toolbar-->
-      <div class="d-flex justify-content-between mb-1">
+      <div class="d-flex card-toolbar justify-content-between mb-4">
         <div class="dropdown dropdown-inline" data-toggle="tooltip" title="Quick actions" data-placement="left">
           <a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown"
              aria-haspopup="true" aria-expanded="false">
             <i class="ki ki-bold-more-hor"></i>
           </a>
-          <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+          <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
             <!--begin::Navigation-->
             <ul class="navi navi-hover">
-              <li class="navi-header font-weight-bold py-4">
-                <span class="font-size-lg">Choose Label:</span>
-                <i class="flaticon2-information icon-md text-muted" data-toggle="tooltip" data-placement="right"
-                   title="Click to learn more..."></i>
-              </li>
-              <li class="navi-separator mb-3 opacity-70"></li>
               <li class="navi-item">
-                <a href="#" class="navi-link">
-																		<span class="navi-text">
-																			<span class="label label-xl label-inline label-light-success">Customer</span>
-																		</span>
-                </a>
-              </li>
-              <li class="navi-item">
-                <a href="#" class="navi-link">
-																		<span class="navi-text">
-																			<span class="label label-xl label-inline label-light-danger">Partner</span>
-																		</span>
-                </a>
-              </li>
-              <li class="navi-item">
-                <a href="#" class="navi-link">
-																		<span class="navi-text">
-																			<span class="label label-xl label-inline label-light-warning">Suplier</span>
-																		</span>
-                </a>
-              </li>
-              <li class="navi-item">
-                <a href="#" class="navi-link">
-																		<span class="navi-text">
-																			<span class="label label-xl label-inline label-light-primary">Member</span>
-																		</span>
-                </a>
-              </li>
-              <li class="navi-item">
-                <a href="#" class="navi-link">
-																		<span class="navi-text">
-																			<span class="label label-xl label-inline label-light-dark">Staff</span>
-																		</span>
-                </a>
-              </li>
-              <li class="navi-separator mt-3 opacity-70"></li>
-              <li class="navi-footer py-4">
-                <a class="btn btn-clean font-weight-bold btn-sm" href="#">
-                  <i class="ki ki-plus icon-sm"></i>Add new</a>
+                <router-link :to="{name: 'Edit product', params: {id: product.id}}" class="navi-link">
+                  <span class="navi-icon">
+                    <i class="flaticon-edit-1"></i>
+                  </span>
+                  <span class="navi-text">Edit product</span>
+                </router-link>
               </li>
             </ul>
             <!--end::Navigation-->
@@ -100,13 +62,11 @@
         <!--begin::Review-->
         <div class="d-flex justify-content-center mb-4">
           <div class="mr-1">
-            <i class="fas fa-star" style="color: #f9bf3b;" />
-            <i class="fas fa-star" style="color: #f9bf3b;" />
-            <i class="fas fa-star" style="color: #f9bf3b;" />
-            <i class="fas fa-star" style="color: #f9bf3b;" />
-            <i class="fas fa-star-half" style="color: #f9bf3b;" />
+            <div class="stars"
+                 :style="`--rating: ${rating};`"
+            />
           </div>
-          <span class="mr-2">{{ (Math.random() * 5).toFixed(2) }}</span>
+          <span class="mr-2">{{ rating }}</span>
           <span class="mr-2">({{ Math.ceil(Math.random() * 300) }})</span>
         </div>
         <!--end::Review-->
@@ -135,7 +95,7 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 
 export default {
   name: "ProductBlock",
@@ -146,23 +106,18 @@ export default {
     }
   },
   setup(props) {
-    console.log(props.product)
-    console.log(props.product.originalPrice)
-    console.log(props.product.discount)
-    console.log(props.product.discount/100)
-    console.log((props.product.originalPrice - (props.product.originalPrice * (props.product.discount/100))))
     return {
       thumbnail: (url) => {
         return url.replace("{widthxheight}", '250x')
       },
       reducedPrice: computed(() => {
-        return (props.product.originalPrice - (props.product.originalPrice * (props.product.discount/100)))
-      })
+        return (props.product.originalPrice - (props.product.originalPrice * (props.product.discount / 100)))
+      }),
+      rating: (Math.random() * 5).toFixed(2)
     }
   }
 }
 </script>
 
 <style scoped>
-
 </style>

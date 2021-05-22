@@ -53,7 +53,7 @@ import TheHeader from "./views/base/TheHeader";
 import TheSubHeader from "./views/base/TheSubHeader";
 import TheFooter from "./views/base/TheFooter";
 import TheUserPanel from "./views/base/TheUserPanel";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -67,6 +67,12 @@ export default {
   },
   setup() {
     const store = useStore()
+
+    onMounted(() => {
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+    })
 
     return {
       isOverlayVisible: computed(() => store.state.globals.isOverlayVisible)

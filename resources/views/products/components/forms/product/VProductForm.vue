@@ -59,6 +59,12 @@ export default {
     VProductStatusAndVisibilitySection,
     VOrganizationSection,
   },
+  props: {
+    id: {
+      type: String,
+      required: false
+    }
+  },
   setup() {
     const productForm = ref(null)
 
