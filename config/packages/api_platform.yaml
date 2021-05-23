@@ -6,7 +6,7 @@ api_platform:
     swagger:
         versions: [3]
     defaults:
-        pagination_items_per_page: 30
+        pagination_items_per_page: 32
         items_per_page_parameter_name: 'itemsPerPage'
         pagination_client_items_per_page: true
     formats:

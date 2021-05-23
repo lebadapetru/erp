@@ -21,6 +21,14 @@
                   <span class="navi-text">Edit product</span>
                 </router-link>
               </li>
+              <li class="navi-item">
+                <router-link :to="{name: 'Delete product', params: {id: product.id}}" class="navi-link">
+                  <span class="navi-icon">
+                    <i class="flaticon-edit-1"></i>
+                  </span>
+                  <span class="navi-text">Delete product</span>
+                </router-link>
+              </li>
             </ul>
             <!--end::Navigation-->
           </div>

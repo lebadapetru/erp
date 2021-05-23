@@ -77,6 +77,7 @@ const actions = {
   readAndParseProducts: ({commit}) => {
     return readProducts().then((response) => {
       commit('setProducts', response.data['hydra:member'])
+      commit('setTotalProducts', response.data['hydra:totalItems'])
     })
   }
 }

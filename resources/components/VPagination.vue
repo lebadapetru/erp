@@ -47,7 +47,8 @@ export default {
     styleClasses: {
       type: String,
       default: ''
-    }
+    },
+
   }
 }
 </script>

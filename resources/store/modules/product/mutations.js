@@ -23,6 +23,7 @@ const mutations = {
   setTagOptions: (state, value) => state.tagOptions = value,
   setTags: (state, value) => state.tags = value,
   setProducts: (state, value) => state.products = value,
+  setTotalProducts: (state, value) => state.totalProducts = value,
 }
 
 
