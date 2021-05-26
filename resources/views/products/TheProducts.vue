@@ -1,9 +1,7 @@
 <template>
   <div v-if="currentRoute.name === 'Products'">
 
-    <div class="row">
-      <GridView />
-    </div>
+    <GridView />
 
     <VProductsToolbar />
   </div>

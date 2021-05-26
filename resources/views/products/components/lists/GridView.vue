@@ -3,17 +3,19 @@
     :style-classes="'mb-8'"
   />
   <!--begin::List-->
-  <template
-    v-for="product in products"
-    :key="product['@id']"
-  >
-    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
-      <ProductBlock
-        v-if="product"
-        :product="product"
-      />
-    </div>
-  </template>
+  <div class="row">
+    <template
+      v-for="product in products"
+      :key="product['@id']"
+    >
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
+        <ProductBlock
+          v-if="product"
+          :product="product"
+        />
+      </div>
+    </template>
+  </div>
   <!--end::List-->
 
   <VPagination />

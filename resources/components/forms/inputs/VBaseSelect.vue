@@ -8,7 +8,14 @@
       onChange
     }"
   >
-    <option value="" disabled selected>{{ placeholder }}</option>
+    <option
+      v-if="placeholder"
+      value=""
+      disabled
+      selected
+    >
+      {{ placeholder }}
+    </option>
     <option
       v-for="(option, index) in options"
       :value="option.value"
@@ -55,7 +62,11 @@ export default {
     name: {
       type: String,
       required: true
-    }
+    },
+    rules: {
+      type: Object,
+      default: undefined
+    },
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
