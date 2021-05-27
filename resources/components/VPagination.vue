@@ -5,45 +5,60 @@
     :class="styleClasses"
   >
     <div class="d-flex flex-wrap mr-3">
-      <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-2 my-1">
+      <button
+        @click="activePage = 1"
+        class="btn btn-icon btn-sm btn-light-primary mr-2 my-1"
+        :disabled="activePage === 1"
+      >
         <i class="ki ki-bold-double-arrow-back icon-xs"></i>
-      </a>
-      <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-2 my-1">
+      </button>
+      <button
+        @click="activePage -= 1"
+        :disabled="activePage === 1"
+        class="btn btn-icon btn-sm btn-light-primary mr-2 my-1"
+      >
         <i class="ki ki-bold-arrow-back icon-xs"></i>
-      </a>
+      </button>
 
       <template
         v-for="page in pages"
         :key="page"
       >
-        <a
+        <button
           @click="activePage = page"
-          href="javascript:;"
           class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1"
           :class="{ active: activePage === page }"
         >
           {{ page }}
-        </a>
+        </button>
       </template>
 
 
-      <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-2 my-1">
+      <button
+        @click="activePage += 1"
+        :disabled="activePage >= totalPages"
+        class="btn btn-icon btn-sm btn-light-primary mr-2 my-1"
+      >
         <i class="ki ki-bold-arrow-next icon-xs"></i>
-      </a>
-      <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-2 my-1">
+      </button>
+      <button
+        @click="activePage = totalPages"
+        :disabled="activePage >= totalPages"
+        class="btn btn-icon btn-sm btn-light-primary mr-2 my-1"
+      >
         <i class="ki ki-bold-double-arrow-next icon-xs"></i>
-      </a>
+      </button>
     </div>
     <div class="d-flex align-items-center">
       <VBaseSelect
         :placeholder="''"
         :style-classes="'form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary'"
         style="width: 75px;"
-        :name="'productsPerPage'"
-        :options="itemsPerPage"
-        v-model="productsPerPage"
+        :name="'itemsPerPage'"
+        :options="itemsPerPageOptions"
+        v-model="itemsPerPage"
       />
-      <span class="text-muted">Displaying {{ productsPerPage }} of {{ totalProducts }} {{ label }}</span>
+      <span class="text-muted">Displaying {{ itemsPerPage }} of {{ totalItems }} {{ label }} in {{ totalPages }} pages</span>
     </div>
   </div>
   <!--end::Pagination-->
@@ -51,7 +66,7 @@
 
 <script>
 import { useStore } from "vuex";
-import { computed, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import VBaseSelect from "resources/components/forms/inputs/VBaseSelect";
 
 export default {
@@ -67,21 +82,24 @@ export default {
     label: {
       type: String,
       default: 'items'
+    },
+    totalItems: {
+      type: Number,
+      required: true
     }
   },
-  setup() {
+  setup(props) {
+    console.log(props.totalItems)
+    let pages = ref([])
     const store = useStore()
-
-    const productsPerPage = computed({
-        get: () => store.getters['product/getProductsPerPage'],
-        set: (value) => store.commit('product/setProductsPerPage', value)
+    const itemsPerPage = computed({
+        get: () => store.getters['globals/getItemsPerPage'],
+        set: (value) => store.commit('globals/setItemsPerPage', value)
       }
     )
-
-    const totalPages = Math.ceil(530 / productsPerPage.value)
-    let pages = []
-    for (let i = 1; i <= (totalPages < 10 ? totalPages : 10); i++) {
-      pages.push(i)
+    const totalPages = computed(() => Math.ceil(props.totalItems / itemsPerPage.value))
+    for (let i = 1; i <= (totalPages.value < 10 ? totalPages.value : 10); i++) {
+      pages.value.push(i)
     }
 
     let activePage = computed({
@@ -90,36 +108,45 @@ export default {
     })
 
     watch(activePage, value => {
-      if (value >= totalPages || value === 1) {
+      if (value >= totalPages.value || value === 1) {
         return
       }
-      let lastPage = pages.slice(-1)[0]
-      let firstPage = pages[0]
+      let lastPage = pages.value.slice(-1)[0]
+      let firstPage = pages.value[0]
 
-      if (value === lastPage && value < totalPages) {
-        for (let i = lastPage + 1; i <= ((lastPage + 4) >= totalPages ? totalPages : (lastPage + 4)); i++) {
-          pages.push(i)
+      //if selected page is the last element in array
+      if (value === lastPage) {
+        //add 4 more elements at the end of the array or as many as totalPages
+        for (let i = lastPage + 1; i <= ((lastPage + 4) >= totalPages.value ? totalPages.value : (lastPage + 4)); i++) {
+          pages.value.push(i)
         }
-        console.log(pages)
-        if(pages.length < 10) {
-          console.log('here')
-          console.log((4-((lastPage+4)-totalPages)))
-          pages.splice(0, (4-((lastPage+4)-totalPages)))
-        } else {
-          pages.splice(0, 4)
-        }
+        //keep the last 10 elements of the array and remove the rest
+        pages.value.reverse().splice(10)
+        pages.value.reverse()
+      //if selected page is the first element in array
       } else if (value === firstPage) {
+        //add 4 more elements at the start of the array or until it reaches 1
         for (let i = firstPage - 1; i >= ((firstPage - 4) <= 1 ? 1 : (firstPage-4)); i--) {
-          pages.unshift(i)
+          pages.value.unshift(i)
         }
-        pages.splice(-4)
+        //keep the first 10 elements of the array and remove the rest
+        pages.value.splice(10)
       }
     })
+
+    watch(itemsPerPage, () => {
+      pages.value = []
+      for (let i = 1; i <= (totalPages.value < 10 ? totalPages.value : 10); i++) {
+        pages.value.push(i)
+      }
+
+      activePage.value = 1
+    })
+
     return {
-      itemsPerPage: store.getters['globals/getItemsPerPage'],
-      productsPerPage,
-      //totalProducts: computed(() => store.getters['product/getTotalProducts']),
-      totalProducts: 530,
+      itemsPerPageOptions: store.getters['globals/getItemsPerPageOptions'],
+      itemsPerPage,
+      totalPages,
       pages,
       activePage,
     }

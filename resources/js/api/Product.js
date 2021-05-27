@@ -6,9 +6,11 @@ const createProduct = (product) => {
   return httpClient.post(url, product)
 }
 
-const readProducts = () => {
-  console.log('readProducts')
-  return httpClient.get(url)
+const readProducts = (filters) => {
+  console.log('readProducts', filters)
+  return httpClient.get(url, {
+    params: filters
+  })
 }
 
 export {

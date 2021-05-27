@@ -24,7 +24,6 @@ const mutations = {
   setTags: (state, value) => state.tags = value,
   setProducts: (state, value) => state.products = value,
   setTotalProducts: (state, value) => state.totalProducts = value,
-  setProductsPerPage: (state, value) => state.productsPerPage = value,
 }
 
 

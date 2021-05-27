@@ -24,7 +24,6 @@ const getters = {
   getTags: (state) => state.tags,
   getProducts: (state) => state.products,
   getTotalProducts: (state) => state.totalProducts,
-  getProductsPerPage: (state) => state.productsPerPage,
 }
 
 export default getters

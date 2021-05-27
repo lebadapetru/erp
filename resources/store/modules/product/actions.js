@@ -74,8 +74,8 @@ const actions = {
       name: tag.text
     })
   },
-  readAndParseProducts: ({commit}) => {
-    return readProducts().then((response) => {
+  readAndParseProducts: ({ commit }, filters) => {
+    return readProducts(filters).then((response) => {
       commit('setProducts', response.data['hydra:member'])
       commit('setTotalProducts', response.data['hydra:totalItems'])
     })

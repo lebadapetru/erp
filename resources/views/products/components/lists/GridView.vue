@@ -1,6 +1,8 @@
 <template>
   <VPagination
+    v-if="totalProducts"
     :style-classes="'mb-8'"
+    :total-items="totalProducts"
   />
   <!--begin::List-->
   <div class="row">
@@ -18,7 +20,10 @@
   </div>
   <!--end::List-->
 
-  <VPagination />
+  <VPagination
+    v-if="totalProducts"
+    :total-items="totalProducts"
+  />
 
 </template>
 
@@ -27,6 +32,7 @@ import { useStore } from "vuex";
 import { computed } from "vue";
 import VPagination from "resources/components/VPagination";
 import ProductBlock from "resources/views/products/components/ProductBlock";
+import { usePagination } from "resources/views/products/js/pagination";
 
 export default {
   name: "GridView",
@@ -36,16 +42,15 @@ export default {
   },
   setup() {
     const store = useStore()
-
-    store.dispatch('product/readAndParseProducts')
-
+    const pagination = usePagination()
+    console.log(pagination.totalProducts)
     const products = computed(() => store.getters['product/getProducts'])
-    const totalProducts = computed(() => store.getters['product/getTotalProducts'])
 
     console.log(products)
 
     return {
-      products
+      products,
+      totalProducts: pagination.totalProducts
     }
   }
 }

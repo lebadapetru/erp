@@ -26,7 +26,6 @@ const state = () => ({
   files: [],
   products: [],
   totalProducts: 0,
-  productsPerPage: 32,
 })
 
 export default state
