@@ -13,7 +13,7 @@ import {
   onUnmounted,
   watch,
   ref,
-  nextTick
+  nextTick, onUpdated
 } from 'vue'
 import 'select2'
 import isEmpty from 'lodash/isEmpty'
@@ -62,9 +62,11 @@ export default {
   },
   setup(props, {emit}) {
     const el = ref(null)
-
+    console.log('created select2' + props.name)
+    console.log(props.options)
     const createSelect2 = () => {
       $(document).ready(function () {
+        console.log('init select2' + props.name)
         console.log(props.options)
         console.log(isEmpty(props.options))
         $(el.value).select2({
@@ -75,6 +77,7 @@ export default {
           tokenSeparators: props.hasMultiple ? [',', ' '] : null,
           data: props.options,
           createTag: function (params) {
+            console.log('create tag')
             /*TODO creation constraints based on user permissions*/
             let term = (params.term).trim();
 
@@ -89,6 +92,8 @@ export default {
             }
           },
         }).on('select2:select', function (event) {
+          console.log('select' + props.name)
+          console.log(event)
           if (event.params.data?.newTag && props.addItemCallback !== undefined) {
             Swal.fire({
               title: 'Are you sure?',
@@ -107,6 +112,7 @@ export default {
             }).then((result) => {
               if (result.isConfirmed) {
                 props.addItemCallback(event.params.data).then((response) => {
+                  console.log('itemAdded' + response + props.name)
                   console.log(response)
                   emit(`itemAdded`)
                 })
@@ -119,12 +125,8 @@ export default {
       })
     }
 
-    onMounted(() => {
-      /*TODO there is a known issue, select2 initialize before the props.options has been received when cache is invalidated*/
-      createSelect2()
-    })
-
     onUnmounted(() => {
+      alert('unonmounted')
       $(el.value)
           .off()
           .val(null)
@@ -132,8 +134,11 @@ export default {
           .select2("destroy")
     })
 
-    watch(() => props.options, (newValue, oldValue) => {
+    watch(() => props.options, (options) => {
+      /*TODO there is a known issue, select2 initialize before the props.options has been received when cache is invalidated*/
+      //TODO replace this with bootstrap vue 3 multiselect
       if ($(el.value).hasClass("select2-hidden-accessible")) {
+        console.log(options)
         $(el.value)
             .off()
             .val(null)
@@ -141,6 +146,9 @@ export default {
             .select2("destroy")
       }
       createSelect2()
+      $(document).ready(function () {
+        $(el.value).val(['dsa']).trigger('change')
+      })
     });
 
 

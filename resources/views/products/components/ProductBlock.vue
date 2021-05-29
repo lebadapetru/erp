@@ -61,7 +61,7 @@
         <!--end::Pic-->
         <!--begin::Title-->
         <div class="d-flex justify-content-center mb-4 overflow-hidden" style="max-height: 50px;">
-          <a href="#" class="text-dark font-weight-bold text-hover-primary font-size-h4 mb-0">
+          <a href="#" class="text-dark font-weight-bolder text-hover-primary mb-0">
             {{ product.title }}
           </a>
         </div>

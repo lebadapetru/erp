@@ -1,6 +1,5 @@
 <template>
   <VSelect2
-      v-if="categoryOptions"
       :name="'categories'"
       :placeholder="`Search for categories`"
       :has-tags="true"
@@ -34,14 +33,19 @@ export default {
       await store.dispatch("product/parseAndCreateCategoryOption", category)
     }
 
+    let categoryOptions = computed(() => store.getters["product/getCategoryOptions"])
+
+    console.log('select categories')
+    console.log(categoryOptions)
+
     return {
-      categoryOptions: computed(() => store.getters["product/getCategoryOptions"]),
       categories: computed({
         get: () => store.getters["product/getCategories"],
         set: (value) => store.commit("product/setCategories", value),
       }),
       readAndParseCategoryOptions,
       parseAndCreateCategoryOption,
+      categoryOptions: categoryOptions,
     }
   }
 }

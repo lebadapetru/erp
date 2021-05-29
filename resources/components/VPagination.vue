@@ -7,15 +7,17 @@
     <div class="d-flex flex-wrap mr-3">
       <button
         @click="activePage = 1"
-        class="btn btn-icon btn-sm btn-light-primary mr-2 my-1"
+        class="btn btn-icon btn-sm mr-2 my-1"
+        :class="[(activePage === 1) ? 'btn-secondary' : 'btn-light-primary']"
         :disabled="activePage === 1"
       >
         <i class="ki ki-bold-double-arrow-back icon-xs"></i>
       </button>
       <button
         @click="activePage -= 1"
+        class="btn btn-icon btn-sm mr-2 my-1"
+        :class="[(activePage === 1) ? 'btn-secondary' : 'btn-light-primary']"
         :disabled="activePage === 1"
-        class="btn btn-icon btn-sm btn-light-primary mr-2 my-1"
       >
         <i class="ki ki-bold-arrow-back icon-xs"></i>
       </button>
@@ -36,15 +38,17 @@
 
       <button
         @click="activePage += 1"
+        class="btn btn-icon btn-sm mr-2 my-1"
+        :class="[(activePage >= totalPages) ? 'btn-secondary' : 'btn-light-primary']"
         :disabled="activePage >= totalPages"
-        class="btn btn-icon btn-sm btn-light-primary mr-2 my-1"
       >
         <i class="ki ki-bold-arrow-next icon-xs"></i>
       </button>
       <button
         @click="activePage = totalPages"
+        class="btn btn-icon btn-sm mr-2 my-1"
+        :class="[(activePage >= totalPages) ? 'btn-secondary' : 'btn-light-primary']"
         :disabled="activePage >= totalPages"
-        class="btn btn-icon btn-sm btn-light-primary mr-2 my-1"
       >
         <i class="ki ki-bold-double-arrow-next icon-xs"></i>
       </button>
@@ -58,7 +62,7 @@
         :options="itemsPerPageOptions"
         v-model="itemsPerPage"
       />
-      <span class="text-muted">Displaying {{ itemsPerPage }} of {{ totalItems }} {{ label }} in {{ totalPages }} pages</span>
+      <span class="text-muted">Displaying {{ (itemsPerPage > totalItems) ? totalItems : itemsPerPage }} of {{ totalItems }} {{ label }} in {{ totalPages }} pages</span>
     </div>
   </div>
   <!--end::Pagination-->
@@ -89,7 +93,6 @@ export default {
     }
   },
   setup(props) {
-    console.log(props.totalItems)
     let pages = ref([])
     const store = useStore()
     const itemsPerPage = computed({

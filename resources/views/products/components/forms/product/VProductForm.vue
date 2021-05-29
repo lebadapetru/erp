@@ -71,6 +71,7 @@ export default {
     const onSubmit = (data) => {
       //TODO in the future if additional business logic is needed before product creation
       //TODO move this into a vuex action
+      console.log(data)
       createProduct(data).then(() => {
         Swal.fire({
           text: 'The product has been created!',
