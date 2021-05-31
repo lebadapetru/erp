@@ -126,7 +126,6 @@ export default {
     }
 
     onUnmounted(() => {
-      alert('unonmounted')
       $(el.value)
           .off()
           .val(null)

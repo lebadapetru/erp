@@ -1,4 +1,4 @@
-const mutations = {
+let mutations = {
   setTitle: (state, value) => state.title = value,
   setDescription: (state, value) => state.description = value,
   setOriginalPrice: (state, value) => state.originalPrice = value,
@@ -24,7 +24,29 @@ const mutations = {
   setTags: (state, value) => state.tags = value,
   setProducts: (state, value) => state.products = value,
   setTotalProducts: (state, value) => state.totalProducts = value,
+  resetState: (state) => Object.assign(state, state.defaultState),
 }
 
+mutations.setProduct = (state, value) => {
+  console.log(value)
+  mutations.setTitle(state, value.title)
+  mutations.setDescription(state, value.description)
+  //TODO media
+  mutations.setOriginalPrice(state, value.originalPrice)
+  mutations.setReducedPrice(state, value.reducedPrice)
+  mutations.setDiscount(state, value.discount)
+  mutations.setSku(state, value.sku)
+  mutations.setBarcode(state, value.barcode)
+  mutations.setIsTrackQuantity(state, value.isTrackQuantity)
+  mutations.setIsContinueSellingOutOfStock(state, value.isContinueSellingOutOfStock)
+  mutations.setIsPhysicalProduct(state, value.isPhysicalProduct)
+  mutations.setWeight(state, value.weight)
+  mutations.setHasVariants(state, value.hasVariants)
+  mutations.setIsPublic(state, value.isPublic)
+  mutations.setStatus(state, value.status)
+  mutations.setVendor(state, value.vendor)
+  mutations.setCategories(state, value.categories)
+  mutations.setTags(state, value.tags)
+}
 
 export default mutations

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { toRefs, ref } from 'vue'
+import { toRefs, ref, onUnmounted } from 'vue'
 import validationSchema from "./validationSchema"
 import VBaseForm from "resources/components/forms/VBaseForm";
 import VProductFormToolbarActions from "resources/views/products/components/teleports/VProductFormToolbar";
@@ -44,6 +44,7 @@ import VProductStatusAndVisibilitySection
 import VOrganizationSection from "resources/views/products/components/forms/product/sections/VOrganizationSection";
 import { createProduct } from "resources/js/api/Product";
 import Swal from "sweetalert2";
+import { useStore } from "vuex";
 
 export default {
   name: "VProductForm",
@@ -62,11 +63,21 @@ export default {
   props: {
     id: {
       type: String,
-      required: false
+      required: false,
+      validator: (id) => {
+        //match uuid syntax
+        return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)
+      }
     }
   },
-  setup() {
+  setup(props) {
+    const store = useStore()
     const productForm = ref(null)
+
+    if (props.id) {
+      console.log(props.id)
+      store.dispatch('product/readProduct', props.id)
+    }
 
     const onSubmit = (data) => {
       //TODO in the future if additional business logic is needed before product creation
@@ -87,6 +98,10 @@ export default {
         })
       })
     }
+
+    onUnmounted(() => {
+      store.commit('product/resetState')
+    })
 
     return {
       productForm,

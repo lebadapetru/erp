@@ -1,4 +1,4 @@
-const state = () => ({
+const defaultState = {
   title: '',
   description: '',
   originalPrice: '0',
@@ -12,18 +12,22 @@ const state = () => ({
   isPhysicalProduct: true,
   weight: 0,
   hasVariants: false,
-  variantOptions: [],
   variants: [],
   isPublic: true,
-  statusOptions: [],
   status: '/api/lookup_product_statuses/1',
-  vendorOptions: [],
   vendor: '/api/vendors/1',
-  categoryOptions: [],
   categories: [],
-  tagOptions: [],
   tags: [],
   files: [],
+}
+const state = () => ({
+  defaultState,
+  ...defaultState,
+  variantOptions: [],
+  statusOptions: [],
+  vendorOptions: [],
+  categoryOptions: [],
+  tagOptions: [],
   products: [],
   totalProducts: 0,
 })

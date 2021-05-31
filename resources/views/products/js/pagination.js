@@ -7,7 +7,7 @@ const usePagination = () => {
   let activePage = computed(() => store.getters['globals/getActivePage'])
   let itemsPerPage = computed(() => store.getters['globals/getItemsPerPage'])
 
-  store.dispatch('product/readAndParseProducts', {
+  store.dispatch('product/readProducts', {
     page: activePage.value,
     itemsPerPage: itemsPerPage.value
   })
@@ -18,7 +18,7 @@ const usePagination = () => {
     console.log('products pagination')
     console.log(page)
     console.log(itemsPerPage)
-    store.dispatch('product/readAndParseProducts', {
+    store.dispatch('product/readProducts', {
       page,
       itemsPerPage: itemsPerPage.value
     })
