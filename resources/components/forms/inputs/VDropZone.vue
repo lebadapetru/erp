@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import Dropzone from 'dropzone'
 import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
@@ -46,9 +46,13 @@ export default {
     multiple: {
       type: Boolean,
       default: true
+    },
+    modelValue: {
+      type: Array,
+      default: []
     }
   },
-  setup(props) {
+  setup(props, {emit}) {
     const el = ref(null)
     const files = ref([])
 
@@ -66,7 +70,7 @@ export default {
     onMounted(() => {
       //TODO setup chunking
       //TODO custom file block display for cropping and other edits
-      new Dropzone(el.value, {
+      let myDropzone = new Dropzone(el.value, {
         url: "/api/files",
         headers: {
           accept: httpClient.defaults.headers.accept
@@ -103,6 +107,7 @@ export default {
           })
           //TODO save the whole response object for each file, into vuex state
           handleInput(files)
+          emit('update:modelValue', files)
         },
         error: function (file, error) {
           console.log('error')
@@ -115,10 +120,66 @@ export default {
         },*/
         chunksUploaded: function () {
           console.log('done')
+        },
+        init: function () {
+          console.log('dropzone init')
+          console.log(props.modelValue)
+          return
+          let file = {}
+          let thumbnail_url = ''
+          // Push file to collection
+          this.files.push(file);
+          // Emulate event to create interface
+          this.emit("addedfile", file);
+          // Add thumbnail url
+          this.emit("thumbnail", file, thumbnail_url);
+          // Add status processing to file
+          this.emit("processing", file);
+          // Add status success to file AND RUN EVENT success from response
+          this.emit("success", file, Dropzone.SUCCESS, false);
+          // Add status complete to file
+          this.emit("complete", file);
+
         }
       });
 
       console.log(el.value.dropzone)
+    })
+
+    watch(() => props.modelValue, value => {
+      console.log('watch dropzone')
+      console.log(value)
+      let testFile = [{
+        // flag: processing is complete
+        processing: true,
+        // flag: file is accepted (for limiting maxFiles)
+        accepted: true,
+        // name of file on page
+        name: "res-1785a69cd0dd722d5fd777071ac65b4d-60b522e45bc40.webp",
+        // image size
+        size: 163408,
+        // image type
+        type: 'image/webp',
+        // flag: status upload
+        status: Dropzone.SUCCESS,
+        url: "http://erp.local:80/image/f0af0e83-bdf2-4296-9c65-f4f31c33dbc1/scale/200x/res-1785a69cd0dd722d5fd777071ac65b4d-60b522e45bc40.webp"
+      }]
+      testFile.forEach(file => {
+        // Push file to collection
+        el.value.dropzone.files.push(file);
+        // Emulate event to create interface
+        el.value.dropzone.emit("addedfile", file);
+        // Add thumbnail url
+        el.value.dropzone.emit("thumbnail", file, file.url);
+        // Add status processing to file
+        el.value.dropzone.emit("processing", file);
+        // Add status success to file AND RUN EVENT success from response
+        el.value.dropzone.emit("success", file, {
+          status: "success"
+        }, false);
+        // Add status complete to file
+        el.value.dropzone.emit("complete", file);
+      })
     })
 
     return {

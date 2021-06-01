@@ -7,7 +7,7 @@
       type="checkbox"
       :name="name"
       :checked="checkboxChecked"
-      :value="valueProp"
+      :value="checkboxValue"
       @change="onChange"
     />
     <span></span>{{ label }}
@@ -20,6 +20,7 @@
 <script>
 import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
+import { watch } from "vue";
 
 export default {
   props: {
@@ -62,6 +63,10 @@ export default {
       handleChange(event.target.checked)
       emit('update:checked', event.target.checked)
     }
+
+    watch(() => props.checked, value => {
+      checkboxValue.value = value
+    })
 
     return {
       onChange,

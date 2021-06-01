@@ -2,12 +2,15 @@
   <editor
       :api-key="apiKey"
       :init="config"
-      :modelValue="inputValue"
+      v-model="modelValue"
       @keyup="onInput"
       @change="onInput"
       @init="onInit"
   />
-  <div class="error-message" v-if="errorMessage">
+  <div
+    v-if="errorMessage"
+    class="error-message"
+  >
     {{ capitalize(errorMessage) }}
   </div>
 </template>
@@ -16,6 +19,7 @@
 import Editor from '@tinymce/tinymce-vue'
 import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
+import { watch } from "vue";
 
 export default {
   name: "VTinyMCE",
@@ -47,14 +51,19 @@ export default {
       initialValue: props.modelValue,
     });
 
-    const onInit = (e) => {
+    const onInit = (event, editor) => {
       console.log('tinymce loaded')
     }
 
     const onInput = (event, editor) => {
+      console.log('onInput tinymce')
       handleChange(editor.getContent())
       emit('update:modelValue', editor.getContent())
     }
+
+    watch(() => props.modelValue, value => {
+      inputValue.value = value
+    })
 
     return {
       onInput,

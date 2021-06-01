@@ -43,7 +43,7 @@
         <!--begin::Pic-->
         <div
           class="d-flex mb-4"
-          style="max-height: 160px;"
+          style="max-height: 150px;"
         >
           <img
             v-if="product.files.length > 0"
@@ -116,7 +116,7 @@ export default {
   setup(props) {
     return {
       thumbnail: (url) => {
-        return url.replace("{widthxheight}", '250x')
+        return url.replace("{widthxheight}", '150x')
       },
       reducedPrice: computed(() => {
         return (props.product.originalPrice - (props.product.originalPrice * (props.product.discount / 100)))

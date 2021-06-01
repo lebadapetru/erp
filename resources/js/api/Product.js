@@ -7,6 +7,9 @@ export const createProduct = (product) => {
 }
 
 export const readProducts = (filters) => {
+  console.log({
+    params: filters
+  })
   return httpClient.get(url, {
     params: filters
   })

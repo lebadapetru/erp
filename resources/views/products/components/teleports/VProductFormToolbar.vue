@@ -15,7 +15,6 @@
     <!--begin::Dropdown-->
     <div
       class="btn-group ml-2"
-      :class="{'show': isSubmitDropdownVisible}"
     >
       <button
         type="button"
@@ -28,14 +27,11 @@
         class="btn btn-primary font-weight-bold dropdown-toggle dropdown-toggle-split"
         data-toggle="dropdown"
         aria-haspopup="true"
-        :aria-expanded="isSubmitDropdownVisible"
-        @click="toggleSubmitDropdown"
+        aria-expanded="false"
         id="kt_submit_menu_toggle"
       ></button>
       <div
-        class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right"
-        :class="{'show': isSubmitDropdownVisible}"
-        v-click-away="{callback: hideSubmitDropdown, trigger: '#kt_submit_menu_toggle'}"
+        class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-left"
       >
         <ul class="navi py-5">
           <li class="navi-item">
@@ -70,7 +66,6 @@
 </template>
 
 <script>
-import { ref } from "vue";
 
 export default {
   name: "VProductFormToolbarActions",
@@ -81,24 +76,11 @@ export default {
     }
   },
   setup(props) {
-    const isSubmitDropdownVisible = ref(false)
-
-    const toggleSubmitDropdown = () => {
-      isSubmitDropdownVisible.value = !isSubmitDropdownVisible.value
-    }
-
-    const hideSubmitDropdown = () => {
-      isSubmitDropdownVisible.value = false
-    }
-
     const onSave = () => {
       props.targetForm.el.dispatchEvent(new Event('submit'));
     }
 
     return {
-      isSubmitDropdownVisible,
-      toggleSubmitDropdown,
-      hideSubmitDropdown,
       onSave
     }
   }
@@ -106,11 +88,4 @@ export default {
 </script>
 
 <style scoped>
-.dropdown-menu-right {
-  position: absolute;
-  transform: translate3d(-30px, 40px, 0px);
-  top: 0;
-  left: 0;
-  will-change: transform;
-}
 </style>

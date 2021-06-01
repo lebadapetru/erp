@@ -3,6 +3,7 @@
     v-if="totalProducts"
     :style-classes="'mb-8'"
     :total-items="totalProducts"
+    :label="'products'"
   />
   <!--begin::List-->
   <div class="row">
@@ -23,6 +24,7 @@
   <VPagination
     v-if="totalProducts"
     :total-items="totalProducts"
+    :label="'products'"
   />
 
 </template>

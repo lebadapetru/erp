@@ -1,6 +1,7 @@
 const getters = {
   getTitle: (state) => state.title,
   getDescription: (state) => state.description,
+  getFiles: (state) => state.files,
   getOriginalPrice: (state) => state.originalPrice,
   getReducedPrice: (state) => state.reducedPrice,
   getDiscount: (state) => state.discount,

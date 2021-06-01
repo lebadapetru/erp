@@ -62,7 +62,9 @@
         :options="itemsPerPageOptions"
         v-model="itemsPerPage"
       />
-      <span class="text-muted">Displaying {{ (itemsPerPage > totalItems) ? totalItems : itemsPerPage }} of {{ totalItems }} {{ label }} in {{ totalPages }} pages</span>
+      <span class="text-muted">
+        Displaying {{ (itemsPerPage > totalItems) ? totalItems : itemsPerPage }} of {{ totalItems }} {{ label }} in {{ totalPages }} page{{ totalPages > 1 ? 's' : '' }}
+      </span>
     </div>
   </div>
   <!--end::Pagination-->

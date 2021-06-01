@@ -6,7 +6,7 @@
     :class="styleClasses"
     :name="name"
     :id="name"
-    :value="inputValue"
+    :value="modelValue"
     :placeholder="placeholder"
     :autocomplete="autocomplete"
     :min="(type === 'number') ? min : undefined"
@@ -83,16 +83,16 @@ export default {
     const onInput = (event) => {
       const value = (props.type === 'number') ? parseInt(event.target.value) : event.target.value
       handleInput(value)
-      emit('update:modelValue', value);
+      emit('update:modelValue', value)
     }
 
     const onKeyPress = (event) => {
-      emit('keypress', event);
+      emit('keypress', event)
     }
 
     watch(() => props.modelValue, value => {
-      inputValue.value = value;
-    });
+      inputValue.value = value
+    })
 
     return {
       onInput,

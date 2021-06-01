@@ -17,7 +17,7 @@
     <div class="card-body">
       <div class="form-group row">
         <div class="col-12">
-          <VDropZone />
+          <VDropZone v-model="files" />
         </div>
       </div>
     </div>
@@ -27,6 +27,8 @@
 
 <script>
 import VDropZone from "resources/components/forms/inputs/VDropZone";
+import { computed } from "vue";
+import { useStore } from "vuex";
 
 export default {
   name: "VMediaSection",
@@ -34,8 +36,12 @@ export default {
     VDropZone,
   },
   setup() {
+    const store = useStore()
     return {
-
+      files: computed({
+        get: () => store.getters['product/getFiles'],
+        set: () => store.commit('product/setFiles')
+      })
     }
   }
 }

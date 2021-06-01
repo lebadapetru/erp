@@ -21,7 +21,7 @@ const defaultState = {
   files: [],
 }
 const state = () => ({
-  defaultState,
+  defaultState: Object.freeze(defaultState),
   ...defaultState,
   variantOptions: [],
   statusOptions: [],

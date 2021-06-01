@@ -63,12 +63,14 @@ export default {
     const store = useStore()
 
     store.dispatch("product/readAndParseLookupProductStatus")
-
+    let isPublic = computed({
+      get: () => store.getters["product/getIsPublic"],
+      set: (value) => store.commit("product/setIsPublic", value)
+    })
+    console.log('wtf')
+    console.log(isPublic)
     return {
-      isPublic: computed({
-        get: () => store.getters["product/getIsPublic"],
-        set: (value) => store.commit("product/setIsPublic", value)
-      }),
+      isPublic,
       statusOptions: computed(() => store.getters["product/getStatusOptions"]),
       status: computed({
         get: () => store.getters["product/getStatus"],
