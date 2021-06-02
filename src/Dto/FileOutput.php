@@ -14,10 +14,37 @@ final class FileOutput
     public ?string $url;
 
     /**
-     * @return string|null
+     * @Groups({"file:read", "product:read"})
      */
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
+    public string $realName;
+
+    /**
+     * @Groups({"file:read", "file:write", "product:read"})
+     */
+    public string $displayName;
+
+    /**
+     * @Groups({"file:read", "product:read"})
+     */
+    public ?string $extension;
+
+    /**
+     * @Groups({"file:read", "product:read"})
+     */
+    public string $fullRealName;
+
+    /**
+     * @Groups({"file:read", "product:read"})
+     */
+    public string $fullDisplayName;
+
+    /**
+     * @Groups({"file:read", "product:read"})
+     */
+    public ?int $size;
+
+    /**
+     * @Groups({"file:read", "product:read"})
+     */
+    public ?string $mimeType;
 }

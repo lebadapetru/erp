@@ -131,7 +131,7 @@ class FileStorage
             ($withBaseUrl ? $this->parameterBag->get('app.url') : '') . //TODO this will be the s3 base url
             $this->getRelativeStoragePath() . '/' .
             $fileEntity->getId() . '/' .
-            ($withFile ? $fileEntity->getFileFullRealName() : '');
+            ($withFile ? $fileEntity->getFullRealName() : '');
     }
 
     public function getRealFileLocation(File $fileEntity, bool $withAbsolutePath = true, bool $withFile = true): string
@@ -139,6 +139,6 @@ class FileStorage
         return
             ($withAbsolutePath ? $this->getAbsoluteStoragePath() . '/'  : '') . //TODO this will be the s3 base url
             $fileEntity->getId() . '/' .
-            ($withFile ? $fileEntity->getFileFullRealName() : '');
+            ($withFile ? $fileEntity->getFullRealName() : '');
     }
 }

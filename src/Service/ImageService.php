@@ -39,7 +39,7 @@ class ImageService
     {
         return str_replace(
             ['{id}', '{size}', '{name}'],
-            [$file->getId(), '{widthxheight}', $file->getFileFullDisplayName()],
+            [$file->getId(), '{widthxheight}', $file->getFullDisplayName()],
             $this->routeCollection->getRouteCollection()->get('image')->getPath()
         );
     }

@@ -198,7 +198,7 @@ class File
         return $this->id;
     }
 
-    public function getRealName(): ?string
+    public function getRealName(): string
     {
         return $this->realName;
     }
@@ -210,7 +210,7 @@ class File
         return $this;
     }
 
-    public function getDisplayName(): ?string
+    public function getDisplayName(): string
     {
         return $this->displayName;
     }
@@ -394,12 +394,12 @@ class File
         return $this;
     }
 
-    public function getFileFullDisplayName(): string
+    public function getFullDisplayName(): string
     {
         return $this->displayName . '.' . $this->extension;
     }
 
-    public function getFileFullRealName(): string
+    public function getFullRealName(): string
     {
         return $this->realName . '.' . $this->extension;
     }

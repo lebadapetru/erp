@@ -100,6 +100,7 @@ export default {
           console.log('sending')
         },
         success: function (file, response) {
+          console.log('success')
           //TODO why does it come as string instead of json
           files.value.push({
             file: JSON.parse(response)['@id'],
@@ -146,39 +147,28 @@ export default {
       console.log(el.value.dropzone)
     })
 
-    watch(() => props.modelValue, value => {
+    watch(() => props.modelValue, items => {
       console.log('watch dropzone')
-      console.log(value)
-      let testFile = [{
-        // flag: processing is complete
-        processing: true,
-        // flag: file is accepted (for limiting maxFiles)
-        accepted: true,
-        // name of file on page
-        name: "res-1785a69cd0dd722d5fd777071ac65b4d-60b522e45bc40.webp",
-        // image size
-        size: 163408,
-        // image type
-        type: 'image/webp',
-        // flag: status upload
-        status: Dropzone.SUCCESS,
-        url: "http://erp.local:80/image/f0af0e83-bdf2-4296-9c65-f4f31c33dbc1/scale/200x/res-1785a69cd0dd722d5fd777071ac65b4d-60b522e45bc40.webp"
-      }]
-      testFile.forEach(file => {
-        // Push file to collection
-        el.value.dropzone.files.push(file);
-        // Emulate event to create interface
-        el.value.dropzone.emit("addedfile", file);
-        // Add thumbnail url
-        el.value.dropzone.emit("thumbnail", file, file.url);
-        // Add status processing to file
-        el.value.dropzone.emit("processing", file);
-        // Add status success to file AND RUN EVENT success from response
-        el.value.dropzone.emit("success", file, {
-          status: "success"
-        }, false);
-        // Add status complete to file
-        el.value.dropzone.emit("complete", file);
+      console.log(files)
+
+      items.forEach(item => {
+        let file = {
+          // flag: processing is complete
+          processing: true,
+          // flag: file is accepted (for limiting maxFiles)
+          accepted: true,
+          // name of file on page
+          name: item.file.fullRealName,
+          // image size
+          size: item.file.size,
+          // image type
+          type: item.file.mimeType,
+          // flag: status upload
+          status: Dropzone.SUCCESS,
+          url: "http://erp.local:80/image/f0af0e83-bdf2-4296-9c65-f4f31c33dbc1/scale/200x/res-1785a69cd0dd722d5fd777071ac65b4d-60b522e45bc40.webp"
+        }
+
+        el.value.dropzone.displayExistingFile(file, file.url)
       })
     })
 

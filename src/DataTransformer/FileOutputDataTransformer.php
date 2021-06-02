@@ -18,11 +18,21 @@ class FileOutputDataTransformer implements DataTransformerInterface
     )
     {}
 
-    public function transform($object, string $to, array $context = [])
+    /**
+     * @param File $object
+    */
+    public function transform($object, string $to, array $context = []): FileOutput
     {
         $output = new FileOutput();
         $url = $this->imageService->getUrl($object);
         $output->url = $this->parameterBag->get('app.url') . $url;
+        $output->realName = $object->getRealName();
+        $output->displayName = $object->getDisplayName();
+        $output->extension = $object->getExtension();
+        $output->fullRealName = $object->getFullRealName();
+        $output->fullDisplayName = $object->getFullDisplayName();
+        $output->size = $object->getSize();
+        $output->mimeType = $object->getMimeType();
 
         return $output;
     }
