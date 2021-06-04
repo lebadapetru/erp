@@ -39,13 +39,19 @@ class ImageController extends AbstractController
 
         preg_match('/^(\d+)?x(\d+)?$/i', $data['size'], $size);
         unset($size[0]);
+        $entityManager = $this->getDoctrine()->getManager();
+        $file = $entityManager->getRepository(File::class)->find($data['id']);
+        if (empty($size)) {
+            $size[] = $file->getWidth();
+            $size[] = $file->getHeight();
+        }
+
         $config = [
             'scale' => [
                 'dim' => $size
             ],
         ];
-        $entityManager = $this->getDoctrine()->getManager();
-        $file = $entityManager->getRepository(File::class)->find($data['id']);
+
         $path = $imageService->getPath($file, $filter, $config);
 
         return new StreamedResponse(

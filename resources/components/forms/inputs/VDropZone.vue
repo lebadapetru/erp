@@ -35,9 +35,11 @@ import { onMounted, onUnmounted, ref, watch } from 'vue'
 import Dropzone from 'dropzone'
 import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
+import { useStore } from "vuex";
 
 export default {
   name: "VDropZone",
+  emits: ['removedFile'],
   props: {
     name: {
       type: String,
@@ -55,6 +57,7 @@ export default {
   setup(props, {emit}) {
     const el = ref(null)
     const files = ref([])
+    const store = useStore()
 
     const mimeTypes = Object.values(app.fileConfiguration.mimeTypes).map(type=> {
       return Object.values(type)
@@ -70,7 +73,7 @@ export default {
     onMounted(() => {
       //TODO setup chunking
       //TODO custom file block display for cropping and other edits
-      let myDropzone = new Dropzone(el.value, {
+      new Dropzone(el.value, {
         url: "/api/files",
         headers: {
           accept: httpClient.defaults.headers.accept
@@ -124,7 +127,17 @@ export default {
         },
         init: function () {
           console.log('dropzone init')
-          console.log(props.modelValue)
+
+          this.on("removedfile", (file) => {
+            console.log('removed file')
+            console.log(file)
+            console.log(files)
+            const index = files.value.findIndex(item => item.id === file.id);
+            files.value.splice(index, 1)
+            console.log(files)
+            emit('removedFile', file.id)
+          });
+
           return
           let file = {}
           let thumbnail_url = ''
@@ -149,10 +162,11 @@ export default {
 
     watch(() => props.modelValue, items => {
       console.log('watch dropzone')
-      console.log(files)
+      console.log(items)
 
       items.forEach(item => {
         let file = {
+          id: item.file.id,
           // flag: processing is complete
           processing: true,
           // flag: file is accepted (for limiting maxFiles)
@@ -165,8 +179,14 @@ export default {
           type: item.file.mimeType,
           // flag: status upload
           status: Dropzone.SUCCESS,
-          url: "http://erp.local:80/image/f0af0e83-bdf2-4296-9c65-f4f31c33dbc1/scale/200x/res-1785a69cd0dd722d5fd777071ac65b4d-60b522e45bc40.webp"
+          url: "http://erp.local:80/image/f0af0e83-bdf2-4296-9c65-f4f31c33dbc1/scale/x/res-1785a69cd0dd722d5fd777071ac65b4d-60b522e45bc40.webp"
         }
+
+        files.value.push({
+          file: item.file['@id'],
+          position: null
+        })
+        handleInput(files)
 
         el.value.dropzone.displayExistingFile(file, file.url)
       })

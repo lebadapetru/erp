@@ -3,7 +3,8 @@ import { readLookupProductStatuses } from "resources/js/api/LookupProductStatus"
 import { readVendors } from "resources/js/api/Vendor";
 import { createCategory, readCategories } from "resources/js/api/Category";
 import { createTag, readTags } from "resources/js/api/Tag";
-import { createProduct, readProducts, readProduct } from "resources/js/api/Product";
+import { createProduct, readProducts, readProduct, deleteProduct } from "resources/js/api/Product";
+import { deleteFile } from "resources/js/api/File";
 
 const actions = {
   readAndParseVariantOptions: ({ commit }) => {
@@ -84,6 +85,12 @@ const actions = {
     return readProduct(id).then((response) => {
       commit('setProduct', response.data)
     })
+  },
+  deleteProduct: ({ state}, id) => {
+    return deleteProduct(id)
+  },
+  deleteFile: ({ state, commit }, id) => {
+    return deleteFile(id)
   }
 }
 

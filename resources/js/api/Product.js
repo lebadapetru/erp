@@ -7,9 +7,6 @@ export const createProduct = (product) => {
 }
 
 export const readProducts = (filters) => {
-  console.log({
-    params: filters
-  })
   return httpClient.get(url, {
     params: filters
   })
@@ -17,4 +14,8 @@ export const readProducts = (filters) => {
 
 export const readProduct = (id) => {
   return httpClient.get(url + '/' + id)
+}
+
+export const deleteProduct = (id) => {
+  return httpClient.delete(url + '/' + id)
 }

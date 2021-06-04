@@ -8,6 +8,7 @@ use App\Entity\LookupFileStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToDeleteFile;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -22,13 +23,16 @@ class UploadService
         private FileStorage $fileStorage,
         private ParameterBagInterface $parameterBag,
         private ImageService $imageService,
-    ) {}
+        private CacheManager $cacheManager,
+    )
+    {
+    }
 
     public function save(array $data): File
     {
-        /**@var UploadedFile $temporaryFile*/
+        /**@var UploadedFile $temporaryFile */
         $temporaryFile = $data['files'];
-        /**@var UuidV4 $id*/
+        /**@var UuidV4 $id */
         $id = $data['id'] ? UuidV4::fromString($data['id']) : UuidV4::v4();
         $this->entityManager->getConnection()->beginTransaction();
         try {
@@ -117,5 +121,21 @@ class UploadService
         $this->entityManager->flush();
 
         return $file;
+    }
+
+    public function delete(File $fileEntity): void
+    {
+        $this->entityManager->getConnection()->beginTransaction();
+        try {
+            //TODO remove liipimagine cache for a specific image
+            $this->entityManager->remove($fileEntity);
+            $this->fileStorage->deleteDirectory($fileEntity);
+            $this->entityManager->flush();
+
+            $this->entityManager->getConnection()->commit();
+        } catch (\Throwable $exception) {
+            $this->entityManager->getConnection()->rollBack();
+            throw $exception;
+        }
     }
 }

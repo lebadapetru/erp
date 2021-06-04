@@ -22,12 +22,12 @@
                 </router-link>
               </li>
               <li class="navi-item">
-                <router-link :to="{name: 'Delete product', params: {id: product.id}}" class="navi-link">
+                <a class="navi-link" href="javascript:;" @click="deleteProduct(product.id, product.title)">
                   <span class="navi-icon">
                     <i class="flaticon-delete"></i>
                   </span>
                   <span class="navi-text">Delete product</span>
-                </router-link>
+                </a>
               </li>
             </ul>
             <!--end::Navigation-->
@@ -104,6 +104,8 @@
 
 <script>
 import { computed, onMounted } from "vue";
+import { useStore } from "vuex";
+import Swal from "sweetalert2";
 
 export default {
   name: "ProductBlock",
@@ -114,9 +116,32 @@ export default {
     }
   },
   setup(props) {
+    const store = useStore()
+
     return {
       thumbnail: (url) => {
         return url.replace("{widthxheight}", '150x')
+      },
+      deleteProduct: (id, title) => {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: `You want to delete the product '${title}'?`,
+          icon: 'warning',
+          showCancelButton: true,
+          buttonsStyling: false,
+          cancelButtonColor: '#d33',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, delete it!',
+          customClass: {
+            confirmButton: "btn font-weight-bold btn-light-primary",
+            cancelButton: "btn font-weight-bold btn-light-primary",
+          },
+          heightAuto: false
+        }).then((result) => {
+          if (result.isConfirmed) {
+            store.dispatch('product/deleteProduct', id)
+          }
+        })
       },
       reducedPrice: computed(() => {
         return (props.product.originalPrice - (props.product.originalPrice * (props.product.discount / 100)))

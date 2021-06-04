@@ -3,8 +3,6 @@
       :api-key="apiKey"
       :init="config"
       v-model="modelValue"
-      @keyup="onInput"
-      @change="onInput"
       @init="onInit"
   />
   <div
@@ -55,18 +53,11 @@ export default {
       console.log('tinymce loaded')
     }
 
-    const onInput = (event, editor) => {
-      console.log('onInput tinymce')
-      handleChange(editor.getContent())
-      emit('update:modelValue', editor.getContent())
-    }
-
     watch(() => props.modelValue, value => {
       inputValue.value = value
     })
 
     return {
-      onInput,
       onInit,
       inputValue,
       handleChange,
@@ -89,6 +80,14 @@ export default {
           'cut copy paste removeformat | searchreplace | bullist numlist | outdent indent | hr | link unlink anchor image code | inserttime',
           'table | subscript superscript | charmap | visualchars visualblocks nonbreaking | template | helloworld'
         ],
+        setup: (editor) => {
+          console.log(editor.isDirty())
+          editor.on('change input', () => {
+            console.log('input: ', editor.getContent());
+            handleChange(editor.getContent())
+            emit('update:modelValue', editor.getContent())
+          })
+        }
       }
     }
   }

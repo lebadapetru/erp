@@ -17,7 +17,10 @@
     <div class="card-body">
       <div class="form-group row">
         <div class="col-12">
-          <VDropZone v-model="files" />
+          <VDropZone
+            v-model="files"
+            @removed-file="deleteFile"
+          />
         </div>
       </div>
     </div>
@@ -41,7 +44,8 @@ export default {
       files: computed({
         get: () => store.getters['product/getFiles'],
         set: () => store.commit('product/setFiles')
-      })
+      }),
+      deleteFile: (id) => store.dispatch('product/deleteFile', id)
     }
   }
 }

@@ -5,9 +5,15 @@ namespace App\Dto;
 
 
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\UuidV4;
 
 final class FileOutput
 {
+    /**
+     * @Groups({"file:read", "product:read"})
+     */
+    public UuidV4 $id;
+
     /**
      * @Groups({"file:read", "product:read"})
     */

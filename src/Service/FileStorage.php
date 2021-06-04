@@ -6,6 +6,7 @@ namespace App\Service;
 use App\Entity\File;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
+use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToWriteFile;
@@ -54,18 +55,32 @@ class FileStorage
 
     public function delete(File $fileEntity)
     {
-        $fileLocation = $this->getRealFileLocation($fileEntity);
+        $fileLocation = $this->getRealFileLocation($fileEntity, false);
         try {
-            if ($this->defaultStorage->fileExists($fileLocation)) {
-                $result = $this->defaultStorage->delete($fileLocation);
+            $result = $this->defaultStorage->delete($fileLocation);
 
-                if ($result === false) {
-                    throw new UnableToDeleteFile(sprintf('Couldn\'t delete the "%s" file!', $fileLocation));
-                }
+            if ($result === false) {
+                throw new UnableToDeleteFile(sprintf('Couldn\'t delete the "%s" file!', $fileLocation));
             }
         } catch (FileNotFoundException $exception) {
             $this->logger->alert(sprintf('The file "%s" is missing!', $fileLocation));
         } catch (FilesystemException | UnableToDeleteFile $exception) {
+            throw $exception;
+        }
+    }
+
+    public function deleteDirectory(File $fileEntity)
+    {
+        $directoryLocation = $this->getRealFileLocation($fileEntity, false, false);
+        try {
+            $result = $this->defaultStorage->deleteDirectory($directoryLocation);
+
+            if ($result === false) {
+                throw new UnableToDeleteDirectory(sprintf('Couldn\'t delete the "%s" directory!', $directoryLocation));
+            }
+        } catch (UnableToDeleteDirectory $exception) {
+            $this->logger->alert(sprintf('The file "%s" is missing!', $directoryLocation));
+        } catch (FilesystemException $exception) {
             throw $exception;
         }
     }
