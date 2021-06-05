@@ -57,7 +57,7 @@ use App\Dto\FileOutput;
  * )
  * @ORM\Entity(repositoryClass=FileRepository::class)
  * @ORM\Table("`files`")
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class File
 {

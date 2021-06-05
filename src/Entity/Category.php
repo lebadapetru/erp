@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * )
  * @ORM\Entity(repositoryClass=CategoriesRepository::class)
  * @ORM\Table("`categories`")
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Category
 {

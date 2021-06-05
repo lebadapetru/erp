@@ -139,7 +139,9 @@ export default {
           heightAuto: false
         }).then((result) => {
           if (result.isConfirmed) {
-            store.dispatch('product/deleteProduct', id)
+            store.dispatch('product/deleteProduct', id).then(() => {
+              store.dispatch('product/readProducts')
+            })
           }
         })
       },

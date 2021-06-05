@@ -38,7 +38,7 @@ use Symfony\Component\Uid\UuidV4;
  *     })
  * @ORM\Entity(repositoryClass=ProductsRepository::class)
  * @ORM\Table("`products`")
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Product
 {
