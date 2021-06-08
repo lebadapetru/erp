@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { toRefs, ref, onUnmounted } from 'vue'
+import { ref, provide } from 'vue'
 import validationSchema from "./validationSchema"
 import VBaseForm from "resources/components/forms/VBaseForm";
 import VProductFormToolbarActions from "resources/views/products/components/teleports/VProductFormToolbar";
@@ -77,6 +77,7 @@ export default {
     const productForm = ref(null)
 
     if (props.id) {
+      provide('productId', props.id)
       console.log(props.id)
       store.dispatch('product/readProduct', props.id)
     }

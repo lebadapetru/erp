@@ -30,7 +30,7 @@
 
 <script>
 import VDropZone from "resources/components/forms/inputs/VDropZone";
-import { computed } from "vue";
+import { computed, inject } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -40,16 +40,23 @@ export default {
   },
   setup() {
     const store = useStore()
+    const productId = inject('id')
+
+    const deleteFile = (id) => {
+      store.dispatch('product/deleteFile', id).then(() => {
+        console.log('after delete')
+        console.log(productId)
+        if (productId) {
+          store.dispatch('product/readProduct', id)
+        }
+      })
+    }
     return {
       files: computed({
         get: () => store.getters['product/getFiles'],
         set: () => store.commit('product/setFiles')
       }),
-      deleteFile: (id) => {
-        store.dispatch('product/deleteFile', id).then(() => {
-          store.dispatch('product/readProduct')
-        })
-      }
+      deleteFile
     }
   }
 }

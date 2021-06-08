@@ -31,11 +31,10 @@
 </template>
 
 <script>
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import Dropzone from 'dropzone'
 import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
-import { useStore } from "vuex";
 import Swal from "sweetalert2";
 
 export default {
@@ -58,14 +57,13 @@ export default {
   setup(props, {emit}) {
     const el = ref(null)
     const files = ref([])
-    const store = useStore()
+    const productFiles = ref([])
 
     const mimeTypes = Object.values(app.fileConfiguration.mimeTypes).map(type=> {
       return Object.values(type)
     }).flat().join(',')
 
     const {
-      value: inputValue,
       errorMessage,
       handleInput,
     } = useField(props.name, null);
@@ -103,13 +101,12 @@ export default {
         success: (file, response) => {
           console.log('success')
           console.log(response)
-          //TODO why does it come as string instead of json
-          files.value.push({
+          productFiles.value.push({
             file: JSON.parse(response)['@id'],
             position: null
           })
-          //TODO save the whole response object for each file, into vuex state
-          handleInput(files)
+          handleInput(productFiles)
+          files.value.push(response)
           emit('update:modelValue', files)
         },
         error: (file, error) => {
@@ -118,7 +115,8 @@ export default {
           console.log(error)
         },
         dictRemoveFileConfirmation: true,
-        addedfiles: (files) => {
+        addedfiles: (dropzoneFiles) => {
+          let dropzoneFile = dropzoneFiles[0]
           // Create the remove button
           let removeButton = Dropzone.createElement('<a class="dz-remove">Remove file</a>');
 
@@ -130,44 +128,57 @@ export default {
 
             Swal.fire({
               title: 'Are you sure?',
-              html: `You are about to remove the file <b>${files[0].name}</b>!`,
+              html: `You are about to remove the file <b>${dropzoneFile.name}</b>  from the current product!`,
               icon: 'warning',
               showCancelButton: true,
               buttonsStyling: false,
               cancelButtonColor: '#d33',
               confirmButtonColor: '#3085d6',
-              confirmButtonText: 'Yes, delete it!',
+              confirmButtonText: 'Yes, remove it!',
               customClass: {
                 confirmButton: "btn font-weight-bold btn-light-primary",
                 cancelButton: "btn font-weight-bold btn-light-primary",
               },
+              input: 'checkbox',
+              inputValue: 1,
+              inputPlaceholder:
+                'Also, delete it!',
               heightAuto: false
             }).then((result) => {
+              console.log(result)
               if (result.isConfirmed) {
                 // Remove the file preview.
-                el.value.dropzone.removeFile(files[0]);
+                console.log('removed file')
+                console.log(dropzoneFile)
+                const index = files.value.findIndex(item => item.id === dropzoneFile.upload.uuid)
+                files.value.splice(index, 1)
+                console.log(files)
+                console.log(dropzoneFile)
+
+                if (result.value) {
+                  emit('removedFile', dropzoneFile.upload.uuid)
+
+                  Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                  )
+                }
+
+                el.value.dropzone.removeFile(dropzoneFile);
               }
             })
-
-            // If you want to the delete the file on the server as well,
-            // you can do the AJAX request here.
           })
 
-          files[0].previewElement.lastElementChild.remove()
+          dropzoneFile.previewElement.lastElementChild.remove()
           // Add the button to the file preview element.
-          files[0].previewElement.appendChild(removeButton);
+          dropzoneFile.previewElement.appendChild(removeButton);
         },
-        init: () => {
+        init: function() {
           console.log('dropzone init')
 
           this.on("removedfile", (file) => {
-            console.log('removed file')
-            console.log(file)
-            console.log(files)
-            const index = files.value.findIndex(item => item.id === file.id);
-            files.value.splice(index, 1)
-            console.log(files)
-            emit('removedFile', file.id)
+
           });
 
           return
@@ -197,8 +208,10 @@ export default {
       console.log(items)
 
       items.forEach(item => {
-        let file = {
-          id: item.file.id,
+        let dropzoneFile = {
+          upload: {
+            uuid: item.file.id,
+          },
           // flag: processing is complete
           processing: true,
           // flag: file is accepted (for limiting maxFiles)
@@ -211,16 +224,16 @@ export default {
           type: item.file.mimeType,
           // flag: status upload
           status: Dropzone.SUCCESS,
-          url: "http://erp.local:80/image/f0af0e83-bdf2-4296-9c65-f4f31c33dbc1/scale/x/res-1785a69cd0dd722d5fd777071ac65b4d-60b522e45bc40.webp"
+          url: item.file.url.replace("{widthxheight}", 'x')
         }
 
-        files.value.push({
+        productFiles.value.push({
           file: item.file['@id'],
           position: null
         })
-        handleInput(files)
+        handleInput(productFiles)
 
-        el.value.dropzone.displayExistingFile(file, file.url)
+        el.value.dropzone.displayExistingFile(dropzoneFile, dropzoneFile.url)
       })
     })
 

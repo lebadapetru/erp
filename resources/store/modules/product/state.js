@@ -1,4 +1,5 @@
 const defaultState = {
+  id: null,
   title: '',
   description: '',
   originalPrice: '0',

@@ -1,4 +1,5 @@
 let mutations = {
+  setId: (state, value) => state.id = value,
   setTitle: (state, value) => state.title = value,
   setDescription: (state, value) => state.description = value,
   setFiles: (state, value) => state.files = value,
@@ -27,7 +28,9 @@ let mutations = {
 }
 
 mutations.setProduct = (state, value) => {
+  console.log('wtf2')
   console.log(value)
+  mutations.setId(state, value.id)
   mutations.setTitle(state, value.title)
   mutations.setDescription(state, value.description)
   //TODO media
