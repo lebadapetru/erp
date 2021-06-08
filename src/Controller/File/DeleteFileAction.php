@@ -15,10 +15,10 @@ class DeleteFileAction
 
     /**
      * @throws \Throwable
-     * @throws \League\Flysystem\FilesystemException
      */
     public function __invoke(File $file): void
     {
+        //TODO create validation request
         $this->uploadService->delete($file);
     }
 }

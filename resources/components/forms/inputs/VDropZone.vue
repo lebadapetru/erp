@@ -36,10 +36,11 @@ import Dropzone from 'dropzone'
 import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
 import { useStore } from "vuex";
+import Swal from "sweetalert2";
 
 export default {
   name: "VDropZone",
-  emits: ['removedFile'],
+  emits: ['removedFile', 'update:modelValue'],
   props: {
     name: {
       type: String,
@@ -76,7 +77,7 @@ export default {
       new Dropzone(el.value, {
         url: "/api/files",
         headers: {
-          accept: httpClient.defaults.headers.accept
+          accept: httpClient.defaults.headers.accept,
         },
         paramName: props.name,
         maxFiles: 10,
@@ -91,7 +92,7 @@ export default {
         autoQueue: true,
         autoProcessQueue: true,
         acceptedFiles: mimeTypes,
-        params: function (file, xhr) { //send additional params beside the file object
+        params: (file, xhr) => { //send additional params beside the file object
           console.log(file)
           console.log(xhr)
 
@@ -99,11 +100,9 @@ export default {
             id: file[0].upload.uuid
           }
         },
-        sending: function (file, xhr, formData) {
-          console.log('sending')
-        },
-        success: function (file, response) {
+        success: (file, response) => {
           console.log('success')
+          console.log(response)
           //TODO why does it come as string instead of json
           files.value.push({
             file: JSON.parse(response)['@id'],
@@ -113,19 +112,52 @@ export default {
           handleInput(files)
           emit('update:modelValue', files)
         },
-        error: function (file, error) {
+        error: (file, error) => {
           console.log('error')
           console.log(file)
           console.log(error)
         },
-        /*accept: function (file, done) {
-          //done()
-          console.log(file)
-        },*/
-        chunksUploaded: function () {
-          console.log('done')
+        dictRemoveFileConfirmation: true,
+        addedfiles: (files) => {
+          // Create the remove button
+          let removeButton = Dropzone.createElement('<a class="dz-remove">Remove file</a>');
+
+          // Listen to the click event
+          removeButton.addEventListener("click", (e) => {
+            // Make sure the button click doesn't submit the form:
+            e.preventDefault();
+            e.stopPropagation();
+
+            Swal.fire({
+              title: 'Are you sure?',
+              html: `You are about to remove the file <b>${files[0].name}</b>!`,
+              icon: 'warning',
+              showCancelButton: true,
+              buttonsStyling: false,
+              cancelButtonColor: '#d33',
+              confirmButtonColor: '#3085d6',
+              confirmButtonText: 'Yes, delete it!',
+              customClass: {
+                confirmButton: "btn font-weight-bold btn-light-primary",
+                cancelButton: "btn font-weight-bold btn-light-primary",
+              },
+              heightAuto: false
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Remove the file preview.
+                el.value.dropzone.removeFile(files[0]);
+              }
+            })
+
+            // If you want to the delete the file on the server as well,
+            // you can do the AJAX request here.
+          })
+
+          files[0].previewElement.lastElementChild.remove()
+          // Add the button to the file preview element.
+          files[0].previewElement.appendChild(removeButton);
         },
-        init: function () {
+        init: () => {
           console.log('dropzone init')
 
           this.on("removedfile", (file) => {

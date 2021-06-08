@@ -42,9 +42,11 @@ import VVariantsSection from "resources/views/products/components/forms/product/
 import VProductStatusAndVisibilitySection
   from "resources/views/products/components/forms/product/sections/VProductStatusAndVisibilitySection";
 import VOrganizationSection from "resources/views/products/components/forms/product/sections/VOrganizationSection";
-import { createProduct } from "resources/js/api/Product";
 import Swal from "sweetalert2";
 import { useStore } from "vuex";
+import isEqual from 'lodash/isEqual'
+import clone from 'lodash/clone'
+import { onBeforeRouteLeave } from 'vue-router'
 
 export default {
   name: "VProductForm",
@@ -79,28 +81,43 @@ export default {
       store.dispatch('product/readProduct', props.id)
     }
 
+    const initialState = clone(store.getters['product/getProduct'])
+
     const onSubmit = (data) => {
-      //TODO in the future if additional business logic is needed before product creation
-      //TODO move this into a vuex action
       console.log(data)
-      createProduct(data).then(() => {
-        Swal.fire({
-          text: 'The product has been created!',
-          icon: "success",
-          buttonsStyling: false,
-          confirmButtonText: "Ok, got it!",
-          customClass: {
-            confirmButton: "btn font-weight-bold btn-light-primary"
-          },
-          heightAuto: false
-        }).then(() => {
-          //TODO based on the submit type, redirect or do something else
-        })
-      })
+      if (props.id) {
+        store.dispatch('product/updateProduct', data)
+      } else {
+        store.dispatch('product/createProduct', data)
+      }
     }
 
-    onUnmounted(() => {
-      store.commit('product/resetState')
+    onBeforeRouteLeave((to, from) => {
+      if(!isEqual(store.getters['product/getProduct'], initialState)) {
+        Swal.fire({
+          title: 'You want to leave the page?',
+          text: `There are unsaved changes that will be lost!`,
+          icon: 'warning',
+          showCancelButton: true,
+          buttonsStyling: false,
+          cancelButtonColor: '#d33',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, leave!',
+          customClass: {
+            confirmButton: "btn font-weight-bold btn-light-primary",
+            cancelButton: "btn font-weight-bold btn-light-primary",
+          },
+          heightAuto: false
+        }).then((result) => {
+          if (result.isConfirmed) {
+            store.commit('product/resetState')
+            return true
+          }
+
+        })
+        return false
+      }
+      return true
     })
 
     return {

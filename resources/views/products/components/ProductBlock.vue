@@ -125,7 +125,7 @@ export default {
       deleteProduct: (id, title) => {
         Swal.fire({
           title: 'Are you sure?',
-          text: `You want to delete the product '${title}'?`,
+          html: `You are about to delete the product <b>${title}</b>!`,
           icon: 'warning',
           showCancelButton: true,
           buttonsStyling: false,
@@ -140,7 +140,7 @@ export default {
         }).then((result) => {
           if (result.isConfirmed) {
             store.dispatch('product/deleteProduct', id).then(() => {
-              store.dispatch('product/readProducts')
+              store.dispatch('products/readProducts')
             })
           }
         })

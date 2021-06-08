@@ -23,8 +23,6 @@ let mutations = {
   setCategories: (state, value) => state.categories = value,
   setTagOptions: (state, value) => state.tagOptions = value,
   setTags: (state, value) => state.tags = value,
-  setProducts: (state, value) => state.products = value,
-  setTotalProducts: (state, value) => state.totalProducts = value,
   resetState: (state) => Object.assign(state, state.defaultState),
 }
 

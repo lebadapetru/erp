@@ -71,7 +71,7 @@ export default {
         resize: true,
         height: 400,
         plugins: [
-          'advlist autolink autosave link image media lists charmap hr anchor',
+          'advlist autolink link image media lists charmap hr anchor',
           'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime nonbreaking',
           'table template paste importcss textpattern spellchecker'
         ],

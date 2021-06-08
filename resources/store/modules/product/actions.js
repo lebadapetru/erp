@@ -3,8 +3,9 @@ import { readLookupProductStatuses } from "resources/js/api/LookupProductStatus"
 import { readVendors } from "resources/js/api/Vendor";
 import { createCategory, readCategories } from "resources/js/api/Category";
 import { createTag, readTags } from "resources/js/api/Tag";
-import { createProduct, readProducts, readProduct, deleteProduct } from "resources/js/api/Product";
+import { createProduct, readProduct, deleteProduct, updateProduct } from "resources/js/api/Product";
 import { deleteFile } from "resources/js/api/File";
+import Swal from "sweetalert2";
 
 const actions = {
   readAndParseVariantOptions: ({ commit }) => {
@@ -75,15 +76,41 @@ const actions = {
       name: tag.text
     })
   },
-  readProducts: ({ commit }, filters) => {
-    return readProducts(filters).then((response) => {
-      commit('setProducts', response.data['hydra:member'])
-      commit('setTotalProducts', response.data['hydra:totalItems'])
-    })
-  },
   readProduct: ({ state, commit }, id) => {
     return readProduct(id).then((response) => {
       commit('setProduct', response.data)
+    })
+  },
+  createProduct: ({}, data) => {
+    createProduct(data).then(() => {
+      Swal.fire({
+        text: 'The product has been created!',
+        icon: "success",
+        buttonsStyling: false,
+        confirmButtonText: "Ok, got it!",
+        customClass: {
+          confirmButton: "btn font-weight-bold btn-light-primary"
+        },
+        heightAuto: false
+      }).then(() => {
+        //TODO based on the submit type, redirect or do something else
+      })
+    })
+  },
+  updateProduct: ({}, data) => {
+    updateProduct(data).then(() => {
+      Swal.fire({
+        text: 'The product has been updated!',
+        icon: "success",
+        buttonsStyling: false,
+        confirmButtonText: "Ok, got it!",
+        customClass: {
+          confirmButton: "btn font-weight-bold btn-light-primary"
+        },
+        heightAuto: false
+      }).then(() => {
+        //TODO based on the submit type, redirect or do something else
+      })
     })
   },
   deleteProduct: ({ state}, id) => {

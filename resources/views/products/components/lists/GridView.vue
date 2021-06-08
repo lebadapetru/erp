@@ -46,7 +46,7 @@ export default {
     const store = useStore()
     const pagination = usePagination()
     console.log(pagination.totalProducts)
-    const products = computed(() => store.getters['product/getProducts'])
+    const products = computed(() => store.getters['products/getProducts'])
 
     console.log(products)
 

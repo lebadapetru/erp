@@ -7,15 +7,15 @@ const usePagination = () => {
   let activePage = computed(() => store.getters['globals/getActivePage'])
   let itemsPerPage = computed(() => store.getters['globals/getItemsPerPage'])
 
-  store.dispatch('product/readProducts', {
+  store.dispatch('products/readProducts', {
     page: activePage.value,
     itemsPerPage: itemsPerPage.value
   })
-  const totalProducts = computed(() => store.getters['product/getTotalProducts'])
+  const totalProducts = computed(() => store.getters['products/getTotalProducts'])
 
   //TODO this gets triggered twice, find a way to trigger when value = initial state
   watch([activePage, itemsPerPage], ([page, itemsPerPage]) => {
-    store.dispatch('product/readProducts', {
+    store.dispatch('products/readProducts', {
       page,
       itemsPerPage
     })

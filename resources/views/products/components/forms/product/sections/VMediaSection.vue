@@ -45,7 +45,11 @@ export default {
         get: () => store.getters['product/getFiles'],
         set: () => store.commit('product/setFiles')
       }),
-      deleteFile: (id) => store.dispatch('product/deleteFile', id)
+      deleteFile: (id) => {
+        store.dispatch('product/deleteFile', id).then(() => {
+          store.dispatch('product/readProduct')
+        })
+      }
     }
   }
 }

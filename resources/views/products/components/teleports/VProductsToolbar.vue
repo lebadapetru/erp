@@ -59,7 +59,7 @@ export default {
     const store = useStore()
 
     return {
-      totalProducts: computed(() => store.getters['product/getTotalProducts'])
+      totalProducts: computed(() => store.getters['products/getTotalProducts'])
     }
   }
 }

@@ -20,7 +20,7 @@ const defaultState = {
   tags: [],
   files: [],
 }
-const state = () => ({
+const state = {
   defaultState: Object.freeze(defaultState),
   ...defaultState,
   variantOptions: [],
@@ -28,8 +28,6 @@ const state = () => ({
   vendorOptions: [],
   categoryOptions: [],
   tagOptions: [],
-  products: [],
-  totalProducts: 0,
-})
+}
 
 export default state

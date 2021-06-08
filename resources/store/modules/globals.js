@@ -5,12 +5,14 @@ const state = () => ({
   pagination: {
     activePage: 1,
     itemsPerPageOptions: [
+      { label: 1, value: 1 },
+      { label: 2, value: 2 },
       { label: 16, value: 16 },
       { label: 24, value: 24 },
       { label: 32, value: 32 },
       { label: 40, value: 40 },
     ],
-    itemsPerPage: 32,
+    itemsPerPage: 1,
   }
 })
 
