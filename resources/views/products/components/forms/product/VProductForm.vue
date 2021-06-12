@@ -93,7 +93,7 @@ export default {
       }
     }
 
-    onBeforeRouteLeave((to, from) => {
+    onBeforeRouteLeave((to, from, next) => {
       if(!isEqual(store.getters['product/getProduct'], initialState)) {
         Swal.fire({
           title: 'You want to leave the page?',
@@ -112,13 +112,12 @@ export default {
         }).then((result) => {
           if (result.isConfirmed) {
             store.commit('product/resetState')
-            return true
+            next()
           }
-
         })
-        return false
+      } else {
+        next()
       }
-      return true
     })
 
     return {

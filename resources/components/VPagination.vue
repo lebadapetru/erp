@@ -1,73 +1,116 @@
 <template>
-  <!--begin::Pagination-->
   <div
-    class="d-flex justify-content-between align-items-center flex-wrap"
+    class="card card-custom"
     :class="styleClasses"
   >
-    <div class="d-flex flex-wrap mr-3">
-      <button
-        @click="activePage = 1"
-        class="btn btn-icon btn-sm mr-2 my-1"
-        :class="[(activePage === 1) ? 'btn-secondary' : 'btn-light-primary']"
-        :disabled="activePage === 1"
+    <div class="card-body py-5">
+      <!--begin::Pagination-->
+      <div
+        class="d-flex justify-content-between align-items-center flex-wrap"
       >
-        <i class="ki ki-bold-double-arrow-back icon-xs"></i>
-      </button>
-      <button
-        @click="activePage -= 1"
-        class="btn btn-icon btn-sm mr-2 my-1"
-        :class="[(activePage === 1) ? 'btn-secondary' : 'btn-light-primary']"
-        :disabled="activePage === 1"
-      >
-        <i class="ki ki-bold-arrow-back icon-xs"></i>
-      </button>
+        <div class="d-flex flex-wrap mr-3">
+          <button
+            @click="activePage = 1"
+            class="btn btn-icon btn-sm mr-2 my-1"
+            :class="[(activePage === 1) ? 'btn-secondary' : 'btn-light-primary']"
+            :disabled="activePage === 1"
+          >
+            <i class="ki ki-bold-double-arrow-back icon-xs"></i>
+          </button>
+          <button
+            @click="activePage -= 1"
+            class="btn btn-icon btn-sm mr-2 my-1"
+            :class="[(activePage === 1) ? 'btn-secondary' : 'btn-light-primary']"
+            :disabled="activePage === 1"
+          >
+            <i class="ki ki-bold-arrow-back icon-xs"></i>
+          </button>
 
-      <template
-        v-for="page in pages"
-        :key="page"
-      >
-        <button
-          @click="activePage = page"
-          class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1"
-          :class="{ active: activePage === page }"
-        >
-          {{ page }}
-        </button>
-      </template>
+          <template
+            v-for="page in pages"
+            :key="page"
+          >
+            <button
+              @click="activePage = page"
+              class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1"
+              :class="{ active: activePage === page }"
+            >
+              {{ page }}
+            </button>
+          </template>
 
 
-      <button
-        @click="activePage += 1"
-        class="btn btn-icon btn-sm mr-2 my-1"
-        :class="[(activePage >= totalPages) ? 'btn-secondary' : 'btn-light-primary']"
-        :disabled="activePage >= totalPages"
-      >
-        <i class="ki ki-bold-arrow-next icon-xs"></i>
-      </button>
-      <button
-        @click="activePage = totalPages"
-        class="btn btn-icon btn-sm mr-2 my-1"
-        :class="[(activePage >= totalPages) ? 'btn-secondary' : 'btn-light-primary']"
-        :disabled="activePage >= totalPages"
-      >
-        <i class="ki ki-bold-double-arrow-next icon-xs"></i>
-      </button>
-    </div>
-    <div class="d-flex align-items-center">
-      <VBaseSelect
-        :placeholder="''"
-        :style-classes="'form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary'"
-        style="width: 75px;"
-        :name="'itemsPerPage'"
-        :options="itemsPerPageOptions"
-        v-model="itemsPerPage"
-      />
-      <span class="text-muted">
+          <button
+            @click="activePage += 1"
+            class="btn btn-icon btn-sm mr-2 my-1"
+            :class="[(activePage >= totalPages) ? 'btn-secondary' : 'btn-light-primary']"
+            :disabled="activePage >= totalPages"
+          >
+            <i class="ki ki-bold-arrow-next icon-xs"></i>
+          </button>
+          <button
+            @click="activePage = totalPages"
+            class="btn btn-icon btn-sm mr-2 my-1"
+            :class="[(activePage >= totalPages) ? 'btn-secondary' : 'btn-light-primary']"
+            :disabled="activePage >= totalPages"
+          >
+            <i class="ki ki-bold-double-arrow-next icon-xs"></i>
+          </button>
+        </div>
+        <div class="d-flex align-items-center">
+          <ul class="nav nav-pills me-6 mr-3 mb-sm-0">
+            <li class="nav-item m-0">
+              <button
+                class="btn btn-icon btn-sm border-0 btn-hover-primary"
+              >
+                <!--begin::Svg Icon | path: icons/duotone/Layout/Layout-4-blocks-2.svg-->
+                <span class="svg-icon svg-icon-lg">
+														<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+															<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																<rect x="5" y="5" width="5" height="5" rx="1" fill="#000000"></rect>
+																<rect x="14" y="5" width="5" height="5" rx="1" fill="#000000" opacity="0.3"></rect>
+																<rect x="5" y="14" width="5" height="5" rx="1" fill="#000000" opacity="0.3"></rect>
+																<rect x="14" y="14" width="5" height="5" rx="1" fill="#000000" opacity="0.3"></rect>
+															</g>
+														</svg>
+													</span>
+                <!--end::Svg Icon-->
+              </button>
+            </li>
+            <li class="nav-item m-0">
+              <button
+                class="btn btn-icon btn-sm border-0 btn-hover-primary"
+              >
+                <!--begin::Svg Icon | path: icons/duotone/Layout/Layout-horizontal.svg-->
+                <span class="svg-icon svg-icon-lg">
+														<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+															<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																<rect x="0" y="0" width="24" height="24"></rect>
+																<rect fill="#000000" opacity="0.3" x="4" y="5" width="16" height="6" rx="1.5"></rect>
+																<rect fill="#000000" x="4" y="13" width="16" height="6" rx="1.5"></rect>
+															</g>
+														</svg>
+													</span>
+                <!--end::Svg Icon-->
+              </button>
+            </li>
+          </ul>
+          <VBaseSelect
+            :placeholder="''"
+            :style-classes="'btn btn-light mr-4 border-0 btn-hover-primary'"
+            style="width: 75px;"
+            :name="'itemsPerPage'"
+            :options="itemsPerPageOptions"
+            v-model="itemsPerPage"
+          />
+          <span class="text-muted">
         Displaying {{ (itemsPerPage > totalItems) ? totalItems : itemsPerPage }} of {{ totalItems }} {{ label }} in {{ totalPages }} page{{ totalPages > 1 ? 's' : '' }}
       </span>
+        </div>
+      </div>
+      <!--end::Pagination-->
     </div>
   </div>
-  <!--end::Pagination-->
 </template>
 
 <script>

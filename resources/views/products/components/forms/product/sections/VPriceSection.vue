@@ -22,7 +22,6 @@
             <VBaseInput
               :type="'text'"
               :name="'originalPrice'"
-              @keypress="priceFilter"
               v-model:model-value="originalPrice"
               placeholder="0.00"
             />
@@ -41,7 +40,6 @@
               :type="'text'"
               :name="'reducedPrice'"
               placeholder="0.00"
-              @keypress="priceFilter"
               v-model:model-value="reducedPrice"
             />
           </div>

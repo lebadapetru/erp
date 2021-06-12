@@ -1,6 +1,6 @@
 <template>
   <teleport
-    to="#details"
+    to="#toolbar-left"
   >
     <!--begin::Search Form-->
     <span class="text-dark-50 font-weight-bold" id="kt_subheader_total">{{ totalProducts }} Total</span>
@@ -31,9 +31,10 @@
       </div>
     </form>
     <!--end::Search Form-->
+
   </teleport>
   <teleport
-    to="#toolbar"
+    to="#toolbar-right"
   >
     <!--begin::Toolbar-->
     <!--begin::Button-->

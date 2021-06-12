@@ -4,13 +4,13 @@
     <div class="d-flex align-items-center flex-wrap mr-2">
       <TheBreadcrumbs />
       <div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-4 bg-gray-200"></div>
-      <div id="details" class="d-flex align-items-center">
+      <div id="toolbar-left" class="d-flex align-items-center">
 
       </div>
     </div>
     <!--end::Info-->
     <!--begin::Toolbar-->
-    <div id="toolbar" class="d-flex align-items-center">
+    <div id="toolbar-right" class="d-flex align-items-center">
 
     </div>
     <!--end::Toolbar-->
