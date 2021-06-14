@@ -1,7 +1,7 @@
 <template>
   <teleport
     v-if="targetForm"
-    to="#toolbar"
+    to="#toolbar-right"
   >
     <!--begin::Button-->
     <router-link

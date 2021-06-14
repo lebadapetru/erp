@@ -6,7 +6,8 @@
       :total-items="totalProducts"
       :label="'products'"
     />
-    <GridView />
+    <TableView v-if="activeView === 'table'" />
+    <GridView v-else-if="activeView === 'grid'" />
     <VPagination
       v-if="totalProducts"
       :total-items="totalProducts"
@@ -25,6 +26,8 @@ import VProductsToolbar from "resources/views/products/components/teleports/VPro
 import GridView from "resources/views/products/components/lists/GridView";
 import TableView from "resources/views/products/components/lists/TableView";
 import { usePagination } from "resources/views/products/js/pagination";
+import { useStore } from "vuex";
+import { computed } from "vue";
 
 export default {
   name: "TheProducts",
@@ -35,12 +38,14 @@ export default {
     VProductsToolbar,
   },
   setup() {
+    const store = useStore()
     const router = useRouter()
     const pagination = usePagination()
 
     return {
       currentRoute: router.currentRoute,
       totalProducts: pagination.totalProducts,
+      activeView: computed(() => store.getters['products/getActiveView']),
     }
   }
 }

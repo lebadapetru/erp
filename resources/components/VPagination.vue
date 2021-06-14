@@ -61,7 +61,9 @@
           <ul class="nav nav-pills me-6 mr-3 mb-sm-0">
             <li class="nav-item m-0">
               <button
+                @click="activeView = 'grid'"
                 class="btn btn-icon btn-sm border-0 btn-hover-primary"
+                :class="{active: (activeView === 'grid')}"
               >
                 <!--begin::Svg Icon | path: icons/duotone/Layout/Layout-4-blocks-2.svg-->
                 <span class="svg-icon svg-icon-lg">
@@ -79,7 +81,9 @@
             </li>
             <li class="nav-item m-0">
               <button
+                @click="activeView = 'table'"
                 class="btn btn-icon btn-sm border-0 btn-hover-primary"
+                :class="{active: (activeView === 'table')}"
               >
                 <!--begin::Svg Icon | path: icons/duotone/Layout/Layout-horizontal.svg-->
                 <span class="svg-icon svg-icon-lg">
@@ -197,6 +201,10 @@ export default {
       totalPages,
       pages,
       activePage,
+      activeView: computed({
+        get: () => store.getters['products/getActiveView'],
+        set: (value) => store.commit('products/setActiveView', value),
+      }),
     }
   }
 }

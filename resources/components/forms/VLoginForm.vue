@@ -12,6 +12,7 @@
           placeholder="Email"
           autocomplete="email"
           name="email"
+          v-model:model-value="email"
       />
     </div>
     <div class="form-group">
@@ -21,6 +22,7 @@
           placeholder="Password"
           autocomplete="password"
           name="password"
+          v-model:model-value="password"
       />
     </div>
     <div class="form-group d-flex flex-wrap justify-content-between align-items-center px-8 opacity-60">
@@ -75,6 +77,8 @@ export default {
     }
 
     return {
+      email: '',
+      password: '',
       schema,
       onSubmit,
       showForgotPasswordSection: () => store.commit('setActiveSection', 'forgot-password')
