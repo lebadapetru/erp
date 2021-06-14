@@ -5,18 +5,14 @@
 
 @mixin svg-icon-color($color, $important: false) {
     svg {
-        g {
-            [fill] {
-                transition: fill 0.3s ease;
-                fill: $color valueif($important, !important, null);
-            }
+        [fill]:not(.permanent):not(g) {
+            transition: fill 0.3s ease;
+            fill: $color valueif($important, !important, null);
         }
 
         &:hover {
-            g {
-                [fill] {
-                    transition: fill 0.3s ease;
-                }
+            [fill]:not(.permanent):not(g) {
+                transition: fill 0.3s ease;
             }
         }
     }
@@ -24,10 +20,8 @@
 
 @mixin svg-icon-transition() {
     svg {
-        g {
-            [fill] {
-                transition: fill 0.3s ease;
-            }
+        [fill]:not(g) {
+            transition: fill 0.3s ease;
         }
     }
 }
@@ -36,13 +30,5 @@
     svg {
         height: $size valueif($important, !important, null);
         width: $size valueif($important, !important, null);
-    }
-}
-
-@mixin svg-logo-color($color, $important: false){
-    svg{
-        path{
-            fill: $color valueif($important, !important, null);
-        }
     }
 }

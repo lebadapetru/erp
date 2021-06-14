@@ -15,12 +15,11 @@
         align-items: center;
         justify-content: center;
         font-weight: 500;
-        color: $dark-75;
+        color: $gray-800;
         background-color: $gray-100;
         background-repeat: no-repeat;
         background-position: center center;
         background-size: cover;
-
         @include border-radius($border-radius);
     }
 
@@ -30,56 +29,45 @@
         border: 2px solid $white;
         border-radius: 100%;
         top: 0;
-        right: 0;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%) !important;
     }
 
     // Image
     > img {
-        display: flex;
+        width: 100%;
+        flex-shrink: 0;
+        display: inline-block;
         @include border-radius($border-radius);
     }
 
-    // Circle style
-    &.symbol-circle {
-        @include border-radius(50%);
-
-        > img {
-            @include border-radius(50%);
-        }
-
+    // Square
+    &.symbol-square {
+        &,
+        > img,
         .symbol-label {
-            @include border-radius(50%);
+            border-radius: 0 !important;
         }
     }
 
-    // Theme colors
-    @each $color, $value in $theme-colors {
-        // Default style
-        &.symbol-#{$color} {
-            .symbol-label {
-                background-color: $value;
-                color: theme-inverse-color($color);
-            }
-        }
-
-        // Light style
-        &.symbol-light-#{$color} {
-            .symbol-label {
-                background-color: theme-light-color($color);
-                color: $value;
-            }
+    // Circle
+    &.symbol-circle {
+        &,
+        > img,
+        .symbol-label {
+            border-radius: 50%;
         }
     }
 
-    // Responsize sizes
+    // Sizes
+    @include symbol-size(get($symbol-sizes, default));
+
     @each $breakpoint in map-keys($grid-breakpoints) {
         @include media-breakpoint-up($breakpoint) {
             $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
 
             @each $name, $value in $symbol-sizes {
-                @if ($name == 'default') {
-                    @include symbol-size($value);
-                } @else {
+                @if ($name != 'default') {
                     &.symbol#{$infix}-#{$name} {
                         @include symbol-size($value);
                     }
@@ -89,10 +77,12 @@
     }
 }
 
-// symbol Group
+// Group
 .symbol-group {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    margin-left: 10px;
 
     .symbol {
         position: relative;
@@ -100,10 +90,6 @@
         margin-left: -10px;
         border: 2px solid $white;
         transition: all 0.3s ease;
-
-        &:first-child {
-            margin-left: 0;
-        }
 
         &:hover {
             transition: all 0.3s ease;
@@ -114,20 +100,6 @@
     &.symbol-hover {
         .symbol {
             cursor: pointer;
-        }
-    }
-}
-
-// symbol List
-.symbol-list {
-    display: flex;
-    align-items: center;
-
-    .symbol {
-        margin-right: 0.5rem;
-
-        &:last-child {
-            margin-right: 0;
         }
     }
 }

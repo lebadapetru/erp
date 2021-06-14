@@ -24,6 +24,7 @@
         opacity: 0;
     }
 
+    &.overlay-show,
     &.overlay-block,
     &:hover {
         .overlay-layer {

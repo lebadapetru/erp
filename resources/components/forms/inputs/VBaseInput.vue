@@ -1,9 +1,14 @@
 <template>
-  <label v-if="label">{{ label }}</label>
+  <label
+    v-if="label"
+    :class="labelStyleClasses"
+  >
+    {{ label }}
+  </label>
   <input
     v-bind="$attrs"
     :type="type"
-    :class="styleClasses"
+    :class="inputStyleClasses"
     :name="name"
     :id="name"
     :value="modelValue"
@@ -15,7 +20,7 @@
     @blur="handleBlur"
     @keypress="onKeyPress"
   />
-  <div v-if="errorMessage" class="error-message">
+  <div v-if="errorMessage" class="error-message" role="alert">
     {{ capitalize(errorMessage) }}
   </div>
 </template>
@@ -36,9 +41,13 @@ export default {
       type: String,
       default: 'text'
     },
-    styleClasses: {
+    inputStyleClasses: {
       type: String,
       default: 'form-control'
+    },
+    labelStyleClasses: {
+      type: String,
+      default: 'form-label'
     },
     placeholder: {
       type: String,

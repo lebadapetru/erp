@@ -83,10 +83,6 @@ export default {
 
 <style lang="scss">
 // Import Main styles for this application
-@import "./assets/fonts/poppins/poppins.css";
-@import "./assets/fonts/keenthemes-icons/font/ki.css";
-@import "./assets/plugins/flaticon/flaticon.css";
-@import "./assets/plugins/flaticon2/flaticon.css";
 @import "./assets/sass/style";
-@import "resources/assets/sass/vendors/plugins/ckeditor";
+
 </style>
