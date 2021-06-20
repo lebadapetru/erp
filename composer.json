@@ -16,7 +16,7 @@
         "doctrine/orm": "^2.8",
         "gedmo/doctrine-extensions": "^3.0",
         "league/flysystem-bundle": "^2.0",
-        "league/oauth2-server": "^8.1",
+        "lexik/jwt-authentication-bundle": "^2.11",
         "liip/imagine-bundle": "^2.6.0",
         "nelmio/cors-bundle": "^1.5 || ^2.0",
         "nesbot/carbon": "^2.42",

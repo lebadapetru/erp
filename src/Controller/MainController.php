@@ -16,7 +16,7 @@ class MainController extends AbstractController
      * @Route(
      *     "/{route}",
      *     name="vue_pages",
-     *     requirements={"route"="^(?!.*api|_wdt|_profiler|login|logout|register|forgot-password|verify|favicon|build|uploads).+"},
+     *     requirements={"route"="^(?!.*api|_wdt|_profiler|logout|register|forgot-password|verify|favicon|build|storage).+"},
      *     methods={"GET"})
      */
     public function index(): \Symfony\Component\HttpFoundation\Response
@@ -26,17 +26,12 @@ class MainController extends AbstractController
 
         return $this->render('app.html.twig', [
             'appUrl' => $this->getParameter('app.url'),
-            'tinymceApiKey' => $this->getParameter('tinymce.api.key'),
+            'tinymceApiKey' => $user ? $this->getParameter('tinymce.api.key') : null,
             'fileConfiguration' => [
                 'mimeTypes' => File::ACCEPTED_MIME_TYPES,
                 'extensions' => File::ACCEPTED_EXTENSIONS,
             ],
-            'user' => [
-                'id' => $user->getId(),
-                'firstName' => $user->getFirstName(),
-                'lastName' => $user->getLastName(),
-                'email' => $user->getEmail()
-            ],
+            'user' => $user,
         ]);
     }
 }

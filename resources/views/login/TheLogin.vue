@@ -5,7 +5,7 @@
     <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
       <!--begin::Logo-->
       <a href="/" class="mb-12">
-        <img alt="Logo" src="build/media/logos/logo-2.svg" class="h-45px" />
+        <img alt="Logo" src="build/media/logos/logo-2-dark.svg" class="h-45px" />
       </a>
       <!--end::Logo-->
       <!--begin::Wrapper-->
@@ -36,7 +36,7 @@
 import VLoginForm from "resources/components/forms/VLoginForm";
 
 export default {
-  name: "TheLoginPage",
+  name: "TheLogin",
   components: {
     VLoginForm,
   }

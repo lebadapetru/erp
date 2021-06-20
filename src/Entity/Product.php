@@ -168,7 +168,7 @@ class Product
     private bool $isPhysicalProduct = true;
 
     /**
-     * @ORM\OneToMany(targetEntity=ProductFile::class, mappedBy="products", cascade="persist")
+     * @ORM\OneToMany(targetEntity=ProductFile::class, mappedBy="products", cascade={"persist"})
      * @Groups({"product:read", "product:write"})
      * @SerializedName("files")
      */

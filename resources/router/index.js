@@ -1,110 +1,135 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-const TheDashboard = () => import('../views/dashboard/TheDashboard')
-const TheCategories = () => import('../views/categories/TheCategories')
-const TheProducts = () => import('../views/products/TheProducts')
-const ProductForm = () => import('../views/products/components/forms/product/VProductForm')
-const TheServices = () => import('../views/services/TheServices')
-const TheECommerce = () => import('../views/ecommerce/TheECommerce')
-const NotFound = () => import('../views/dashboard/TheDashboard')
-
-/*the routes are dependent of services, and services should be requested through api to check validity*/
-export default createRouter({
-  history: createWebHistory(),
-  routes: [
-    {
-      path: '/',
-      name: 'Dashboard',
-      component: TheDashboard,
-      meta: {
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+const routes = [
+  {
+    path: '/login',
+    name: 'login',
+    title: 'Login',
+    component: () => import('resources/views/login/TheLogin'),
+    meta: {}
+  },
+  {
+    path: '/',
+    name: 'home',
+    component: () => import('resources/themes/base/Layout'),
+    children: [
+      {
+        path: '/',
+        name: 'dashboard',
+        title: 'Dashboard',
+        component: () => import('resources/views/dashboard/TheDashboard'),
+        meta: {
+          svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
       <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
          <rect x="0" y="0" width="24" height="24"/>
          <path d="M4.00246329,12.2004927 L13,14 L13,4.06189375 C16.9463116,4.55399184 20,7.92038235 20,12 C20,16.418278 16.418278,20 12,20 C7.64874861,20 4.10886412,16.5261253 4.00246329,12.2004927 Z" fill="#000000" opacity="0.3"/>
          <path d="M3.0603968,10.0120794 C3.54712466,6.05992157 6.91622084,3 11,3 L11,11.6 L3.0603968,10.0120794 Z" fill="#000000"/>
       </g>
    </svg>`
-      }
-    },
-    {
-      path: '/ecommerce',
-      name: 'E-commerce',
-      component: TheECommerce,
-      children: [
-        {
-          path: '/products',
-          name: 'Products',
-          component: TheProducts,
-          children: [
-            {
-              path: '/products/new',
-              name: 'Add product',
-              component: ProductForm,
-              meta: {}
-            },
-            {
-              path: '/products/:id/edit',
-              name: 'Edit product',
-              component: ProductForm,
-              props: true,
-              meta: {}
-            },
-            {
-              path: '/products/:id/delete',
-              name: 'Delete product',
-              component: ProductForm,
-              props: true,
-              meta: {}
-            },
-          ],
-          meta: {
-            icon: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+        }
+      },
+      {
+        path: '/ecommerce',
+        name: 'ecommerce',
+        title: 'E-Commerce',
+        component: () => import('resources/views/ecommerce/TheECommerce'),
+        children: [
+          {
+            path: '/products',
+            name: 'products',
+            title: 'Products',
+            component: () => import('resources/views/products/TheProducts'),
+            children: [
+              {
+                path: '/products/new',
+                name: 'add product',
+                title: 'Add product',
+                component: () => import('resources/views/products/components/forms/product/VProductForm'),
+                meta: {}
+              },
+              {
+                path: '/products/:id/edit',
+                name: 'edit product',
+                title: 'Edit product',
+                component: () => import('resources/views/products/components/forms/product/VProductForm'),
+                props: true,
+                meta: {}
+              },
+            ],
+            meta: {
+              svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
       <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
          <polygon points="0 0 24 0 24 24 0 24"/>
          <path d="M3.52270623,14.028695 C2.82576459,13.3275941 2.82576459,12.19529 3.52270623,11.4941891 L11.6127629,3.54050571 C11.9489429,3.20999263 12.401513,3.0247814 12.8729533,3.0247814 L19.3274172,3.0247814 C20.3201611,3.0247814 21.124939,3.82955935 21.124939,4.82230326 L21.124939,11.2583059 C21.124939,11.7406659 20.9310733,12.2027862 20.5869271,12.5407722 L12.5103155,20.4728108 C12.1731575,20.8103442 11.7156477,21 11.2385688,21 C10.7614899,21 10.3039801,20.8103442 9.9668221,20.4728108 L3.52270623,14.028695 Z M16.9307214,9.01652093 C17.9234653,9.01652093 18.7282432,8.21174298 18.7282432,7.21899907 C18.7282432,6.22625516 17.9234653,5.42147721 16.9307214,5.42147721 C15.9379775,5.42147721 15.1331995,6.22625516 15.1331995,7.21899907 C15.1331995,8.21174298 15.9379775,9.01652093 16.9307214,9.01652093 Z" fill="#000000" fill-rule="nonzero" opacity="1"/>
       </g>
    </svg>`
-          }
-        },
-        {
-          path: '/categories',
-          name: 'Categories',
-          component: TheCategories,
-          children: [
-            {
-              path: '/categories/:id/edit',
-              name: 'Edit category',
-              component: TheCategories,
-              meta: {}
-            },
-          ],
-          meta: {
-            icon: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+            }
+          },
+          {
+            path: '/categories',
+            name: 'categories',
+            title: 'Categories',
+            component: () => import('../views/categories/TheCategories'),
+            children: [
+              {
+                path: '/categories/:id/edit',
+                name: 'edit category',
+                title: 'Edit category',
+                component: () => import('../views/categories/TheCategories'),
+                meta: {}
+              },
+            ],
+            meta: {
+              svgIcon: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
       <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
          <polygon points="0 0 24 0 24 24 0 24"/>
          <path d="M12.9336061,16.072447 L19.36,10.9564761 L19.5181585,10.8312381 C20.1676248,10.3169571 20.2772143,9.3735535 19.7629333,8.72408713 C19.6917232,8.63415859 19.6104327,8.55269514 19.5206557,8.48129411 L12.9336854,3.24257445 C12.3871201,2.80788259 11.6128799,2.80788259 11.0663146,3.24257445 L4.47482784,8.48488609 C3.82645598,9.00054628 3.71887192,9.94418071 4.23453211,10.5925526 C4.30500305,10.6811601 4.38527899,10.7615046 4.47382636,10.8320511 L4.63,10.9564761 L11.0659024,16.0730648 C11.6126744,16.5077525 12.3871218,16.5074963 12.9336061,16.072447 Z" fill="#000000" fill-rule="nonzero"/>
          <path d="M11.0563554,18.6706981 L5.33593024,14.122919 C4.94553994,13.8125559 4.37746707,13.8774308 4.06710397,14.2678211 C4.06471678,14.2708238 4.06234874,14.2738418 4.06,14.2768747 L4.06,14.2768747 C3.75257288,14.6738539 3.82516916,15.244888 4.22214834,15.5523151 C4.22358765,15.5534297 4.2250303,15.55454 4.22647627,15.555646 L11.0872776,20.8031356 C11.6250734,21.2144692 12.371757,21.2145375 12.909628,20.8033023 L19.7677785,15.559828 C20.1693192,15.2528257 20.2459576,14.6784381 19.9389553,14.2768974 C19.9376429,14.2751809 19.9363245,14.2734691 19.935,14.2717619 L19.935,14.2717619 C19.6266937,13.8743807 19.0546209,13.8021712 18.6572397,14.1104775 C18.654352,14.112718 18.6514778,14.1149757 18.6486172,14.1172508 L12.9235044,18.6705218 C12.377022,19.1051477 11.6029199,19.1052208 11.0563554,18.6706981 Z" fill="#000000" opacity="0.3"/>
       </g>
    </svg>`
-          }
-        },
-      ],
-      meta: {
-        icon: ` <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+            }
+          },
+        ],
+        meta: {
+          svgIcon: ` <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
       <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
          <rect x="0" y="0" width="24" height="24"/>
          <path d="M12,4.56204994 L7.76822128,9.6401844 C7.4146572,10.0644613 6.7840925,10.1217854 6.3598156,9.76822128 C5.9355387,9.4146572 5.87821464,8.7840925 6.23177872,8.3598156 L11.2317787,2.3598156 C11.6315738,1.88006147 12.3684262,1.88006147 12.7682213,2.3598156 L17.7682213,8.3598156 C18.1217854,8.7840925 18.0644613,9.4146572 17.6401844,9.76822128 C17.2159075,10.1217854 16.5853428,10.0644613 16.2317787,9.6401844 L12,4.56204994 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
          <path d="M3.28077641,9 L20.7192236,9 C21.2715083,9 21.7192236,9.44771525 21.7192236,10 C21.7192236,10.0817618 21.7091962,10.163215 21.6893661,10.2425356 L19.5680983,18.7276069 C19.234223,20.0631079 18.0342737,21 16.6576708,21 L7.34232922,21 C5.96572629,21 4.76577697,20.0631079 4.43190172,18.7276069 L2.31063391,10.2425356 C2.17668518,9.70674072 2.50244587,9.16380623 3.03824078,9.0298575 C3.11756139,9.01002735 3.1990146,9 3.28077641,9 Z M12,12 C11.4477153,12 11,12.4477153 11,13 L11,17 C11,17.5522847 11.4477153,18 12,18 C12.5522847,18 13,17.5522847 13,17 L13,13 C13,12.4477153 12.5522847,12 12,12 Z M6.96472382,12.1362967 C6.43125772,12.2792385 6.11467523,12.8275755 6.25761704,13.3610416 L7.29289322,17.2247449 C7.43583503,17.758211 7.98417199,18.0747935 8.51763809,17.9318517 C9.05110419,17.7889098 9.36768668,17.2405729 9.22474487,16.7071068 L8.18946869,12.8434035 C8.04652688,12.3099374 7.49818992,11.9933549 6.96472382,12.1362967 Z M17.0352762,12.1362967 C16.5018101,11.9933549 15.9534731,12.3099374 15.8105313,12.8434035 L14.7752551,16.7071068 C14.6323133,17.2405729 14.9488958,17.7889098 15.4823619,17.9318517 C16.015828,18.0747935 16.564165,17.758211 16.7071068,17.2247449 L17.742383,13.3610416 C17.8853248,12.8275755 17.5687423,12.2792385 17.0352762,12.1362967 Z" fill="#000000"/>
       </g>
    </svg>`
-      }
-    },
-    {
-      path: "/:catchAll(.*)",
-      component: NotFound,
-      meta: {
-        isSystem: true,
-      }
-    },
-  ]
+        }
+      },
+    ]
+  },
+  {
+    path: "/:catchAll(.*)",
+    /*TODO 404 page*/
+    component: () => import('../views/dashboard/TheDashboard'),
+    meta: {
+      isSystem: true,
+    }
+  },
+]
+
+/*the routes are dependent of services, and services should be requested through api to check validity*/
+const router = createRouter({
+  history: createWebHistory(),
+  routes
 })
+
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/login', '/register'];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem('user');
+
+  // trying to access a restricted page + not logged in
+  // redirect to login page
+  if (authRequired && !loggedIn) {
+    next('/login');
+  } else {
+    next();
+  }
+})
+
+export default router

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import TheBreadcrumbs from "resources/views/base/TheBreadcrumbs";
+import TheBreadcrumbs from "resources/themes/base/TheBreadcrumbs";
 
 export default {
   name: "TheSubHeader",

@@ -95,6 +95,7 @@
 import { Form, Field } from 'vee-validate'
 import VBaseInput from "./inputs/VBaseInput";
 import { object, string } from 'yup'
+import { useRouter } from "vue-router";
 
 export default {
   name: "VLoginForm",
@@ -104,6 +105,8 @@ export default {
     VBaseInput,
   },
   setup() {
+    const router = useRouter()
+
     const schema = object().shape({
       email: string().required('Email address is required').email('Email address is invalid'),
       password: string().required('Password is required').min(8).max(128),
@@ -115,7 +118,7 @@ export default {
           accept: 'application/json',
         }
       }).then(() => {
-         window.location.href = '/';
+         router.push({name: 'home'})
       })
     }
 

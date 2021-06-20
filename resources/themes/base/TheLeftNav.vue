@@ -88,7 +88,7 @@
 
 <script>
 import { useRouter } from 'vue-router'
-import TheBrand from "resources/views/base/TheBrand";
+import TheBrand from "resources/themes/base/TheBrand";
 import { ref } from 'vue'
 
 export default {

@@ -17,7 +17,7 @@
         <meta name="csrf-token" content="{{ csrf_token('authenticate') }}">
 
     </head>
-    <body id="kt_body" class="{% block body_class %}header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable{% endblock %}">
+    <body id="kt_body" class="{% block body_class %}header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed toolbar-tablet-and-mobile-fixed aside-enabled aside-fixed{% endblock %}">
         {% block body %}{% endblock %}
         {% block javascripts %}
             {% block globals %}
