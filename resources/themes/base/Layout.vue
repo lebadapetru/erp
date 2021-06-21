@@ -6,25 +6,18 @@
     <!-- end:: Aside Left -->
 
     <div id="kt_wrapper" class="d-flex flex-column flex-row-fluid wrapper">
-      <KTHeader :title="pageTitle"></KTHeader>
+      <Header />
 
       <!-- begin:: Content -->
       <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
         <!-- begin:: Content Head -->
-        <KTToolbar
-          v-if="subheaderDisplay && !isDocPage"
-          :breadcrumbs="breadcrumbs"
-          :title="pageTitle"
-        />
+        <ToolBar />
         <!-- end:: Content Head -->
 
         <!-- begin:: Content Body -->
         <div class="post d-flex flex-column-fluid">
           <div
-            :class="{
-              'container-fluid': contentWidthFluid,
-              container: !contentWidthFluid
-            }"
+            class="container"
           >
             <router-view />
           </div>
@@ -32,7 +25,7 @@
         <!-- end:: Content Body -->
       </div>
       <!-- end:: Content -->
-      <KTFooter></KTFooter>
+      <Footer />
     </div>
   </div>
   <!-- end:: Body -->
@@ -40,11 +33,20 @@
 
 <script>
 import Aside from "resources/themes/base/aside/Aside";
+import Header from "resources/themes/base/header/Header";
+import ToolBar from "resources/themes/base/toolbar/ToolBar";
+import Footer from "resources/themes/base/footer/Footer";
+
 export default {
   name: "Layout",
   components: {
     Aside,
-  }
+    Header,
+    ToolBar,
+    Footer,
+  },
+  setup() {}
+
 }
 </script>
 

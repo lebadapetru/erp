@@ -86,8 +86,10 @@ export default {
     let processRoutes = (routes) => {
       return routes
         .filter((route) => (
-          !route.meta.hasOwnProperty('isSystem') ||
-          (route.meta.hasOwnProperty('isSystem') && !route.meta.isSystem)
+          route.hasOwnProperty('meta') && (
+            !route.meta.hasOwnProperty('isSystem') ||
+            (route.meta.hasOwnProperty('isSystem') && !route.meta.isSystem)
+          )
         ))
         .map((route) => {
           route.hasChildren = false
