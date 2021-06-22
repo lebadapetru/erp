@@ -5,7 +5,7 @@
   >
     <!--begin::Title-->
     <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">
-      {{ currentRoute.title }}
+      {{ currentRoute.meta.title }}
     </h1>
     <!--end::Title-->
 
@@ -15,35 +15,33 @@
 
     <!--begin::Breadcrumb-->
     <ul
-      v-if="currentRoute.matched"
+      v-if="currentRoute.matched.length > 0"
       class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1"
     >
-      <li class="breadcrumb-item pe-3">
-        <router-link to="/dashboard" class="text-muted text-hover-primary">
-          Home
-        </router-link>
-      </li>
-      <li class="breadcrumb-item">
-        <span class="bullet bg-gray-200 w-5px h-2px"></span>
-      </li>
       <template
         v-for="(route, index) in currentRoute.matched"
         :key="index"
       >
-        <li class="breadcrumb-item text-muted">
-          <router-link
-            :to="route.path"
-            class="text-muted text-hover-primary">
-            {{ route.title }}
-          </router-link>
-        </li>
-        <li class="breadcrumb-item">
-          <span class="bullet bg-gray-200 w-5px h-2px"></span>
-        </li>
+        <template
+          v-if="!route.meta.isSystem"
+        >
+          <li
+            class="breadcrumb-item text-muted"
+          >
+            <router-link
+              :to="route.path"
+              class="text-muted text-hover-primary">
+              {{ route.meta.title }}
+            </router-link>
+          </li>
+          <li
+            v-if="currentRoute.name !== route.name"
+            class="breadcrumb-item"
+          >
+            <span class="bullet bg-gray-200 w-5px h-2px"></span>
+          </li>
+        </template>
       </template>
-      <li class="breadcrumb-item pe-3 text-dark">
-        {{ currentRoute.title }}
-      </li>
     </ul>
     <!--end::Breadcrumb-->
   </div>
@@ -57,6 +55,7 @@ export default {
   name: "Breadcrumbs",
   setup() {
     const router = useRouter()
+    console.log('here')
     console.log(router.currentRoute)
     return {
       currentRoute: router.currentRoute

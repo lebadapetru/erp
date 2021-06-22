@@ -7,6 +7,7 @@ const routes = [
     component: () => import('resources/views/login/TheLogin'),
     meta: {
       title: 'Login',
+      isSystem: true,
     }
   },
   {
@@ -105,7 +106,10 @@ const routes = [
    </svg>`
         }
       },
-    ]
+    ],
+    meta: {
+      isSystem: true,
+    }
   },
   {
     //    path: "/:pathMatch(.*)*",

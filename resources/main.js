@@ -6,9 +6,12 @@ import "./httpClient"; /*TODO create plugin*/
 import vueClickAway from './assets/js/vendors/plugins/vue-click-away'
 import vuePerfectScrollbar from "./assets/js/vendors/plugins/vue-perfect-scrollbar";
 import 'bootstrap'
+import ElementPlus from 'element-plus';
+import 'element-plus/lib/theme-chalk/index.css';
 
 createApp(App)
   .use(store)
+  .use(ElementPlus)
   .use(router)
   .use(vueClickAway)
   .use(vuePerfectScrollbar, {

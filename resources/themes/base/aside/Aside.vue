@@ -19,7 +19,7 @@
       >
         <span class="svg-icon svg-icon-1 rotate-180">
           <inline-svg
-            src="media/icons/duotone/Navigation/Angle-double-left.svg"
+            :src="'build/media/icons/duotone/Navigation/Angle-double-left.svg'"
           />
         </span>
       </div>
