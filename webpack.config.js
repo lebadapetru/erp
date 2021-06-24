@@ -80,13 +80,13 @@ Encore
     'resources': path.resolve('./resources')
   })
 
-  .addPlugin(
+  /*.addPlugin(
     new webpack.DefinePlugin({
       // Drop Options API from bundle
       __VUE_OPTIONS_API__: false,
       __VUE_PROD_DEVTOOLS__: false
     })
-  )
+  )*/
 
   .addPlugin(
     new webpack.ProvidePlugin({

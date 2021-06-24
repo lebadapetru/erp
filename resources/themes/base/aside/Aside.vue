@@ -33,17 +33,7 @@
     </div>
     <!--end::Aside menu-->
 
-    <!--begin::Footer-->
-    <div
-      class="aside-footer flex-column-auto pt-5 pb-7 px-5"
-      id="kt_aside_footer"
-    >
-      <router-link
-        to="/dashboard"
-        class="btn btn-primary w-100"
-      >Preview Metronic</router-link >
-    </div>
-    <!--end::Footer-->
+
   </div>
   <!--end::Aside-->
 </template>
