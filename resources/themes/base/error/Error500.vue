@@ -7,7 +7,7 @@
     <div class="d-flex flex-column flex-column-fluid text-center p-10 py-lg-20">
       <!--begin::Logo-->
       <a href="#" class="mb-10 pt-lg-20">
-        <img alt="Logo" src="build/media/logos/logo-2-dark.svg" class="h-50px mb-5" />
+        <img alt="Logo" src="/build/media/logos/logo-2-dark.svg" class="h-50px mb-5" />
       </a>
       <!--end::Logo-->
 

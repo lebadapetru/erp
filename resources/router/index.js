@@ -22,7 +22,7 @@ const routes = [
         component: () => import('resources/views/dashboard/TheDashboard'),
         meta: {
           title: 'Dashboard',
-          svgIcon: "build/media/icons/duotone/Design/PenAndRuller.svg",
+          svgIcon: "/build/media/icons/duotone/Design/PenAndRuller.svg",
         }
       },
       {
@@ -37,7 +37,7 @@ const routes = [
             children: [
               {
                 path: '/products/new',
-                name: 'add product',
+                name: 'addProduct',
                 component: () => import('resources/views/products/components/forms/product/VProductForm'),
                 meta: {
                   title: 'Add product',
@@ -45,7 +45,7 @@ const routes = [
               },
               {
                 path: '/products/:id/edit',
-                name: 'edit product',
+                name: 'editProduct',
                 component: () => import('resources/views/products/components/forms/product/VProductForm'),
                 props: true,
                 meta: {
@@ -69,8 +69,16 @@ const routes = [
             component: () => import('../views/categories/TheCategories'),
             children: [
               {
+                path: '/categories/new',
+                name: 'addCategory',
+                component: () => import('../views/categories/TheCategories'),
+                meta: {
+                  title: 'Add category',
+                }
+              },
+              {
                 path: '/categories/:id/edit',
-                name: 'edit category',
+                name: 'editCategory',
                 component: () => import('../views/categories/TheCategories'),
                 meta: {
                   title: 'Edit category',

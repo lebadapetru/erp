@@ -15,7 +15,7 @@
           id="kt_aside_mobile_toggle"
         >
           <span class="svg-icon svg-icon-2x mt-1">
-            <inline-svg src="build/media/icons/duotone/Text/Menu.svg" />
+            <inline-svg src="/build/media/icons/duotone/Text/Menu.svg" />
           </span>
         </div>
       </div>
@@ -24,7 +24,7 @@
       <!--begin::Mobile logo-->
       <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
         <a href="#" class="d-lg-none">
-          <img alt="Logo" src="build/media/logos/logo-3.svg" class="h-30px" />
+          <img alt="Logo" src="/build/media/logos/logo-3.svg" class="h-30px" />
         </a>
       </div>
       <!--end::Mobile logo-->

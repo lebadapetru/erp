@@ -9,7 +9,7 @@
         id="kt_activities_toggle"
       >
         <span class="svg-icon svg-icon-1">
-          <inline-svg src="build/media/icons/duotone/Media/Equalizer.svg" />
+          <inline-svg src="/build/media/icons/duotone/Media/Equalizer.svg" />
         </span>
       </div>
       <!--end::drawer toggle-->
@@ -23,7 +23,7 @@
         class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px"
       >
         <span class="svg-icon svg-icon-1">
-          <inline-svg src="build/media/icons/duotone/Layout/Layout-4-blocks.svg" />
+          <inline-svg src="/build/media/icons/duotone/Layout/Layout-4-blocks.svg" />
         </span>
       </div>
       <QuickLinksMenu />
@@ -39,7 +39,7 @@
         id="kt_drawer_chat_toggle"
       >
         <span class="svg-icon svg-icon-1">
-          <inline-svg src="build/media/icons/duotone/Communication/Group-chat.svg" />
+          <inline-svg src="/build/media/icons/duotone/Communication/Group-chat.svg" />
         </span>
 
         <span
@@ -58,7 +58,7 @@
         class="btn btn-icon btn-active-light-primary position-relative w-30px h-30px w-md-40px h-md-40px"
       >
         <span class="svg-icon svg-icon-1">
-          <inline-svg src="build/media/icons/duotone/Code/Compiling.svg" />
+          <inline-svg src="/build/media/icons/duotone/Code/Compiling.svg" />
         </span>
       </div>
       <NotificationsMenu />
@@ -75,7 +75,7 @@
       <div
         class="cursor-pointer symbol symbol-30px symbol-md-40px"
       >
-        <img src="build/media//avatars/150-2.jpg" alt="metronic" />
+        <img src="/build/media//avatars/150-2.jpg" alt="metronic" />
       </div>
       <UserMenu />
       <!--end::Menu-->
@@ -92,7 +92,7 @@
         id="kt_header_menu_mobile_toggle"
       >
         <span class="svg-icon svg-icon-1">
-          <inline-svg src="build/media/icons/duotone/Text/Toggle-Right.svg" />
+          <inline-svg src="/build/media/icons/duotone/Text/Toggle-Right.svg" />
         </span>
       </div>
     </div>

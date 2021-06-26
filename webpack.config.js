@@ -75,7 +75,11 @@ Encore
     runtimeCompilerBuild: false //if using only single file components, this is not needed (https://symfony.com/doc/current/frontend/encore/vuejs.html#runtime-compiler-build)
 
   })
+  // uncomment if you use TypeScript
+  .enableTypeScriptLoader()
 
+  // uncomment if you're having problems with a jQuery plugin
+  .autoProvidejQuery()
   .addAliases({
     'resources': path.resolve('./resources')
   })
@@ -88,25 +92,11 @@ Encore
     })
   )*/
 
-  .addPlugin(
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jquery: 'jquery',
-      'window.jQuery': 'jquery',
-      jQuery: 'jquery'
-    })
-  )
-
-
-// uncomment if you use TypeScript
-//.enableTypeScriptLoader()
 
 // uncomment to get integrity="..." attributes on your script & link tags
 // requires WebpackEncoreBundle 1.4 or higher
 //.enableIntegrityHashes()
 
-// uncomment if you're having problems with a jQuery plugin
-//.autoProvidejQuery()
 
 // uncomment if you use API Platform Admin (composer req api-admin)
 //.enableReactPreset()

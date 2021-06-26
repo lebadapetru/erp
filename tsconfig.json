@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "resources/*": [
+        "resources/*"
+      ]
+    }
+  },
+  "include": [
+    "resources/**/*.ts",
+    "resources/**/*.tsx",
+    "resources/**/*.vue",
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

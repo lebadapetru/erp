@@ -207,6 +207,7 @@
 // Set menu link show state
 @mixin menu-link-show-state($title-color, $icon-color, $bullet-color, $arrow-color, $bg-color: null, $all-links: true) {
 	&.here > .menu-link,
+	&.showing > .menu-link,
 	&.show > .menu-link {
 		transition: $transition-link;
 

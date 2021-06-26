@@ -15,7 +15,7 @@
             class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder"
           >
             <span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
-              <inline-svg src="build/media/icons/duotone/Text/Filter.svg" />
+              <inline-svg src="/build/media/icons/duotone/Text/Filter.svg" />
             </span>
             Filter
           </a>

@@ -54,7 +54,7 @@
           <img
             v-else
             class="img-fluid mx-auto"
-            src="build/media/default-image.jpg"
+            src="/build/media/default-image.jpg"
             alt="image"
           />
         </div>

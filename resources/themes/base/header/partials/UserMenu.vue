@@ -8,7 +8,7 @@
       <div class="menu-content d-flex align-items-center px-3">
         <!--begin::Avatar-->
         <div class="symbol symbol-50px me-5">
-          <img alt="Logo" src="build/media/avatars/150-2.jpg" />
+          <img alt="Logo" src="/build/media/avatars/150-2.jpg" />
         </div>
         <!--end::Avatar-->
 
@@ -179,7 +179,7 @@
             <span class="symbol symbol-20px me-4">
               <img
                 class="rounded-1"
-                src="build/media/flags/united-states.svg"
+                src="/build/media/flags/united-states.svg"
                 alt="metronic"
               />
             </span>
@@ -197,7 +197,7 @@
             <span class="symbol symbol-20px me-4">
               <img
                 class="rounded-1"
-                src="build/media/flags/spain.svg"
+                src="/build/media/flags/spain.svg"
                 alt="metronic"
               />
             </span>
@@ -215,7 +215,7 @@
             <span class="symbol symbol-20px me-4">
               <img
                 class="rounded-1"
-                src="build/media/flags/germany.svg"
+                src="/build/media/flags/germany.svg"
                 alt="metronic"
               />
             </span>
@@ -233,7 +233,7 @@
             <span class="symbol symbol-20px me-4">
               <img
                 class="rounded-1"
-                src="build/media/flags/japan.svg"
+                src="/build/media/flags/japan.svg"
                 alt="metronic"
               />
             </span>
@@ -251,7 +251,7 @@
             <span class="symbol symbol-20px me-4">
               <img
                 class="rounded-1"
-                src="build/media/flags/france.svg"
+                src="/build/media/flags/france.svg"
                 alt="metronic"
               />
             </span>

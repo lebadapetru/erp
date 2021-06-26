@@ -46,6 +46,8 @@
         <div
           v-else
           class="menu-item menu-accordion"
+          @click="toggleMenuItem(parentRoute)"
+          :class="{ showing: (selectedMenuItems.includes(parentRoute.name)), here: activeTree.includes(parentRoute.name) }"
         >
               <span class="menu-link">
                 <span
@@ -70,9 +72,11 @@
           <div
             v-if="parentRoute.hasChildren"
             class="menu-sub menu-sub-accordion"
+            :id="'menu-submenu-'+parentRoute.name"
+            @click.stop
           >
             <template v-for="(childRoute, childIndex) in parentRoute.children" :key="childIndex">
-              <template v-if="!childRoute.hasChildren" >
+              <template v-if="!childRoute.hasChildren">
                 <div class="menu-item">
                   <router-link
                     v-slot="{ href, navigate, isActive, isExactActive }"
@@ -98,6 +102,8 @@
               <div
                 v-else
                 class="menu-item menu-accordion"
+                @click="toggleMenuItem(childRoute)"
+                :class="{ showing: (selectedMenuItems.includes(childRoute.name)), here: activeTree.includes(childRoute.name) }"
               >
                     <span class="menu-link">
                       <span class="menu-bullet">
@@ -109,6 +115,8 @@
                 <div
                   v-if="childRoute.hasChildren"
                   class="menu-sub menu-sub-accordion"
+                  :id="'menu-submenu-'+childRoute.name"
+                  @click.stop
                 >
                   <template v-for="(grandChildRoute, grandChildIndex) in childRoute.children" :key="grandChildIndex">
                     <div class="menu-item">
@@ -146,22 +154,37 @@
   <!--end::Menu wrapper-->
 </template>
 
-<script>
-import { ref } from "vue";
+<script lang="ts">
+import { computed, defineComponent, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import InlineSvg from 'vue-inline-svg'
 
-export default {
+export default defineComponent({
   name: "Menu",
   components: {
     InlineSvg,
   },
   setup() {
-    let selectedMenuItem = ref(null)
+    const selectedMenuItems = ref([])
     const router = useRouter()
-    console.log('router.options.routes')
-    console.log(router.options.routes)
-    let processRoutes = (routes) => {
+
+    const toggleMenuItem = (item) => {
+      if (!item.hasChildren) {
+        return;
+      }
+      $(function () {
+        console.log('toggle: ' + '#kt_aside_menu_wrapper #menu-submenu-' + item.name)
+        $('#kt_aside_menu_wrapper #menu-submenu-' + item.name).slideToggle('fast')
+      })
+
+      if (!selectedMenuItems.value.includes(item.name)) {
+        selectedMenuItems.value.push(item.name)
+      } else {
+        selectedMenuItems.value.splice(selectedMenuItems.value.indexOf(item.name), 1)
+      }
+    }
+
+    const processRoutes = (routes) => {
       return routes
         .filter((route) => (
           route.hasOwnProperty('meta') && (
@@ -185,38 +208,31 @@ export default {
             route.children = processRoutes(children)
             route.hasChildren = true
 
+            //collapse menu item on page load
+            const matched = router.currentRoute.value.matched.some((matched) => (matched.name === route.name))
+            if (matched && route.hasChildren) {
+              toggleMenuItem(route)
+            }
+
             return route
           }
 
           return route
         })
     }
-
+    console.log(router)
     const routes = processRoutes(router.options.routes[1].children)
 
-    const toggleMenuItem = (item, index) => {
-      if (!item.hasChildren) {
-        return;
-      }
-      $('#kt_aside_menu>ul:first-child>li>div[class=menu-submenu]').slideUp('fast')
-
-      if (selectedMenuItem.value === index) {
-        selectedMenuItem.value = null
-
-        return
-      }
-
-      $('#menu-submenu-' + index).slideDown('fast')
-      selectedMenuItem.value = index
-    }
-    console.log(routes)
     return {
       routes,
       toggleMenuItem,
-      selectedMenuItem
+      selectedMenuItems,
+      activeTree: computed(() => {
+        return router.currentRoute.value.matched.map((match) => match.name)
+      })
     }
   }
-}
+})
 </script>
 
 <style lang="scss">
