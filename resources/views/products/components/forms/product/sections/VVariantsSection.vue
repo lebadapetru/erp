@@ -1,6 +1,6 @@
 <template>
   <!--begin::Variants-->
-  <div class="card card-custom mt-4">
+  <div class="card card-custom">
     <div class="card-header">
       <div class="card-title">
         <h3 class="card-label">Variants</h3>

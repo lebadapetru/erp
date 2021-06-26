@@ -1,6 +1,6 @@
 <template>
   <!--begin::Title&Description-->
-  <div class="card card-custom mt-4">
+  <div class="card card-custom">
     <div class="card-body">
       <div class="form-group row">
         <div class="col-12">

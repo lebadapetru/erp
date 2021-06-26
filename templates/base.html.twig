@@ -17,7 +17,11 @@
         <meta name="csrf-token" content="{{ csrf_token('authenticate') }}">
 
     </head>
-    <body id="kt_body" class="{% block body_class %}header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed toolbar-tablet-and-mobile-fixed aside-enabled aside-fixed{% endblock %}">
+    <body
+        id="kt_body"
+        class="{% block body_class %}header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed toolbar-tablet-and-mobile-fixed aside-enabled aside-fixed{% endblock %}"
+        style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px"
+    >
         {% block body %}{% endblock %}
         {% block javascripts %}
             {% block globals %}
