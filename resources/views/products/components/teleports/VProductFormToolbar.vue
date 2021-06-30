@@ -6,11 +6,11 @@
     <!--begin::Button-->
     <router-link
       :to="{name: 'products'}"
-      class="btn btn-sm btn-bg-light text-muted btn-active-color-primary me-3"
+      class="btn btn-sm btn-light text-muted me-3"
     >
       <span class="">
-															<i class="flaticon2-left-arrow"></i>
-														</span>
+        <i class="fas fa-angle-left"></i>
+      </span>
       Back
     </router-link>
     <!--end::Button-->
@@ -38,7 +38,7 @@
         <li>
           <a href="#" class="dropdown-item text-hover-primary px-6 py-3">
 														<span class="me-3">
-															<i class="flaticon2-reload"></i>
+															<i class="fas fa-sync"></i>
 														</span>
             <span class="navi-text">Save &amp; continue</span>
           </a>
@@ -46,7 +46,7 @@
         <li>
           <a href="#" class="dropdown-item text-hover-primary px-6 py-3">
 														<span class="me-3">
-															<i class="flaticon2-add-1"></i>
+															<i class="fas fa-plus"></i>
 														</span>
             <span class="navi-text">Save &amp; add new</span>
           </a>
@@ -54,7 +54,7 @@
         <li>
           <a href="#" class="dropdown-item text-hover-primary px-6 py-3">
 														<span class="me-3">
-															<i class="flaticon2-left-arrow"></i>
+															<i class="fas fa-angle-left"></i>
 														</span>
             <span class="navi-text">Save &amp; exit</span>
           </a>

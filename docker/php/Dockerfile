@@ -40,8 +40,8 @@ RUN apk add --no-cache \
     gettext-dev \
     icu-dev\
     php7-intl \
-    nodejs \
-    nodejs-npm \
+    #nodejs \
+    #nodejs-npm \
     libjpeg-turbo-dev \
     jpeg-dev \
     libpng-dev \

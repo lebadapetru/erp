@@ -1,6 +1,6 @@
 <template>
   <!--begin::Pricing-->
-  <div class="card card-custom">
+  <div class="card card-custom mb-5">
     <div class="card-header">
       <div class="card-title">
         <h3 class="card-label">Pricing</h3>
@@ -14,16 +14,10 @@
         <div class="col-5">
           <label>Original price</label>
           <div class="input-group">
-            <div class="input-group-prepend">
-                        <span class="input-group-text">
-                          RON
-                        </span>
-            </div>
-            <VBaseInput
-              :type="'text'"
+            <span class="input-group-text">RON</span>
+            <VCurrencyInput
               :name="'originalPrice'"
-              v-model:model-value="originalPrice"
-              placeholder="0.00"
+              v-model="originalPrice"
             />
           </div>
         </div>
@@ -31,16 +25,13 @@
         <div class="col-4">
           <label>Reduced price</label>
           <div class="input-group">
-            <div class="input-group-prepend">
-                        <span class="input-group-text">
-                          RON
-                        </span>
-            </div>
+            <span class="input-group-text">RON</span>
             <VBaseInput
               :type="'text'"
               :name="'reducedPrice'"
               placeholder="0.00"
               v-model:model-value="reducedPrice"
+              disabled="disabled"
             />
           </div>
         </div>
@@ -48,16 +39,13 @@
         <div class="col-3">
           <label>Discount</label>
           <div class="input-group">
-            <div class="input-group-prepend">
-                      <span class="input-group-text">
-                        <i class="fas fa-percent fa-sm" style="color: unset;"></i>
-                      </span>
-            </div>
+            <span class="input-group-text">
+              <i class="fas fa-percent fa-sm" style="color: unset;"></i>
+            </span>
             <VBaseInput
               :type="'number'"
               :name="'discount'"
               placeholder="0"
-              @keypress="integerFilter"
               v-model:model-value="discount"
               :min="0"
               :max="100"
@@ -72,14 +60,15 @@
 
 <script>
 import VBaseInput from "resources/components/forms/inputs/VBaseInput";
-import { integerFilter, priceFilter } from "resources/js/helpers/inputFilters";
+import VCurrencyInput from "resources/components/forms/inputs/VCurrencyInput";
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed} from "vue";
 
 export default {
   name: "VPriceSection",
   components: {
     VBaseInput,
+    VCurrencyInput,
   },
   setup() {
     const store = useStore()
@@ -96,7 +85,7 @@ export default {
       set: (value) => {
         let tmpReducedPrice = (value <= originalPrice.value) ? value : originalPrice.value
         //or ((originalPrice-reducedPrice)/originalPrice))*100
-        store.commit("product/setDiscount", 100 - ((tmpReducedPrice * 100) / originalPrice.value))
+        //store.commit("product/setDiscount", 100 - ((tmpReducedPrice * 100) / originalPrice.value))
         store.commit("product/setReducedPrice", tmpReducedPrice)
       }
     })
@@ -115,8 +104,6 @@ export default {
       originalPrice,
       reducedPrice,
       discount,
-      integerFilter,
-      priceFilter,
     }
   }
 }

@@ -66,6 +66,7 @@ export default {
     id: {
       type: String,
       required: false,
+      default: null,
       validator: (id) => {
         //match uuid syntax
         return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)
@@ -77,15 +78,17 @@ export default {
     const productForm = ref(null)
 
     if (props.id) {
-      provide('productId', props.id)
       console.log(props.id)
       store.dispatch('product/readProduct', props.id)
     }
+    provide('id', props.id)
 
     const initialState = clone(store.getters['product/getProduct'])
 
     const onSubmit = (data) => {
       console.log(data)
+
+      return;
       if (props.id) {
         store.dispatch('product/updateProduct', data)
       } else {

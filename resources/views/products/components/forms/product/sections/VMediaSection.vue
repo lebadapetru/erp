@@ -1,6 +1,6 @@
 <template>
   <!--begin::Media-->
-  <div class="card card-custom">
+  <div class="card card-custom mb-5">
     <div class="card-header">
       <div class="card-title">
         <h3 class="card-label">Media</h3>
@@ -9,7 +9,7 @@
         <a href="#">
           Add media from url
           <span>
-            <i class="ki ki-bold-triangle-bottom icon-sm"></i>
+            <i class="fas fa-caret-down"></i>
           </span>
         </a>
       </div>
@@ -42,12 +42,11 @@ export default {
     const store = useStore()
     const productId = inject('id')
 
-    const deleteFile = (id) => {
-      store.dispatch('product/deleteFile', id).then(() => {
-        console.log('after delete')
-        console.log(productId)
+    const deleteFile = (fileId) => {
+      store.dispatch('product/deleteFile', fileId).then(() => {
+
         if (productId) {
-          store.dispatch('product/readProduct', id)
+          store.dispatch('product/readProduct', fileId)
         }
       })
     }

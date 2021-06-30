@@ -1,0 +1,49 @@
+
+.error-message {
+  margin-top: 0.25rem;
+  color: $danger;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+/*.ki {
+  color: $primary;
+}*/
+
+:root {
+  --star-size: 20px;
+  --star-color: #ccc;
+  --star-background: #f9bf3b;
+}
+
+.stars {
+  --percent: calc(var(--rating) / 5 * 100%);
+
+  display: inline-block;
+  font-size: var(--star-size);
+  font-family: Times; // make sure ★ appears correctly
+  line-height: 1;
+
+  &::before {
+    content: '★★★★★';
+    letter-spacing: 3px;
+    background: linear-gradient(90deg, var(--star-background) var(--percent), var(--star-color) var(--percent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+// Set menu link show state
+@mixin menu-link-show-state($title-color, $icon-color, $bullet-color, $arrow-color, $bg-color: null, $all-links: true) {
+  &.here > .menu-link,
+  &.showing > .menu-link,
+  &.show > .menu-link {
+    transition: $transition-link;
+
+    @include menu-link-theme($title-color, $icon-color, $bullet-color, $arrow-color, $bg-color);
+  }
+}
+
+.dropzone {
+  border: 2px dashed rgba(0, 0, 0, 0.3);
+}

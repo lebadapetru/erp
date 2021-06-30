@@ -15,7 +15,7 @@
             :class="[(activePage === 1) ? 'btn-secondary' : 'btn-light-primary']"
             :disabled="activePage === 1"
           >
-            <i class="ki ki-bold-double-arrow-back icon-xs"></i>
+            <i class="fas fa-angle-double-left"></i>
           </button>
           <button
             @click="activePage -= 1"
@@ -23,7 +23,7 @@
             :class="[(activePage === 1) ? 'btn-secondary' : 'btn-light-primary']"
             :disabled="activePage === 1"
           >
-            <i class="ki ki-bold-arrow-back icon-xs"></i>
+            <i class="fas fa-angle-left"></i>
           </button>
 
           <template
@@ -46,7 +46,7 @@
             :class="[(activePage >= totalPages) ? 'btn-secondary' : 'btn-light-primary']"
             :disabled="activePage >= totalPages"
           >
-            <i class="ki ki-bold-arrow-next icon-xs"></i>
+            <i class="fas fa-angle-right"></i>
           </button>
           <button
             @click="activePage = totalPages"
@@ -54,7 +54,7 @@
             :class="[(activePage >= totalPages) ? 'btn-secondary' : 'btn-light-primary']"
             :disabled="activePage >= totalPages"
           >
-            <i class="ki ki-bold-double-arrow-next icon-xs"></i>
+            <i class="fas fa-angle-double-right"></i>
           </button>
         </div>
         <div class="d-flex align-items-center">

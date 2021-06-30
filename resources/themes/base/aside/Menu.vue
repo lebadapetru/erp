@@ -173,7 +173,6 @@ export default defineComponent({
         return;
       }
       $(function () {
-        console.log('toggle: ' + '#kt_aside_menu_wrapper #menu-submenu-' + item.name)
         $('#kt_aside_menu_wrapper #menu-submenu-' + item.name).slideToggle('fast')
       })
 
@@ -220,7 +219,6 @@ export default defineComponent({
           return route
         })
     }
-    console.log(router)
     const routes = processRoutes(router.options.routes[1].children)
 
     return {

@@ -1,21 +1,22 @@
 <template>
   <!--begin::Title&Description-->
-  <div class="card card-custom">
+  <div class="card card-custom mb-5">
     <div class="card-body">
-      <div class="form-group row">
+      <div class="form-group row mb-6">
         <div class="col-12">
           <VBaseInput
             :label="'Title'"
             :type="'text'"
             placeholder="Cotton blue jeans"
             :name="'title'"
+            :label-style-classes="'form-label required'"
             v-model="title"
           />
         </div>
       </div>
-      <div class="form-group row">
+      <div class="form-group row mb-6">
         <div class="col-12">
-          <label>Description</label>
+          <label class="form-label">Description</label>
           <VTinyMCE v-model="description" />
         </div>
       </div>
