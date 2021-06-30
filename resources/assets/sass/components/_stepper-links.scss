@@ -7,14 +7,17 @@
     .stepper-nav {
 		display: flex;
 		margin: 0 auto;
-		justify-content: center;
-		align-items: center;	
-		flex-wrap: wrap;
+		padding-top: 4.25rem;
+		overflow: auto;
 
         .stepper-item {
+			margin-right: 3rem;
 			position: relative;
 			flex-shrink: 0;
-			margin: 1rem 1.5rem;
+
+			&:last-child {
+				margin-right: 0;
+			}			 
 
 			&:after {
 				content: " ";

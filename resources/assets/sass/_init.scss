@@ -4,14 +4,14 @@
 
 
 // Custom functions & mixins
-@import "base/functions";
-@import "base/mixins";
-@import "components/mixins";
-@import "vendors/plugins/mixins";
+@import "./core/base/functions";
+@import "./core/base/mixins";
+@import "./core/components/mixins";
+@import "./core/vendors/plugins/mixins";
 
 // Custom variables
-@import "components/variables.custom";
-@import "components/variables";
+@import "./components/variables.custom";
+@import "./core/components/variables";
 
 // Bootstrap initializaton
 @import "~bootstrap/scss/functions";
@@ -20,7 +20,7 @@
 @import "~bootstrap/scss/utilities";
 
 // 3rd-Party plugins variables
-@import "vendors/plugins/variables";
+@import "./core/vendors/plugins/variables";
 
 // Custom layout variables
 @import "layout/variables";

@@ -2,10 +2,6 @@
 // Main
 //
 
-// Font color from Content background color
-.content-bg-for-font-color {
-	color: $content-bg-color;
-}
 
 // Desktop Mode
 @include media-breakpoint-up(lg) {
