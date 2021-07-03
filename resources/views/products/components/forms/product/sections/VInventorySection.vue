@@ -1,5 +1,5 @@
 <template>
-  <div class="card card-custom">
+  <div class="card card-custom mb-5">
     <div class="card-header">
       <div class="card-title">
         <h3 class="card-label">Inventory</h3>
@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="card-body">
-      <div class="form-group row">
+      <div class="form-group row mb-3">
         <div class="col-6">
           <VBaseInput
             :label="'SKU (Stock Keeping Unit)'"
@@ -29,7 +29,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <div class="checkbox-inline">
+          <div class="checkbox-inline mb-2">
             <VBaseCheckbox
               :label="'Track quantity'"
               :name="'isTrackQuantity'"
@@ -55,18 +55,15 @@
       v-show="isTrackQuantity"
       class="card-footer"
     >
-      <div class="card-title">
-        <h6 class="card-label">Quantity</h6>
+      <div class="card-title mb-3">
+        <h4 class="card-label">Quantity</h4>
       </div>
 
       <div class="form-group row">
         <div class="col-12">
-          <VBaseInput
+          <VIntegerInput
             :label="'Available'"
-            :type="'number'"
             :name="'quantity'"
-            placeholder="0"
-            @keypress="integerFilter"
             :min="0"
             v-model="quantity"
           />
@@ -78,6 +75,7 @@
 
 <script>
 import VBaseInput from "resources/components/forms/inputs/VBaseInput";
+import VIntegerInput from "resources/components/forms/inputs/VIntegerInput";
 import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox";
 import { integerFilter } from "resources/js/helpers/inputFilters";
 import { computed } from "vue";
@@ -87,6 +85,7 @@ export default {
   name: "VInventorySection",
   components: {
     VBaseInput,
+    VIntegerInput,
     VBaseCheckbox,
   },
   setup() {

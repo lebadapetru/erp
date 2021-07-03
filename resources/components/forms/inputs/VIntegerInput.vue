@@ -14,8 +14,11 @@
     :value="modelValue"
     :placeholder="placeholder"
     :autocomplete="autocomplete"
+    :min="min"
+    :max="max"
     @input="onInput"
     @blur="handleBlur"
+    @keypress="integerFilter"
   />
   <div v-if="errorMessage" class="error-message" role="alert">
     {{ capitalize(errorMessage) }}
@@ -29,7 +32,7 @@ import capitalize from 'lodash/capitalize'
 import { integerFilter } from "resources/js/helpers/inputFilters";
 
 export default {
-  name: "VBaseInput",
+  name: "VIntegerInput",
   props: {
     label: {
       type: String,
@@ -37,7 +40,7 @@ export default {
     },
     type: {
       type: String,
-      default: 'text'
+      default: 'number'
     },
     inputStyleClasses: {
       type: String,
@@ -49,11 +52,11 @@ export default {
     },
     placeholder: {
       type: String,
-      default: 'Text'
+      default: '0'
     },
     autocomplete: {
       type: String,
-      default: 'on'
+      default: 'off'
     },
     name: {
       type: String,
@@ -67,6 +70,14 @@ export default {
       type: Object,
       default: undefined
     },
+    min: {
+      type: Number,
+      default: undefined
+    },
+    max: {
+      type: Number,
+      default: undefined
+    }
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
@@ -81,6 +92,7 @@ export default {
 
     const onInput = (event) => {
       handleInput(event)
+
       emit('update:modelValue', event.target.value)
     }
 
@@ -93,7 +105,8 @@ export default {
       handleBlur,
       errorMessage,
       inputValue,
-      capitalize
+      capitalize,
+      integerFilter,
     }
   },
 }

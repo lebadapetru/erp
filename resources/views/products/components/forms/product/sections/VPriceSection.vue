@@ -29,9 +29,10 @@
             <VBaseInput
               :type="'text'"
               :name="'reducedPrice'"
-              placeholder="0.00"
+              placeholder="0"
               v-model:model-value="reducedPrice"
               disabled="disabled"
+              :input-style-classes="'form-control text-muted text-end'"
             />
           </div>
         </div>

@@ -1,7 +1,5 @@
 <template>
-  <label
-    :class="styleClasses"
-  >
+  <div :class="wrapperStyleClasses" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top">
     <input
       v-bind="$attrs"
       type="checkbox"
@@ -9,9 +7,14 @@
       :checked="checkboxChecked"
       :value="checkboxValue"
       @change="onChange"
+      :class="inputStyleClasses"
+      :id="`${id}-${name}`"
     />
-    <span></span>{{ label }}
-  </label>
+    <label :class="labelStyleClasses" :for="`${id}-${name}`">
+      {{ label }}
+    </label>
+  </div>
+
   <div v-if="errorMessage" class="error-message">
     {{ capitalize(errorMessage) }}
   </div>
@@ -24,6 +27,10 @@ import { watch } from "vue";
 
 export default {
   props: {
+    id: {
+      type: String,
+      default: 'checkbox'
+    },
     label: {
       type: String,
       default: ''
@@ -32,9 +39,17 @@ export default {
       type: Boolean,
       default: false
     },
-    styleClasses: {
+    inputStyleClasses: {
       type: String,
-      default: 'checkbox'
+      default: 'form-check-input'
+    },
+    labelStyleClasses: {
+      type: String,
+      default: 'form-check-label'
+    },
+    wrapperStyleClasses: {
+      type: String,
+      default: 'form-check form-check-custom form-check-solid form-check-sm'
     },
     rules: {
       type: Object,

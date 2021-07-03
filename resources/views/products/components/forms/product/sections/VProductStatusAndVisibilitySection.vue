@@ -1,18 +1,16 @@
 <template>
   <!--begin::Product status & visibility-->
-  <div class="card card-custom">
+  <div class="card card-custom mb-5">
     <div class="card-header">
       <div class="card-title">
         <h3 class="card-label">Product status & visibility</h3>
       </div>
       <div class="card-toolbar">
-        <span class="switch switch-outline switch-icon switch-success">
-          <VBaseCheckbox
-            :name="'isPublic'"
-            :style-classes="''"
-            v-model:checked="isPublic"
-          />
-        </span>
+        <VBaseCheckbox
+          :name="'isPublic'"
+          :wrapper-style-classes="'form-check form-switch form-check-custom form-check-solid form-check-success'"
+          v-model:checked="isPublic"
+        />
       </div>
     </div>
     <div class="card-body">
@@ -28,18 +26,17 @@
       </div>
     </div>
     <div class="card-footer">
-      <div class="card-title">
-        <h6 class="card-label">Sales channels and apps</h6>
+      <div class="card-title mb-3">
+        <h4 class="card-label">Sales channels and apps</h4>
       </div>
 
       <div>
-        <div class="checkbox-inline mb-2">
-          <label class="checkbox">
-            <input type="checkbox" checked />
-            <span></span>Online store
-          </label>
-        </div>
-
+        <VBaseCheckbox
+          :name="'channel'"
+          :label="'Online store'"
+          :checked="true"
+        />
+        <br />
         <a href="#">Schedule availability</a>
       </div>
     </div>
@@ -82,5 +79,7 @@ export default {
 </script>
 
 <style scoped>
-
+.form-check.form-check-solid .form-check-input:checked {
+  background-color: #1BC5BD !important;
+}
 </style>

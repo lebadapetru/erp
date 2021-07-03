@@ -1,7 +1,12 @@
 <template>
-  <label v-if="label">{{ label }}</label>
+  <label
+    v-if="label"
+    :class="labelStyleClasses"
+    :for="`${id}-${name}`"
+  >{{ label }}</label>
   <select
-    :class="styleClasses"
+    :id="`${id}-${name}`"
+    :class="selectStyleClasses"
     :value="modelValue"
     v-bind="{
       ...$attrs,
@@ -39,6 +44,18 @@ import capitalize from 'lodash/capitalize'
 export default {
   name: "VBaseSelect",
   props: {
+    id: {
+      type: String,
+      default: 'select'
+    },
+    labelStyleClasses: {
+      type: String,
+      default: 'form-label'
+    },
+    selectStyleClasses: {
+      type: String,
+      default: 'form-select form-select-solid'
+    },
     placeholder: {
       type: String,
       default: 'Select your option'
@@ -54,10 +71,6 @@ export default {
     options: {
       type: Array,
       required: true
-    },
-    styleClasses: {
-      type: String,
-      default: 'custom-select form-control'
     },
     name: {
       type: String,

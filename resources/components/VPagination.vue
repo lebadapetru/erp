@@ -101,7 +101,7 @@
           </ul>
           <VBaseSelect
             :placeholder="''"
-            :style-classes="'btn btn-light mr-4 border-0 btn-hover-primary'"
+            :select-style-classes="'btn btn-light mr-4 border-0 btn-hover-primary'"
             style="width: 75px;"
             :name="'itemsPerPage'"
             :options="itemsPerPageOptions"

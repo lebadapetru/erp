@@ -40,6 +40,7 @@
                 :placeholder="'kg'"
                 :name="'measurementUnit'"
                 :options="[]"
+                :select-style-classes="'form-select form-select-solid text-muted'"
                 disabled="true"
               />
             </div>

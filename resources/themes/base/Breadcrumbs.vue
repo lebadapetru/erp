@@ -16,7 +16,7 @@
     <!--begin::Breadcrumb-->
     <ul
       v-if="currentRoute.matched.length > 0"
-      class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1"
+      class="breadcrumb breadcrumb-dot fw-bold fs-7 my-1"
     >
       <template
         v-for="(route, index) in currentRoute.matched"
@@ -34,12 +34,12 @@
               {{ route.meta.title }}
             </router-link>
           </li>
-          <li
+<!--          <li
             v-if="currentRoute.name !== route.name"
             class="breadcrumb-item"
           >
             <span class="bullet bg-gray-200 w-5px h-2px"></span>
-          </li>
+          </li>-->
         </template>
       </template>
     </ul>

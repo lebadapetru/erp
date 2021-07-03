@@ -11,7 +11,6 @@
     :class="inputStyleClasses"
     :name="name"
     :value="modelValue"
-    placeholder=""
     :autocomplete="autocomplete"
     ref="el"
     @input="onInput"
@@ -80,7 +79,7 @@ export default {
     });
 
     const onInput = (event) => {
-      handleInput(event.target.value)
+      handleInput(event)
       emit('update:modelValue', event.target.value)
     }
 
@@ -90,18 +89,15 @@ export default {
 
     onMounted(() => {
       Inputmask({
-        groupSeparator: false,
         radixPoint: '.',
-        alias: "numeric",
-        placeholder: "0",
-        autoGroup: true,
-        integerDigits: 9,
+        alias: "decimal",
+        placeholder: '0.00',
         digits: 2,
-        digitsOptional: false,
-        numericInput: true,
-        clearMaskOnLostFocus: false
+        clearMaskOnLostFocus: false,
+        colorMask: true,
       }).mask(el.value);
     })
+
     return {
       onInput,
       handleBlur,
