@@ -1,5 +1,5 @@
 <template>
-  <VSelect2
+<!--  <VSelect2
     v-if="tagOptions"
     :name="'tags'"
     :placeholder="`Search for tags`"
@@ -9,18 +9,21 @@
     :item-title="`tag`"
     :add-item-callback="parseAndCreateTagOption"
     @item-added="readAndParseTagOptions()"
-  />
+  />-->
+  <VMultiSelect />
 </template>
 
 <script>
 import VSelect2 from "resources/components/forms/inputs/VSelect2";
+import VMultiSelect from "resources/components/forms/inputs/VMultiSelect";
 import { computed } from 'vue'
 import { useStore } from "vuex";
 
 export default {
   name: "VSelectTags",
   components: {
-    VSelect2
+    VSelect2,
+    VMultiSelect,
   },
   setup() {
     const store = useStore()

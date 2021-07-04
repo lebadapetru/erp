@@ -1,13 +1,13 @@
 <template>
-  <div v-if="currentRoute.name === 'Products'">
+  <div v-if="currentRoute.name === 'products'">
     <VPagination
       v-if="totalProducts"
       :style-classes="'mb-8'"
       :total-items="totalProducts"
       :label="'products'"
     />
-    <TableView v-if="activeView === 'table'" />
-    <GridView v-else-if="activeView === 'grid'" />
+    <TableView v-if="isTableView" />
+    <GridView v-else-if="isGridView" />
     <VPagination
       v-if="totalProducts"
       :total-items="totalProducts"
@@ -42,10 +42,14 @@ export default {
     const router = useRouter()
     const pagination = usePagination()
 
+    const activeView = computed(() => store.getters['products/getActiveView'])
+
     return {
       currentRoute: router.currentRoute,
       totalProducts: pagination.totalProducts,
-      activeView: computed(() => store.getters['products/getActiveView']),
+      activeView,
+      isTableView: () => activeView.value === 'table',
+      isGridView: () => activeView.value === 'grid',
     }
   }
 }

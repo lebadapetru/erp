@@ -54,7 +54,7 @@ export default {
     },
     selectStyleClasses: {
       type: String,
-      default: 'form-select form-select-solid'
+      default: 'form-select'
     },
     placeholder: {
       type: String,

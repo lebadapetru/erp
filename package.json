@@ -30,6 +30,7 @@
     "@popperjs/core": "^2.5.4",
     "@tinymce/tinymce-vue": "^4.0.0",
     "@vee-validate/rules": "^4.2.4",
+    "@vueform/multiselect": "^2.0.1",
     "axios": "^0.21.1",
     "bootstrap": "^5.0.2",
     "chart.js": "^2.9.4",

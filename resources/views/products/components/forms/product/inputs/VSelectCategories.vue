@@ -1,5 +1,5 @@
 <template>
-  <VSelect2
+<!--  <VSelect2
       :name="'categories'"
       :placeholder="`Search for categories`"
       :has-tags="true"
@@ -8,18 +8,21 @@
       :item-title="`category`"
       :add-item-callback="parseAndCreateCategoryOption"
       @item-added="readAndParseCategoryOptions()"
-  />
+  />-->
+  <VMultiSelect />
 </template>
 
 <script>
 import VSelect2 from "resources/components/forms/inputs/VSelect2";
+import VMultiSelect from "resources/components/forms/inputs/VMultiSelect";
 import { useStore } from "vuex";
 import { computed } from "vue";
 
 export default {
   name: "VSelectCategories",
   components: {
-    VSelect2
+    VSelect2,
+    VMultiSelect,
   },
   setup() {
     const store = useStore()
