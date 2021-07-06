@@ -14,7 +14,7 @@
       :label="'products'"
     />
 
-    <VProductsToolbar />
+    <VProductsToolbar v-if="totalProducts" />
   </div>
   <router-view></router-view>
 </template>

@@ -1,6 +1,5 @@
 <template>
   <teleport
-    v-if="targetForm"
     to="#toolbar_actions"
   >
     <!--begin::Button-->
@@ -20,13 +19,13 @@
     >
       <button
         type="button"
-        class="btn btn-primary font-weight-bold"
+        class="btn btn-primary fw-bold"
         @click="onSave()"
       >Save Product
       </button>
       <button
         type="button"
-        class="btn btn-primary px-3 font-weight-bold dropdown-toggle"
+        class="btn btn-primary px-3 fw-bold dropdown-toggle"
         data-bs-toggle="dropdown"
         aria-expanded="false"
         id="kt_submit_menu_toggle"

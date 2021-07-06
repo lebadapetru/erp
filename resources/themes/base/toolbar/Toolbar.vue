@@ -6,7 +6,7 @@
       <Breadcrumbs />
 
       <!--begin::Actions-->
-      <div id="toolbar_actions" class="d-flex align-items-center py-1">
+      <div id="toolbar_actions" class="d-flex flex-grow-1 align-items-center py-1">
       </div>
       <!--end::Actions-->
     </div>
