@@ -1,8 +1,8 @@
 <template>
   <!--begin: Table-->
   <div class="table-responsive">
-    <table class="table">
-      <thead>
+    <table class="table table-row-bordered table-row-dashed gy-4 align-middle fw-bolder">
+      <thead class="fs-7 text-gray-400">
       <tr>
         <th
           v-for="(column, index) in columns"
@@ -11,9 +11,16 @@
         >
           {{ column.name }}
         </th>
+        <th
+          v-if="actions.length > 0"
+          class="text-end"
+          scope="col"
+        >
+          Actions
+        </th>
       </tr>
       </thead>
-      <tbody>
+      <tbody class="fs-7">
       <tr
         v-for="(item, index) in items"
         :key="index"
@@ -22,8 +29,15 @@
           v-for="(value, key) in item"
           :key="key + index"
         >
-          {{ value }}
+          <slot :name="key" :value="value">{{ value }}</slot>
         </td>
+        <template v-if="actions.length > 0">
+          <td>
+            <slot name="actions" :actions="actions">
+              <VActionsCell />
+            </slot>
+          </td>
+        </template>
       </tr>
       </tbody>
     </table>
@@ -32,10 +46,14 @@
 </template>
 
 <script>
+import VActionsCell from "resources/components/tables/cells/VActionsCell";
 import { computed } from "vue";
 
 export default {
   name: "VCustomTable",
+  components: {
+    VActionsCell,
+  },
   props: {
     columns: {
       type: Array,
@@ -44,7 +62,11 @@ export default {
     items: {
       type: Array,
       required: true
-    }
+    },
+    actions: {
+      type: Array,
+      required: false
+    },
   },
   setup(props) {
     const items = computed(() => {
@@ -62,7 +84,7 @@ export default {
 
 
     return {
-      items
+      items,
     }
   }
 }

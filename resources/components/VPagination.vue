@@ -109,7 +109,6 @@
           <VBaseSelect
             :placeholder="''"
             :select-style-classes="'form-select form-select-sm form-select-solid'"
-            style="width: 75px;"
             :name="'itemsPerPage'"
             :options="itemsPerPageOptions"
             v-model="itemsPerPage"
