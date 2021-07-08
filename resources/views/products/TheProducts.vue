@@ -2,7 +2,7 @@
   <div v-if="currentRoute.name === 'products'">
     <VPagination
       v-if="totalProducts"
-      :style-classes="'mb-8'"
+      :style-classes="'mb-5'"
       :total-items="totalProducts"
       :label="'products'"
     />

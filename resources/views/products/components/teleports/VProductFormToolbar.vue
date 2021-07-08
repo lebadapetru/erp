@@ -5,7 +5,7 @@
     <!--begin::Button-->
     <router-link
       :to="{name: 'products'}"
-      class="btn btn-sm btn-light text-muted me-3"
+      class="btn btn-sm btn-light text-muted ms-auto me-3"
     >
       <span class="">
         <i class="fas fa-angle-left"></i>
