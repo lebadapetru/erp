@@ -4,14 +4,14 @@
     <div class="me-5 position-relative">
       <!--begin::Avatar-->
       <div class="symbol symbol-45px symbol-square">
-        <img alt="Pic" src="/build/media/avatars/150-1.jpg" />
+        <img alt="Pic" :src="avatarPath" />
       </div>
       <!--end::Avatar-->
     </div>
     <!--end::Wrapper-->
     <!--begin::Info-->
     <div class="d-flex flex-column justify-content-center">
-      <a href="" class="mb-1 text-gray-800 text-hover-primary">{{ value }}</a>
+      <a href="" class="mb-1 text-gray-800 text-hover-primary">{{ title }}</a>
     </div>
     <!--end::Info-->
   </div>
@@ -21,9 +21,17 @@
 export default {
   name: "VTitleCell",
   props: {
-    value: {
+    title: {
       type: String,
       required: true
+    },
+    avatarPath: {
+      type: String,
+      required: false
+    }
+  },
+  setup(props) {
+    return {
     }
   }
 }

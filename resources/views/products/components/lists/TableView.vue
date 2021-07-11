@@ -7,8 +7,11 @@
         :items="products"
         :actions="actions"
       >
-        <template v-slot:title="titleProps">
-          <VTitleCell :value="titleProps.value" />
+        <template v-slot:titleCell="props">
+          <VTitleCell
+            :title="props.value"
+            :avatar-path="getAvatar(props.itemId)"
+          />
         </template>
       </VBaseTable>
     </div>
@@ -18,7 +21,9 @@
 
 <script>
 import VBaseTable from "resources/components/tables/VBaseTable";
+import VBaseRow from "resources/components/tables/rows/VBaseRow";
 import VTitleCell from "resources/components/tables/cells/VTitleCell";
+import { setImageSize, getImagePlaceholderPath } from "resources/ts/helpers";
 import { useStore } from "vuex";
 import { computed } from "vue";
 
@@ -26,6 +31,7 @@ export default {
   name: "TableView",
   components: {
     VBaseTable,
+    VBaseRow,
     VTitleCell,
   },
   setup() {
@@ -67,6 +73,14 @@ export default {
       columns,
       products,
       actions,
+      getAvatar: (id) => {
+        let url = getImagePlaceholderPath();
+        if(products.value[id].files.length > 0) {
+          url = products.value[id].files[0].file.url //first image
+        }
+
+        return setImageSize(url)
+      }
     }
   }
 }

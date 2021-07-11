@@ -4,6 +4,14 @@
     <table class="table table-row-bordered table-row-dashed gy-4 align-middle fw-bolder">
       <thead class="fs-7 text-gray-400">
       <tr>
+        <th class="w-25px">
+          <div class="form-check form-check-sm form-check-custom form-check-solid">
+            <VBaseCheckbox2
+              :input-style-classes="'form-check-input widget-9-check'"
+              v-model="test"
+            />
+          </div>
+        </th>
         <th
           v-for="(column, index) in columns"
           :key="index"
@@ -21,23 +29,32 @@
       </tr>
       </thead>
       <tbody class="fs-7">
-      <tr
-        v-for="(item, index) in items"
-        :key="index"
-      >
-        <td
-          v-for="(value, key) in item"
-          :key="key + index"
+        <tr
+          v-for="(rowValues, rowIndex) in items"
+          :key="rowIndex"
         >
-          <slot :name="key" :value="value">{{ value }}</slot>
-        </td>
-        <template v-if="actions.length > 0">
-          <td>
-            <slot name="actions" :actions="actions">
-              <VActionsCell />
-            </slot>
-          </td>
-        </template>
+          <slot name="row" :value="rowValues" :index="rowIndex">
+            <th class="w-25px">
+              ceva
+            </th>
+            <td
+              v-for="(cellValue, cellKey) in rowValues"
+              :key="rowIndex + cellKey"
+            >
+              <slot
+                :name="`${cellKey}Cell`"
+                :value="cellValue"
+                :item-id="rowIndex"
+              >{{ cellValue }}</slot>
+            </td>
+            <template v-if="actions.length > 0">
+              <td>
+                <slot name="actions" :actions="actions">
+                  <VActionsCell />
+                </slot>
+              </td>
+            </template>
+          </slot>
       </tr>
       </tbody>
     </table>
@@ -47,11 +64,15 @@
 
 <script>
 import VActionsCell from "resources/components/tables/cells/VActionsCell";
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox";
+import VBaseCheckbox2 from "resources/components/forms/inputs/VBaseCheckbox2";
 
 export default {
   name: "VCustomTable",
   components: {
+    VBaseCheckbox2,
+    VBaseCheckbox,
     VActionsCell,
   },
   props: {
@@ -85,6 +106,7 @@ export default {
 
     return {
       items,
+      test: ref([])
     }
   }
 }

@@ -199,7 +199,7 @@ export default defineComponent({
             route.children.length > 0
           ) {
             let children = route.children.filter((child) => {
-              return !child.path.includes('/:')
+              return !(child.path.includes('/new') || child.path.includes('/edit'))
             })
             if (!children.length) {
               return route

@@ -13,7 +13,7 @@ const state = () => ({
       { label: 32, value: 32 },
       { label: 40, value: 40 },
     ],
-    itemsPerPage: 3,
+    itemsPerPage: 16,
   }
 })
 
