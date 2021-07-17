@@ -4,11 +4,16 @@
     <table class="table table-row-bordered table-row-dashed gy-4 align-middle fw-bolder">
       <thead class="fs-7 text-gray-400">
       <tr>
-        <th class="w-25px">
+        <th
+          v-if="canSelectItems"
+          class="w-25px"
+        >
           <div class="form-check form-check-sm form-check-custom form-check-solid">
-            <VBaseCheckbox2
-              :input-style-classes="'form-check-input widget-9-check'"
-              v-model="test"
+            <input
+              type="checkbox"
+              class="form-check-input widget-9-check"
+              :name="name"
+              v-model="areAllItemsSelected"
             />
           </div>
         </th>
@@ -34,8 +39,19 @@
           :key="rowIndex"
         >
           <slot name="row" :value="rowValues" :index="rowIndex">
-            <th class="w-25px">
-              ceva
+            <th
+              v-if="canSelectItems"
+              class="w-25px"
+            >
+              <div class="form-check form-check-sm form-check-custom form-check-solid">
+                <input
+                  type="checkbox"
+                  class="form-check-input widget-9-check"
+                  :name="`${name}-${rowIndex}`"
+                  :value="rowIndex"
+                  v-model="selectedItems"
+                />
+              </div>
             </th>
             <td
               v-for="(cellValue, cellKey) in rowValues"
@@ -49,8 +65,8 @@
             </td>
             <template v-if="actions.length > 0">
               <td>
-                <slot name="actions" :actions="actions">
-                  <VActionsCell />
+                <slot name="actions" :item-id="rowIndex" :actions="actions">
+                  Actions
                 </slot>
               </td>
             </template>
@@ -64,7 +80,7 @@
 
 <script>
 import VActionsCell from "resources/components/tables/cells/VActionsCell";
-import { computed, ref } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox";
 import VBaseCheckbox2 from "resources/components/forms/inputs/VBaseCheckbox2";
 
@@ -88,8 +104,20 @@ export default {
       type: Array,
       required: false
     },
+    name: {
+      type: String,
+      required: true
+    },
+    canSelectItems: {
+      type: Boolean,
+      default: false
+    },
   },
-  setup(props) {
+  emits: ['itemSelected'],
+  setup(props, {emit}) {
+    const areAllItemsSelected = ref(false)
+    let selectedItems = ref([])
+
     const items = computed(() => {
       let items = []
       props.items.forEach(item => {
@@ -103,10 +131,29 @@ export default {
       return items
     })
 
+    watch(areAllItemsSelected, (newValue) => {
+      console.log('areAllItemsSelected')
+      console.log(newValue)
+      if(newValue) {
+        items.value.forEach((item, index) => {
+          selectedItems.value.push(index)
+        })
+      } else {
+        selectedItems.value = []
+      }
+
+    })
+
+    watch(() => selectedItems, (newValue) => {
+      console.log('selectedItems')
+      console.log(newValue)
+      emit('itemSelected', newValue)
+    })
 
     return {
       items,
-      test: ref([])
+      selectedItems,
+      areAllItemsSelected
     }
   }
 }

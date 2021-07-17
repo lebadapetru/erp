@@ -1,26 +1,19 @@
 <template>
   <div class="d-flex justify-content-end flex-shrink-0">
-    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-      <!--begin::Svg Icon | path: icons/duotone/General/Settings-1.svg-->
-      <span class="svg-icon svg-icon-3">
-        <inline-svg src="/build/media/icons/duotone/General/Settings-1.svg" />
-      </span>
-      <!--end::Svg Icon-->
-    </a>
-    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+    <button @click="editItem" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
       <!--begin::Svg Icon | path: icons/duotone/Communication/Write.svg-->
       <span class="svg-icon svg-icon-3">
         <inline-svg src="/build/media/icons/duotone/Communication/Write.svg" />
       </span>
       <!--end::Svg Icon-->
-    </a>
-    <a href="#" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+    </button>
+    <button @click="deleteItem" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
       <!--begin::Svg Icon | path: icons/duotone/General/Trash.svg-->
       <span class="svg-icon svg-icon-3">
         <inline-svg src="/build/media/icons/duotone/General/Trash.svg" />
       </span>
       <!--end::Svg Icon-->
-    </a>
+    </button>
   </div>
 </template>
 
@@ -31,6 +24,23 @@ export default {
   name: "VActionsCell",
   components: {
     InlineSvg,
+  },
+  props: {
+    itemId: {
+      type: Number,
+      required: true
+    }
+  },
+  emits: ['editItem', 'deleteItem'],
+  setup(props, {emit}) {
+    return {
+      editItem: () => {
+        emit('editItem', props.itemId)
+      },
+      deleteItem: () => {
+        emit('deleteItem', props.itemId)
+      },
+    }
   }
 }
 </script>
