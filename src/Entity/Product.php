@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ProductsRepository;
+use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -60,11 +61,6 @@ class Product
      * @Groups({"product:read", "product:write"})
      */
     private ?string $description;
-
-    /**
-     * @Groups({"product:read"})
-     */
-    private ?string $shortDescription;
 
     /**
      * @ORM\Column(type="boolean")
@@ -212,6 +208,17 @@ class Product
         return $this;
     }
 
+    /**
+     * @Groups({"product:read"})
+     */
+    public function getShortTitle(): ?string
+    {
+        return b($this->title)->slice(0, 64);
+    }
+
+    /**
+     * @Groups({"product:read"})
+     */
     public function getShortDescription(): ?string
     {
         return b($this->description)->slice(0, 128);
@@ -479,5 +486,21 @@ class Product
         }
 
         return $this;
+    }
+
+    /**
+     * @Groups({"product:read"})
+     */
+    public function getUpdatedAtAgo()
+    {
+        return Carbon::instance($this->createdAt)->diffForHumans();
+    }
+
+    /**
+     * @Groups({"product:read"})
+     */
+    public function getCreatedAtAgo()
+    {
+        return Carbon::instance($this->createdAt)->diffForHumans();
     }
 }

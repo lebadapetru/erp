@@ -26,6 +26,7 @@
       :to="{name: 'addProduct'}"
       class="btn btn-primary btn-sm fw-bold"
     >
+      <i class="fas fa-plus"></i>
       Add Product
     </router-link>
     <!--end::Button-->

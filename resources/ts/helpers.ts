@@ -3,5 +3,5 @@ export const setImageSize = (url: string, width: number = 150, height:number): s
 }
 
 export const getImagePlaceholderPath = (): string => {
-  return '/build/media/default-image.jpg'
+  return '/build/media/default-image.jpg' //TODO resize it, it's way too big for a thumbnail
 }

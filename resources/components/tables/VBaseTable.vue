@@ -20,6 +20,7 @@
         <th
           v-for="(column, index) in columns"
           :key="index"
+          :class="[(column.hasOwnProperty('width') && column.width) ? `w-${column.width}px min-w-${column.width}px` : null]"
           scope="col"
         >
           {{ column.name }}
@@ -123,7 +124,11 @@ export default {
       props.items.forEach(item => {
         let obj = {}
         props.columns.forEach(column => {
-          obj[column.key] = item[column.key]
+          if (column.hasOwnProperty('fieldParser') && typeof column.fieldParser === "function") {
+            obj[column.key] = column.fieldParser(item[column.key])
+          } else {
+            obj[column.key] = item[column.key]
+          }
         })
         items.push(obj)
       })
@@ -132,8 +137,6 @@ export default {
     })
 
     watch(areAllItemsSelected, (newValue) => {
-      console.log('areAllItemsSelected')
-      console.log(newValue)
       if(newValue) {
         items.value.forEach((item, index) => {
           selectedItems.value.push(index)
@@ -145,10 +148,8 @@ export default {
     })
 
     watch(() => selectedItems, (newValue) => {
-      console.log('selectedItems')
-      console.log(newValue)
       emit('itemSelected', newValue)
-    })
+    }, {deep: true})
 
     return {
       items,

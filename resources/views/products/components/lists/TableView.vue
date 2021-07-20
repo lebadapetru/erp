@@ -10,7 +10,7 @@
         :actions="actions"
         @item-selected="itemSelected"
       >
-        <template v-slot:titleCell="props">
+        <template v-slot:shortTitleCell="props">
           <VTitleCell
             :title="props.value"
             :avatar-path="getAvatar(props.itemId)"
@@ -53,27 +53,39 @@ export default {
     const columns = [
       {
         name: 'Title',
-        key: 'title',
+        key: 'shortTitle',
+        width: 300,
       },
       {
         name: 'Inventory',
         key: 'quantity',
+        width: null,
       },
       {
-        name: 'Description',
-        key: 'shortDescription',
+        name: 'Status',
+        key: 'status',
+        width: null,
+        fieldParser: (status) => {
+          return status.name
+        }
       },
       {
-        name: 'Is Public',
+        name: 'Visibility',
         key: 'isPublic',
+        width: null,
+        fieldParser: (isPublic) => {
+          return isPublic ? 'Public' : 'Private'
+        }
       },
       {
         name: 'Updated At',
-        key: 'updatedAt',
+        key: 'updatedAtAgo',
+        width: 150,
       },
       {
         name: 'Created At',
-        key: 'createdAt',
+        key: 'createdAtAgo',
+        width: 150,
       },
     ]
     const products = computed(() => store.getters['products/getProducts'])
@@ -87,23 +99,23 @@ export default {
       columns,
       products,
       actions,
-      getAvatar: (id) => {
+      getAvatar: (itemId) => {
         let url = getImagePlaceholderPath();
-        if (products.value[id].files.length > 0) {
-          url = products.value[id].files[0].file.url //first image
+        if (products.value[itemId].files.length > 0) {
+          url = products.value[itemId].files[0].file.url //first image
         }
 
         return setImageSize(url)
       },
-      itemSelected: (value) => {
+      itemSelected: (itemId) => {
         console.log('event')
-        console.log(value)
+        console.log(itemId)
       },
-      editProduct: (id) => {
-        router.push({ name: 'editProduct', params: {id: products.value[id].id}})
+      editProduct: (itemId) => {
+        router.push({ name: 'editProduct', params: {id: products.value[itemId].id}})
       },
-      deleteProduct: (id) => {
-        store.dispatch('product/deleteProduct', products.value[id].id).then(() => {
+      deleteProduct: (itemId) => {
+        store.dispatch('product/deleteProduct', products.value[itemId].id).then(() => {
           store.dispatch('products/readProducts')
         })
       }
