@@ -116,7 +116,9 @@
         </div>
         <div role="status" aria-live="polite">
           <span class="text-muted">
-            Displaying {{ (itemsPerPage > totalItems) ? totalItems : itemsPerPage }} of {{ totalItems }} {{ label }} in {{ totalPages }} page{{ totalPages > 1 ? 's' : '' }}
+            Displaying {{ (itemsPerPage > totalItems) ? totalItems : itemsPerPage }} of {{ totalItems }} {{ label }} in {{
+              totalPages
+            }} page{{ totalPages > 1 ? 's' : '' }}
           </span>
         </div>
       </div>
@@ -124,13 +126,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useStore } from "vuex";
-import { computed, ref, watch } from "vue";
-import VBaseSelect from "resources/components/forms/inputs/VBaseSelect";
+import { computed, defineComponent, ref, watch } from "vue";
+import VBaseSelect from "resources/components/forms/inputs/VBaseSelect.vue";
 import InlineSvg from "vue-inline-svg";
 
-export default {
+export default defineComponent({
   name: "VPagination",
   components: {
     VBaseSelect,
@@ -148,14 +150,18 @@ export default {
     totalItems: {
       type: Number,
       required: true
+    },
+    module: {
+      type: String,
+      required: true
     }
   },
   setup(props) {
     let pages = ref([])
     const store = useStore()
     const itemsPerPage = computed({
-        get: () => store.getters['globals/getItemsPerPage'],
-        set: (value) => store.commit('globals/setItemsPerPage', value)
+        get: () => store.getters[props.module + '/getItemsPerPage'],
+        set: (value) => store.commit(props.module + '/setItemsPerPage', value)
       }
     )
     const totalPages = computed(() => Math.ceil(props.totalItems / itemsPerPage.value))
@@ -164,8 +170,8 @@ export default {
     }
 
     let activePage = computed({
-      get: () => store.getters['globals/getActivePage'],
-      set: (value) => store.commit('globals/setActivePage', value)
+      get: () => store.getters[props.module + '/getActivePage'],
+      set: (value) => store.commit(props.module + '/setActivePage', value)
     })
 
     watch(activePage, value => {
@@ -184,10 +190,10 @@ export default {
         //keep the last 10 elements of the array and remove the rest
         pages.value.reverse().splice(10)
         pages.value.reverse()
-      //if selected page is the first element in array
+        //if selected page is the first element in array
       } else if (value === firstPage) {
         //add 4 more elements at the start of the array or until it reaches 1
-        for (let i = firstPage - 1; i >= ((firstPage - 4) <= 1 ? 1 : (firstPage-4)); i--) {
+        for (let i = firstPage - 1; i >= ((firstPage - 4) <= 1 ? 1 : (firstPage - 4)); i--) {
           pages.value.unshift(i)
         }
         //keep the first 10 elements of the array and remove the rest
@@ -205,14 +211,14 @@ export default {
     })
 
     const activeView = computed({
-      get: () => store.getters['products/getActiveView'],
-      set: (value) => store.commit('products/setActiveView', value),
+      get: () => store.getters[props.module + '/getActiveView'],
+      set: (value) => store.commit(props.module + '/setActiveView', value),
     })
 
     const setActivePage = (value) => activePage.value = value
 
     return {
-      itemsPerPageOptions: store.getters['globals/getItemsPerPageOptions'],
+      itemsPerPageOptions: store.getters[props.module + '/getItemsPerPageOptions'],
       itemsPerPage,
       totalPages,
       pages,
@@ -232,7 +238,7 @@ export default {
       setGridView: () => activeView.value = 'grid',
     }
   }
-}
+})
 </script>
 
 <style scoped>

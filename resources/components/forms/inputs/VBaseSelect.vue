@@ -36,12 +36,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useField } from 'vee-validate'
-import { watch } from 'vue'
+import { defineComponent, watch } from 'vue'
 import capitalize from 'lodash/capitalize'
 
-export default {
+export default defineComponent({
   name: "VBaseSelect",
   props: {
     id: {
@@ -108,5 +108,5 @@ export default {
       capitalize
     }
   }
-}
+})
 </script>

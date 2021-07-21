@@ -20,12 +20,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
-import { watch } from "vue";
+import { defineComponent, watch } from "vue";
 
-export default {
+export default defineComponent({
   props: {
     id: {
       type: String,
@@ -65,7 +65,6 @@ export default {
     const {
       checked: checkboxChecked,
       value: checkboxValue,
-      valueProp,
       errorMessage,
       handleChange,
     } = useField(props.name, props.rules, {
@@ -90,8 +89,7 @@ export default {
       capitalize,
       checkboxChecked,
       checkboxValue,
-      valueProp
     }
   }
-}
+})
 </script>

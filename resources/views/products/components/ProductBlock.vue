@@ -102,12 +102,12 @@
   <!--end:: Card-->
 </template>
 
-<script>
-import { computed, onMounted } from "vue";
+<script lang="ts">
+import { computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 import Swal from "sweetalert2";
 
-export default {
+export default defineComponent({
   name: "ProductBlock",
   props: {
     product: {
@@ -151,7 +151,7 @@ export default {
       rating: (Math.random() * 5).toFixed(2)
     }
   }
-}
+})
 </script>
 
 <style scoped>

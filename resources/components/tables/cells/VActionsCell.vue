@@ -17,10 +17,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import InlineSvg from "vue-inline-svg";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "VActionsCell",
   components: {
     InlineSvg,
@@ -42,7 +43,7 @@ export default {
       },
     }
   }
-}
+})
 </script>
 
 <style scoped>

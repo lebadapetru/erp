@@ -1,10 +1,10 @@
 import { readProducts } from "resources/js/api/Product";
 
 const actions = {
-  readProducts: ({ commit }, filters) => {
+  readItems: ({ commit }, filters) => {
     return readProducts(filters).then((response) => {
-      commit('setProducts', response.data['hydra:member'])
-      commit('setTotalProducts', response.data['hydra:totalItems'])
+      commit('setItems', response.data['hydra:member'])
+      commit('setTotalItems', response.data['hydra:totalItems'])
     })
   },
 }

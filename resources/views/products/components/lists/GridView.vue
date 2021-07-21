@@ -17,13 +17,13 @@
 
 </template>
 
-<script>
+<script lang="ts">
 import { useStore } from "vuex";
-import { computed } from "vue";
-import VPagination from "resources/components/VPagination";
-import ProductBlock from "resources/views/products/components/ProductBlock";
+import { computed, defineComponent } from "vue";
+import VPagination from "resources/components/VPagination.vue";
+import ProductBlock from "resources/views/products/components/ProductBlock.vue";
 
-export default {
+export default defineComponent({
   name: "GridView",
   components: {
     ProductBlock,
@@ -37,7 +37,7 @@ export default {
       products,
     }
   }
-}
+})
 </script>
 
 <style scoped>

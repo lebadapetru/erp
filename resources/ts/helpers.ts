@@ -1,5 +1,5 @@
-export const setImageSize = (url: string, width: number = 150, height:number): string => {
-  return url.replace("{widthxheight}", `${width}x${height ? height : ''}`)
+export const setImageSize = (url: string, width? : number, height?: number): string => {
+  return url.replace("{widthxheight}", `${width ? width : 150}x${height ? height : ''}`)
 }
 
 export const getImagePlaceholderPath = (): string => {

@@ -17,8 +17,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "VTitleCell",
   props: {
     title: {
@@ -34,7 +36,7 @@ export default {
     return {
     }
   }
-}
+})
 </script>
 
 <style scoped>

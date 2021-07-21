@@ -28,8 +28,6 @@ let mutations = {
 }
 
 mutations.setProduct = (state, value) => {
-  console.log('wtf2')
-  console.log(value)
   mutations.setId(state, value.id)
   mutations.setTitle(state, value.title)
   mutations.setDescription(state, value.description)

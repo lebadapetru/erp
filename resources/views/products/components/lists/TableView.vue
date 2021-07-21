@@ -29,22 +29,20 @@
   <!--end::Card-->
 </template>
 
-<script>
-import VBaseTable from "resources/components/tables/VBaseTable";
-import VBaseRow from "resources/components/tables/rows/VBaseRow";
-import VTitleCell from "resources/components/tables/cells/VTitleCell";
+<script lang="ts">
+import VBaseTable from "resources/components/tables/VBaseTable.vue";
+import VTitleCell from "resources/components/tables/cells/VTitleCell.vue";
+import VActionsCell from "resources/components/tables/cells/VActionsCell.vue";
 import { setImageSize, getImagePlaceholderPath } from "resources/ts/helpers";
 import { useStore } from "vuex";
-import { computed } from "vue";
-import VActionsCell from "resources/components/tables/cells/VActionsCell";
+import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
 
-export default {
+export default defineComponent({
   name: "TableView",
   components: {
     VActionsCell,
     VBaseTable,
-    VBaseRow,
     VTitleCell,
   },
   setup() {
@@ -59,12 +57,10 @@ export default {
       {
         name: 'Inventory',
         key: 'quantity',
-        width: null,
       },
       {
         name: 'Status',
         key: 'status',
-        width: null,
         fieldParser: (status) => {
           return status.name
         }
@@ -72,7 +68,6 @@ export default {
       {
         name: 'Visibility',
         key: 'isPublic',
-        width: null,
         fieldParser: (isPublic) => {
           return isPublic ? 'Public' : 'Private'
         }
@@ -88,7 +83,7 @@ export default {
         width: 150,
       },
     ]
-    const products = computed(() => store.getters['products/getProducts'])
+    const products = computed(() => store.getters['products/getItems'])
     const actions = [
       {
         name: 'Edit',
@@ -121,7 +116,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style scoped>

@@ -5,6 +5,7 @@
       :style-classes="'mb-5'"
       :total-items="totalProducts"
       :label="'products'"
+      :module="'products'"
     />
     <TableView v-if="isTableView" />
     <GridView v-else-if="isGridView" />
@@ -12,6 +13,7 @@
       v-if="totalProducts"
       :total-items="totalProducts"
       :label="'products'"
+      :module="'products'"
     />
 
     <VProductsToolbar v-if="totalProducts" />
@@ -19,17 +21,17 @@
   <router-view></router-view>
 </template>
 
-<script>
+<script lang="ts">
 import { useRouter } from "vue-router";
-import VPagination from "resources/components/VPagination";
-import VProductsToolbar from "resources/views/products/components/teleports/VProductsToolbar";
-import GridView from "resources/views/products/components/lists/GridView";
-import TableView from "resources/views/products/components/lists/TableView";
-import { usePagination } from "resources/views/products/js/pagination";
+import VPagination from "resources/components/VPagination.vue";
+import VProductsToolbar from "resources/views/products/components/teleports/VProductsToolbar.vue";
+import GridView from "resources/views/products/components/lists/GridView.vue";
+import TableView from "resources/views/products/components/lists/TableView.vue";
+import { usePagination } from "resources/views/products/ts/pagination";
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, defineComponent } from "vue";
 
-export default {
+export default defineComponent ({
   name: "TheProducts",
   components: {
     VPagination,
@@ -40,19 +42,19 @@ export default {
   setup() {
     const store = useStore()
     const router = useRouter()
-    const pagination = usePagination()
+    const pagination = usePagination('products')
 
     const activeView = computed(() => store.getters['products/getActiveView'])
 
     return {
       currentRoute: router.currentRoute,
-      totalProducts: pagination.totalProducts,
+      totalProducts: pagination.totalItems,
       activeView,
       isTableView: () => activeView.value === 'table',
       isGridView: () => activeView.value === 'grid',
     }
   }
-}
+})
 </script>
 
 <style scoped>

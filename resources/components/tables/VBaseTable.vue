@@ -79,22 +79,25 @@
   <!--end: Table-->
 </template>
 
-<script>
-import VActionsCell from "resources/components/tables/cells/VActionsCell";
-import { computed, reactive, ref, watch } from "vue";
-import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox";
-import VBaseCheckbox2 from "resources/components/forms/inputs/VBaseCheckbox2";
+<script lang="ts">
+import VActionsCell from "resources/components/tables/cells/VActionsCell.vue";
+import { computed, defineComponent, PropType, ref, watch } from "vue";
 
-export default {
+interface Test {
+  name: string,
+  key: string,
+  width?: number,
+  fieldParser: (any) => any,
+}
+
+export default defineComponent({
   name: "VCustomTable",
   components: {
-    VBaseCheckbox2,
-    VBaseCheckbox,
     VActionsCell,
   },
   props: {
     columns: {
-      type: Array,
+      type: Array as PropType<Array<Test>>,
       required: true
     },
     items: {
@@ -157,7 +160,7 @@ export default {
       areAllItemsSelected
     }
   }
-}
+})
 </script>
 
 <style scoped>

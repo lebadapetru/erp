@@ -33,12 +33,12 @@
   </teleport>
 </template>
 
-<script>
+<script lang="ts">
 import InlineSvg from "vue-inline-svg";
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "VProductsToolbar",
   components: {
     InlineSvg,
@@ -47,10 +47,10 @@ export default {
     const store = useStore()
 
     return {
-      totalProducts: computed(() => store.getters['products/getTotalProducts'])
+      totalProducts: computed(() => store.getters['products/getTotalItems'])
     }
   }
-}
+})
 </script>
 
 <style scoped>
