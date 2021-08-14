@@ -27,11 +27,13 @@ abstract class BaseRequest
 
     public function all(): array
     {
+        $errorMessages = [];
+
         $violations = $this->validate(
             $this->getData(),
             $this->getRules()
         );
-        $errorMessages = [];
+
         foreach ($violations as $violation) {
             $errorMessages[] = $violation->getMessage();
             throw new BadRequestHttpException($violation->getMessage());

@@ -4,6 +4,9 @@
 //
 
 // Bootstrap base colors
+
+@use 'sass:math';
+
 $white:    											#ffffff !default;
 $gray-100: 											#F5F8FA !default;
 $gray-200: 											#EFF2F5 !default;
@@ -467,7 +470,7 @@ $font-sizes: (
     5tx: $font-size-base * 5.75     // 74.75px
 ) !default;
 
-$headings-margin-bottom:                            $spacer / 2 !default;
+$headings-margin-bottom:                            math.div($spacer, 2) !default;
 $headings-font-family:                              null !default;
 $headings-font-style:                               null !default;
 $headings-font-weight:                              $font-weight-bolder !default;

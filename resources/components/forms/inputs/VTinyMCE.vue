@@ -13,13 +13,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Editor from '@tinymce/tinymce-vue'
 import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
-import { watch } from "vue";
+import { watch, defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "VTinyMCE",
   components: {
     editor: Editor
@@ -63,7 +63,7 @@ export default {
       handleChange,
       errorMessage,
       capitalize,
-      apiKey: app.tinymceApiKey,
+      apiKey: globalThis.app.tinymceApiKey,
       config: {
         branding: false,
         menubar: true,
@@ -91,7 +91,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style scoped>

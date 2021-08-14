@@ -1,7 +1,10 @@
 <template>
   <div class="d-flex align-items-center">
     <!--begin::Wrapper-->
-    <div class="me-5 position-relative">
+    <div
+      v-if="avatarPath"
+      class="me-5 position-relative"
+    >
       <!--begin::Avatar-->
       <div class="symbol symbol-45px symbol-square">
         <img alt="Pic" :src="avatarPath" />

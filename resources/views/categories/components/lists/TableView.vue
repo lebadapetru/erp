@@ -3,24 +3,23 @@
   <div class="card card-flush mb-5">
     <div class="card-body pt-0">
       <VBaseTable
-        :name="'products'"
+        :name="'categories'"
         :can-select-items="true"
         :columns="columns"
-        :items="products"
+        :items="categories"
         :actions="actions"
         @item-selected="itemSelected"
       >
-        <template v-slot:shortTitleCell="props">
+        <template v-slot:title="props">
           <VTitleCell
             :title="props.value"
-            :avatar-path="getAvatar(props.itemId)"
           />
         </template>
         <template v-slot:actions="props">
           <VActionsCell
             :item-id="props.itemId"
-            @editItem="editProduct"
-            @deleteItem="deleteProduct"
+            @editItem="editCategory"
+            @deleteItem="deleteCategory"
           />
         </template>
       </VBaseTable>
@@ -33,7 +32,6 @@
 import VBaseTable from "resources/components/tables/VBaseTable.vue";
 import VTitleCell from "resources/components/tables/cells/VTitleCell.vue";
 import VActionsCell from "resources/components/tables/cells/VActionsCell.vue";
-import { setImageSize, getImagePlaceholderPath } from "resources/ts/helpers.ts";
 import { useStore } from "vuex";
 import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
@@ -51,19 +49,8 @@ export default defineComponent({
     const columns = [
       {
         name: 'Title',
-        key: 'shortTitle',
+        key: 'title',
         width: 300,
-      },
-      {
-        name: 'Inventory',
-        key: 'quantity',
-      },
-      {
-        name: 'Status',
-        key: 'status',
-        fieldParser: (status) => {
-          return status.name
-        }
       },
       {
         name: 'Visibility',
@@ -83,7 +70,7 @@ export default defineComponent({
         width: 250,
       },
     ]
-    const products = computed(() => store.getters['products/getItems'])
+    const categories = computed(() => store.getters['categories/getItems'])
     const actions = [
       {
         name: 'Edit',
@@ -92,26 +79,18 @@ export default defineComponent({
 
     return {
       columns,
-      products,
+      categories,
       actions,
-      getAvatar: (itemId) => {
-        let url = getImagePlaceholderPath();
-        if (products.value[itemId].files.length > 0) {
-          url = products.value[itemId].files[0].file.url //first image
-        }
-
-        return setImageSize(url)
-      },
       itemSelected: (itemId) => {
         console.log('event')
         console.log(itemId)
       },
-      editProduct: (itemId) => {
-        router.push({ name: 'editProduct', params: {id: products.value[itemId].id}})
+      editCategory: (itemId) => {
+        router.push({ name: 'editCategory', params: {id: categories.value[itemId].id}})
       },
-      deleteProduct: (itemId) => {
-        store.dispatch('product/deleteProduct', products.value[itemId].id).then(() => {
-          store.dispatch('products/readProducts')
+      deleteCategory: (itemId) => {
+        store.dispatch('category/deleteCategory', categories.value[itemId].id).then(() => {
+          store.dispatch('category/readCategory')
         })
       }
     }

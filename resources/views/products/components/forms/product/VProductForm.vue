@@ -76,7 +76,6 @@ export default {
   setup(props) {
     const store = useStore()
     const productForm = ref(null)
-
     if (props.id) {
       console.log(props.id)
       store.dispatch('product/readProduct', props.id)

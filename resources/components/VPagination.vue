@@ -76,6 +76,7 @@
           </ul>
         </div>
       </div>
+<!--  TODO Single responsibility, view options should be in its own component in toolbar   -->
       <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-end">
         <ul class="nav nav-pills me-6 mb-2 mb-sm-0">
           <li class="nav-item m-0">

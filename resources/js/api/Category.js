@@ -6,8 +6,10 @@ const createCategory = (category) => {
   return httpClient.post(url, category)
 }
 
-const readCategories = () => {
-  return httpClient.get(url)
+const readCategories = (filters) => {
+  return httpClient.get(url, {
+    params: filters
+  })
 }
 
 export {

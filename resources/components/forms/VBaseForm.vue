@@ -4,11 +4,11 @@
   </form>
 </template>
 
-<script>
+<script lang="ts">
 import { useForm } from 'vee-validate'
-import { ref } from 'vue'
+import { ref, defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: "VBaseForm",
   emits: ["submit"],
   props: {
@@ -37,7 +37,7 @@ export default {
       onSubmit
     }
   }
-}
+})
 </script>
 
 <style scoped>

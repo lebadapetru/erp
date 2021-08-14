@@ -2,6 +2,8 @@
 // Symbol
 //
 
+@use 'sass:math';
+
 @mixin symbol-size($size) {
     > img {
         //width: 100%;
@@ -32,12 +34,12 @@
     &.symbol-2by3 {
         .symbol-label {
             height: $size;
-            width:  $size * 3/2;
+            width:  math.div($size * 3, 2);
         }
 
         > img {
             height: $size;
-            width:  $size * 3/2;
+            width:  math.div($size * 3, 2);
             max-width: auto;
         }
     }

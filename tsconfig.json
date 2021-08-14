@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es5",
-    "sourceMap": true,
+    "target": "esnext",
+    "module": "esnext",
+    "noImplicitThis": true,
+    "jsx": "preserve",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "lib": [
@@ -16,7 +18,8 @@
       "resources/*": [
         "resources/*"
       ]
-    }
+    },
+    //"typeRoots": [ "./types", "./node_modules/@types"]
   },
   "include": [
     "resources/**/*.ts",
@@ -24,6 +27,7 @@
     "resources/**/*.vue",
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    //"types",
   ]
 }

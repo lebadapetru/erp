@@ -83,7 +83,7 @@
 import VActionsCell from "resources/components/tables/cells/VActionsCell.vue";
 import { computed, defineComponent, PropType, ref, watch } from "vue";
 
-interface Test {
+interface TableColumn {
   name: string,
   key: string,
   width?: number,
@@ -97,7 +97,7 @@ export default defineComponent({
   },
   props: {
     columns: {
-      type: Array as PropType<Array<Test>>,
+      type: Array as PropType<TableColumn[]>,
       required: true
     },
     items: {

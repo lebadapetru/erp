@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CategoriesRepository;
+use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -132,9 +133,9 @@ class Category
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): string
     {
-        return $this->updatedAt;
+        return Carbon::instance($this->updatedAt)->format('Y-m-d h:i:s');
     }
 
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
@@ -144,9 +145,9 @@ class Category
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): string
     {
-        return $this->createdAt;
+        return Carbon::instance($this->createdAt)->format('Y-m-d h:i:s');
     }
 
     public function setCreatedAt(\DateTimeInterface $createdAt): self
