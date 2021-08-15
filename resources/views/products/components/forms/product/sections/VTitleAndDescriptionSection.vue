@@ -2,7 +2,7 @@
   <!--begin::Title&Description-->
   <div class="card card-custom mb-5">
     <div class="card-body">
-      <div class="form-group row mb-6">
+      <div class="row mb-6">
         <div class="col-12">
           <VBaseInput
             :label="'Title'"
@@ -14,7 +14,7 @@
           />
         </div>
       </div>
-      <div class="form-group row mb-6">
+      <div class="row mb-6">
         <div class="col-12">
           <label class="form-label">Description</label>
           <VTinyMCE v-model="description" />

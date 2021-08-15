@@ -8,7 +8,7 @@
   <input
     v-bind="$attrs"
     :type="type"
-    :class="inputStyleClasses"
+    :class="[inputStyleClasses, errorMessage ? 'border border-danger' : '']"
     :name="name"
     :id="name"
     :value="modelValue"

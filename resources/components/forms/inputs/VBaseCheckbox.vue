@@ -10,7 +10,11 @@
       :class="inputStyleClasses"
       :id="`${id}-${name}`"
     />
-    <label :class="labelStyleClasses" :for="`${id}-${name}`">
+    <label
+      v-if="label"
+      :class="labelStyleClasses"
+      :for="`${id}-${name}`"
+    >
       {{ label }}
     </label>
   </div>

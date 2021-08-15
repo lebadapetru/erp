@@ -7,7 +7,7 @@
   >
     <div class="row">
       <div class="col">
-        <div class="form-group">
+        <div>
           <VBaseInput
               type="text"
               style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
@@ -18,7 +18,7 @@
         </div>
       </div>
       <div class="col">
-        <div class="form-group">
+        <div>
           <VBaseInput
               type="text"
               style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
@@ -29,7 +29,7 @@
         </div>
       </div>
     </div>
-    <div class="form-group">
+    <div>
       <VBaseInput
           type="text"
           style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
@@ -38,7 +38,7 @@
           name="email"
       />
     </div>
-    <div class="form-group">
+    <div>
       <VBaseInput
           type="password"
           style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
@@ -47,7 +47,7 @@
           name="password"
       />
     </div>
-    <div class="form-group">
+    <div>
       <VBaseInput
           type="password"
           style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
@@ -56,7 +56,7 @@
           name="confirmPassword"
       />
     </div>
-    <div class="form-group px-8">
+    <div class="px-8">
       <div class="checkbox-inline justify-content-center">
         <label class="checkbox checkbox-outline checkbox-white opacity-60 text-white m-0">
           <Field type="checkbox" name="agreeTermsAndConditions" value="true" />
@@ -66,7 +66,7 @@
       </div>
       <div class="form-text text-muted text-center"></div>
     </div>
-    <div class="form-group">
+    <div>
       <button id="kt_login_signup_submit" class="btn btn-pill btn-primary opacity-90 px-15 py-3 m-2">Sign Up</button>
       <a
           @click="showLoginSection"

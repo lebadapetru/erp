@@ -16,7 +16,7 @@
       :module="'products'"
     />
 
-    <VProductsToolbar v-if="totalProducts" />
+    <VProductsToolbar />
   </div>
   <router-view></router-view>
 </template>

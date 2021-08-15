@@ -1,7 +1,7 @@
 <template>
   <div
     class="modal fade"
-    id="kt_modal_1"
+    id="add_category"
     tabindex="-1"
     aria-hidden="true"
   >

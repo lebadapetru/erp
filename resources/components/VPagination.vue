@@ -76,36 +76,7 @@
           </ul>
         </div>
       </div>
-<!--  TODO Single responsibility, view options should be in its own component in toolbar   -->
       <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-end">
-        <ul class="nav nav-pills me-6 mb-2 mb-sm-0">
-          <li class="nav-item m-0">
-            <button
-              class="btn btn-sm btn-icon btn-white btn-color-muted btn-active-primary me-3"
-              @click="setGridView()"
-              :class="{active: isGridView()}"
-            >
-              <!--begin::Svg Icon | path: icons/duotone/Layout/Layout-4-blocks-2.svg-->
-              <span class="svg-icon svg-icon-2">
-                <inline-svg src="/build/media/icons/duotone/Layout/Layout-4-blocks-2.svg" />
-              </span>
-              <!--end::Svg Icon-->
-            </button>
-          </li>
-          <li class="nav-item m-0">
-            <button
-              class="btn btn-sm btn-icon btn-white btn-color-muted btn-active-primary"
-              @click="setTableView()"
-              :class="{active: isTableView()}"
-            >
-              <!--begin::Svg Icon | path: icons/duotone/Layout/Layout-horizontal.svg-->
-              <span class="svg-icon svg-icon-2">
-                <inline-svg src="/build/media/icons/duotone/Layout/Layout-horizontal.svg" />
-              </span>
-              <!--end::Svg Icon-->
-            </button>
-          </li>
-        </ul>
         <div class="me-3">
           <VBaseSelect
             :placeholder="''"
@@ -211,11 +182,6 @@ export default defineComponent({
       activePage.value = 1
     })
 
-    const activeView = computed({
-      get: () => store.getters[props.module + '/getActiveView'],
-      set: (value) => store.commit(props.module + '/setActiveView', value),
-    })
-
     const setActivePage = (value) => activePage.value = value
 
     return {
@@ -224,7 +190,6 @@ export default defineComponent({
       totalPages,
       pages,
       activePage,
-      activeView,
       previousPage: () => activePage.value -= 1,
       nextPage: () => activePage.value += 1,
       isActivePage: (value) => activePage.value === value,
@@ -233,10 +198,6 @@ export default defineComponent({
       setActivePage,
       setActivePageToFirst: () => setActivePage(1),
       setActivePageToLast: () => setActivePage(totalPages.value),
-      isTableView: () => activeView.value === 'table',
-      isGridView: () => activeView.value === 'grid',
-      setTableView: () => activeView.value = 'table',
-      setGridView: () => activeView.value = 'grid',
     }
   }
 })

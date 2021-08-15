@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="card-body">
-      <div class="form-group row mb-3">
+      <div class="row mb-3">
         <div class="col-6">
           <VBaseInput
             :label="'SKU (Stock Keeping Unit)'"
@@ -59,7 +59,7 @@
         <h4 class="card-label">Quantity</h4>
       </div>
 
-      <div class="form-group row">
+      <div class="row">
         <div class="col-12">
           <VIntegerInput
             :label="'Available'"

@@ -61,12 +61,12 @@ export default defineComponent({
       },
       {
         name: 'Updated At',
-        key: 'updatedAt',
+        key: 'updatedAtForHumans',
         width: 250,
       },
       {
         name: 'Created At',
-        key: 'createdAt',
+        key: 'createdAtForHumans',
         width: 250,
       },
     ]

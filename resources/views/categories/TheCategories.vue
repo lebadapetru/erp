@@ -15,24 +15,24 @@
       :module="'categories'"
     />
 
-    <VCategoriesToolbar v-if="totalCategories" />
+    <VCategoriesToolbar />
     <VAddCategoryModal />
   </div>
   <router-view></router-view>
 </template>
 
-<script>
+<script lang="ts">
 import VPagination from "resources/components/VPagination";
 import TableView from "resources/views/categories/components/lists/TableView";
 import { useRouter } from "vue-router";
 import { usePagination } from "resources/views/products/ts/pagination";
 import VCategoriesToolbar from "resources/views/categories/components/teleports/VCategoriesToolbar";
-import VAddCategoryModal from "resources/views/categories/components/modals/VAddCategoryModal";
+import { defineAsyncComponent, defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "TheCategories",
   components: {
-    VAddCategoryModal,
+    VAddCategoryModal: defineAsyncComponent(() => import("resources/views/categories/components/modals/VAddCategoryModal")),
     TableView,
     VPagination,
     VCategoriesToolbar,
@@ -46,7 +46,7 @@ export default {
       totalCategories: pagination.totalItems,
     }
   }
-}
+})
 </script>
 
 <style scoped>

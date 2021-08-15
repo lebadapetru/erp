@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="card-body">
-      <div class="form-group row">
+      <div class="row">
         <div class="col-12">
           <div class="checkbox-inline">
             <VBaseCheckbox
@@ -25,7 +25,7 @@
       v-if="hasVariants"
       class="card-footer"
     >
-      <div class="form-group row">
+      <div class="row">
         <div class="col-6">
           <VSelectVariantOptions />
         </div>

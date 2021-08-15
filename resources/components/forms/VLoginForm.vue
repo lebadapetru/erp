@@ -13,7 +13,7 @@
     </div>
     <!--begin::Heading-->
     <!--begin::Input group-->
-    <div class="fv-row mb-10">
+    <div class="row mb-10">
       <VBaseInput
           input-style-classes="form-control form-control-lg form-control-solid"
           label-style-classes="form-label fs-6 fw-bolder text-dark"
@@ -28,7 +28,7 @@
     <!--end::Input group-->
 
     <!--begin::Input group-->
-    <div class="fv-row mb-10">
+    <div class="row mb-10">
       <!--begin::Wrapper-->
       <div class="d-flex flex-stack mb-2">
         <!--begin::Label-->
@@ -51,7 +51,7 @@
     </div>
     <!--end::Input group-->
 
-    <div class="fv-row mb-10">
+    <div class="row mb-10">
       <label class="form-check form-check-custom form-check-solid">
         <Field type="checkbox" name="_remember_me" as="input" value="true" class="form-check-input h-20px w-20px" />
         <span class="form-check-label fw-bolder fs-5">Remember me</span>

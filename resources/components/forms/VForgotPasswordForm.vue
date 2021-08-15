@@ -4,7 +4,7 @@
     id="kt_login_forgot_form"
     @submit="onSubmit"
   >
-    <div class="form-group mb-10">
+    <div class="mb-10">
       <VBaseInput
         style-classes="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
         type="text"
@@ -14,7 +14,7 @@
         :rules="email"
       />
     </div>
-    <div class="form-group">
+    <div>
       <button id="kt_login_forgot_submit" class="btn btn-pill btn-primary opacity-90 px-15 py-3 m-2">Request</button>
       <a
         @click="showLoginSection"

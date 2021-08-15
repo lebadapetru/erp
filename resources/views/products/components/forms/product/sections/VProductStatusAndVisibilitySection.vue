@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="card-body">
-      <div class="form-group row">
+      <div class="row">
         <div class="col-12">
           <VBaseSelect
             :name="'status'"

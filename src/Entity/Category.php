@@ -133,9 +133,9 @@ class Category
         return $this;
     }
 
-    public function getUpdatedAt(): string
+    public function getUpdatedAt(): \DateTimeInterface
     {
-        return Carbon::instance($this->updatedAt)->format('Y-m-d h:i:s');
+        return $this->updatedAt;
     }
 
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
@@ -145,9 +145,9 @@ class Category
         return $this;
     }
 
-    public function getCreatedAt(): string
+    public function getCreatedAt(): \DateTimeInterface
     {
-        return Carbon::instance($this->createdAt)->format('Y-m-d h:i:s');
+        return $this->createdAt;
     }
 
     public function setCreatedAt(\DateTimeInterface $createdAt): self
@@ -182,5 +182,21 @@ class Category
         }
 
         return $this;
+    }
+
+    /**
+     * @Groups({"category:read"})
+    */
+    public function getUpdatedAtForHumans(): string
+    {
+        return Carbon::instance($this->createdAt)->format('Y M d, g:i a');
+    }
+
+    /**
+     * @Groups({"category:read"})
+     */
+    public function getCreatedAtForHumans(): string
+    {
+        return Carbon::instance($this->createdAt)->format('Y M d, g:i a');
     }
 }

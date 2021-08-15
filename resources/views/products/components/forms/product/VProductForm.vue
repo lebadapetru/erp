@@ -20,7 +20,6 @@
       </div>
     </div>
     <VProductFormToolbarActions
-      v-if="productForm"
       :target-form="productForm"
     />
   </VBaseForm>

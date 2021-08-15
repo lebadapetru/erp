@@ -284,9 +284,9 @@ class Product
         return $this;
     }
 
-    public function getUpdatedAt(): string
+    public function getUpdatedAt(): \DateTimeInterface
     {
-        return Carbon::instance($this->updatedAt)->format('Y-m-d h:i:s');
+        return $this->updatedAt;
     }
 
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
@@ -296,9 +296,9 @@ class Product
         return $this;
     }
 
-    public function getCreatedAt(): string
+    public function getCreatedAt(): \DateTimeInterface
     {
-        return Carbon::instance($this->createdAt)->format('Y-m-d h:i:s');
+        return $this->createdAt;
     }
 
     public function setCreatedAt(\DateTimeInterface $createdAt): self
@@ -502,5 +502,21 @@ class Product
     public function getCreatedAtAgo(): string
     {
         return Carbon::instance($this->createdAt)->diffForHumans();
+    }
+
+    /**
+     * @Groups({"product:read"})
+     */
+    public function getUpdatedAtForHumans(): string
+    {
+        return Carbon::instance($this->createdAt)->format('Y M d, g:i a');
+    }
+
+    /**
+     * @Groups({"product:read"})
+     */
+    public function getCreatedAtForHumans(): string
+    {
+        return Carbon::instance($this->createdAt)->format('Y M d, g:i a');
     }
 }

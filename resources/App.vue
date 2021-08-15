@@ -1,11 +1,14 @@
 <template>
+  <VFlashMessage />
   <router-view />
 </template>
 
 <script>
 
+import VFlashMessage from "resources/components/alerts/VFlashMessage";
 export default {
   name: 'App',
+  components: { VFlashMessage },
   setup() {
     return {
     }

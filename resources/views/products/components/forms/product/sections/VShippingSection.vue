@@ -21,7 +21,7 @@
       v-if="isPhysicalProduct"
       class="card-footer"
     >
-      <div class="form-group row">
+      <div class="row">
         <div class="col-12">
           <div class="row">
             <div class="col-8">

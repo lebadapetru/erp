@@ -1,6 +1,7 @@
 <template>
   <teleport
     to="#toolbar_actions"
+    v-if="isMounted"
   >
     <!--begin::Button-->
     <router-link
@@ -66,6 +67,8 @@
 
 <script>
 
+import { onMounted, ref } from "vue";
+
 export default {
   name: "VProductFormToolbarActions",
   props: {
@@ -75,11 +78,18 @@ export default {
     }
   },
   setup(props) {
+    const isMounted = ref(false)
+
     const onSave = () => {
       props.targetForm.el.dispatchEvent(new Event('submit'));
     }
 
+    onMounted(() => {
+      isMounted.value = true
+    })
+
     return {
+      isMounted,
       onSave
     }
   }
