@@ -4,6 +4,7 @@
     id="add_category"
     tabindex="-1"
     aria-hidden="true"
+    ref="modal"
   >
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-650px">
@@ -34,7 +35,7 @@
           <slot
             name="footer"
           >
-            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-light" @click="hide()">Close</button>
             <button type="button" class="btn btn-primary">Save changes</button>
           </slot>
         </div>
@@ -46,16 +47,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import InlineSvg from 'vue-inline-svg'
+import * as bootstrap from 'bootstrap'
 
 export default defineComponent({
-  name: "VBaseModal",
+  name: "VBootstrapModal",
   components: {
     InlineSvg,
   },
   setup() {
-
+    const modal = ref(null)
+    return {
+      modal,
+      show: () => {
+        const myModal = bootstrap.Modal.getInstance(modal.value)
+        myModal.show()
+      },
+      hide: () => {
+        const myModal = bootstrap.Modal.getInstance(modal.value)
+        myModal.hide()
+      }
+    }
   }
 })
 </script>

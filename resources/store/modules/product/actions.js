@@ -113,7 +113,7 @@ const actions = {
       })
     })
   },
-  deleteProduct: ({ state}, id) => {
+  deleteProduct: ({}, id) => {
     return deleteProduct(id)
   },
   deleteFile: ({ state, commit }, id) => {

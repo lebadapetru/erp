@@ -57,6 +57,7 @@ export default defineComponent({
     VBaseInput,
     VBaseForm
   },
+  emits: ['saved', 'loading'],
   setup(props, { emit }) {
     const store = useStore()
 
@@ -75,8 +76,9 @@ export default defineComponent({
         set: (value: boolean) => store.commit("category/setIsPublic", value)
       }),
       onSubmit: (data: object) => {
+        emit('loading')
         store.dispatch('category/createCategory', data).then(() => {
-          emit('')
+          emit('saved')
         })
       }
     }

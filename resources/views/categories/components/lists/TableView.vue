@@ -86,11 +86,11 @@ export default defineComponent({
         console.log(itemId)
       },
       editCategory: (itemId) => {
-        router.push({ name: 'editCategory', params: {id: categories.value[itemId].id}})
+        store.commit('category/setId', itemId)
       },
       deleteCategory: (itemId) => {
         store.dispatch('category/deleteCategory', categories.value[itemId].id).then(() => {
-          store.dispatch('category/readCategory')
+          store.dispatch('categories/readItems')
         })
       }
     }

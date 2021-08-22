@@ -1,19 +1,19 @@
 <template>
-  <VFlashMessage />
   <router-view />
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from "vue";
 
-import VFlashMessage from "resources/components/alerts/VFlashMessage";
-export default {
+export default defineComponent({
   name: 'App',
-  components: { VFlashMessage },
+  components: { },
   setup() {
+
     return {
     }
   }
-}
+})
 </script>
 
 <style lang="scss">

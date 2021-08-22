@@ -111,7 +111,7 @@ export default defineComponent({
       },
       deleteProduct: (itemId) => {
         store.dispatch('product/deleteProduct', products.value[itemId].id).then(() => {
-          store.dispatch('products/readProducts')
+          store.dispatch('products/readItems')
         })
       }
     }

@@ -12,7 +12,12 @@ const readCategories = (filters) => {
   })
 }
 
+const deleteCategory = (id) => {
+  return httpClient.delete(url + '/' + id)
+}
+
 export {
   createCategory,
   readCategories,
+  deleteCategory,
 }
