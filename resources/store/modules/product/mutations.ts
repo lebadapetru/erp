@@ -1,4 +1,5 @@
 let mutations = {
+  setProduct: undefined,
   setId: (state, value) => state.id = value,
   setTitle: (state, value) => state.title = value,
   setDescription: (state, value) => state.description = value,

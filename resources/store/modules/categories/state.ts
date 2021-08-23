@@ -14,6 +14,10 @@ const state = {
       { label: 40, value: 40 },
     ],
     itemsPerPage: 16,
+  },
+  modals: {
+    addCategory: false,
+    editCategory: false,
   }
 }
 

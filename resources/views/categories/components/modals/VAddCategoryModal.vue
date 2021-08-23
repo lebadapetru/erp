@@ -1,5 +1,10 @@
 <template>
-  <VBootstrapModal ref="modal">
+  <VBaseModal
+    ref="modal"
+    show-mutation="categories/showAddCategoryModal"
+    hide-mutation="categories/hideAddCategoryModal"
+    visibility-getter="categories/isAddCategoryModalVisible"
+  >
     <template v-slot:body>
       <div class="mb-13 text-center">
         <h1 class="mb-3">Add Category</h1>
@@ -28,7 +33,7 @@
       </button>
     </template>
 
-  </VBootstrapModal>
+  </VBaseModal>
 </template>
 
 <script lang="ts">
@@ -36,10 +41,12 @@ import { defineComponent, ref } from "vue";
 import VBootstrapModal from "resources/components/modals/VBootstrapModal.vue";
 import VCategoryForm from "resources/views/categories/components/forms/VCategoryForm.vue";
 import { Toast } from "resources/components/alerts/toast"
+import VBaseModal from "resources/components/modals/VBaseModal.vue";
 
 export default defineComponent({
   name: "VAddCategoryModal",
   components: {
+    VBaseModal,
     VCategoryForm,
     VBootstrapModal,
   },

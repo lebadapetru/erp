@@ -1,6 +1,6 @@
 const Encore = require('@symfony/webpack-encore');
 const path = require('path');
-const webpack = require('webpack');
+//const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -76,7 +76,13 @@ Encore
 
   })
   // uncomment if you use TypeScript
-  .enableTypeScriptLoader()
+  .enableTypeScriptLoader(options => {
+    options.appendTsSuffixTo = [/\.vue$/];
+  })
+  //.enableForkedTypeScriptTypesChecking()
+  /*.addPlugin(new HtmlWebpackPlugin({
+    template: './src/templates/app.html.twig',
+  }))*/
 
   // uncomment if you're having problems with a jQuery plugin
   .autoProvidejQuery()

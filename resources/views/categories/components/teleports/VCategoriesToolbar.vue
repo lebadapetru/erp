@@ -25,8 +25,7 @@
     <button
       type="button"
       class="btn btn-primary btn-sm fw-bold"
-      data-bs-toggle="modal"
-      data-bs-target="#add_category"
+      @click="showAddCategoryModal()"
     >
       <i class="fas fa-plus"></i>
       Add Category
@@ -54,7 +53,8 @@ export default defineComponent({
 
     return {
       isMounted,
-      totalCategories: computed(() => store.getters['categories/getTotalItems'])
+      totalCategories: computed(() => store.getters['categories/getTotalItems']),
+      showAddCategoryModal: () => store.commit('categories/showAddCategoryModal'),
     }
   }
 })

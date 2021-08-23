@@ -21,6 +21,9 @@
     },
     //"typeRoots": [ "./types", "./node_modules/@types"]
   },
+  /*"files": [
+    "shims-vue.d.ts",
+  ],*/
   "include": [
     "resources/**/*.ts",
     "resources/**/*.tsx",

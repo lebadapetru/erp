@@ -26,5 +26,7 @@ export default defineComponent({
 @import "~dropzone/src/dropzone.scss";
 @import "~dropzone/src/basic.scss";
 
+@import "~animate.css";
+
 @import "./assets/sass/overwrite";
 </style>

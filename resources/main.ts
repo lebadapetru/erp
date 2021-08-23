@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from "./App.vue";
 import router from "./router";
 import store from './store'
-import "./httpClient"; /*TODO create plugin*/
+import "./httpClient";
 import vueClickAway from './assets/js/vendors/plugins/vue-click-away'
 import vuePerfectScrollbar from "./assets/js/vendors/plugins/vue-perfect-scrollbar";
 import 'bootstrap'
