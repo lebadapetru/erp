@@ -1,9 +1,9 @@
 <template>
   <editor
-      :api-key="apiKey"
-      :init="config"
-      v-model="modelValue"
-      @init="onInit"
+    :api-key="apiKey"
+    :init="config"
+    v-model="modelValue"
+    @init="onInit"
   />
   <div
     v-if="errorMessage"
@@ -17,7 +17,7 @@
 import Editor from '@tinymce/tinymce-vue'
 import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
-import { watch, defineComponent } from "vue";
+import { watch, defineComponent, onMounted, ref } from "vue";
 
 export default defineComponent({
   name: "VTinyMCE",
@@ -25,6 +25,10 @@ export default defineComponent({
     editor: Editor
   },
   props: {
+    initialValue: {
+      type: String,
+      required: false
+    },
     modelValue: {
       type: String,
       default: ''
@@ -38,7 +42,7 @@ export default defineComponent({
       default: 'description'
     }
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'loaded'],
   setup(props, { emit }) {
     /*TODO add htmlpurifier to sanitize the user input*/
     const {
@@ -48,9 +52,11 @@ export default defineComponent({
     } = useField(props.name, props.rules, {
       initialValue: props.modelValue,
     });
+    const editor = ref(null)
 
     const onInit = (event, editor) => {
-      console.log('tinymce loaded')
+      emit('loaded')
+      console.log('loaded')
     }
 
     watch(() => props.modelValue, value => {
@@ -58,6 +64,7 @@ export default defineComponent({
     })
 
     return {
+      editor,
       onInit,
       inputValue,
       handleChange,

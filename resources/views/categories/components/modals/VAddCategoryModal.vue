@@ -1,23 +1,64 @@
 <template>
   <VBaseModal
     ref="modal"
-    show-mutation="categories/showAddCategoryModal"
     hide-mutation="categories/hideAddCategoryModal"
     visibility-getter="categories/isAddCategoryModalVisible"
   >
-    <template v-slot:body>
+    <template v-slot:title>
       <div class="mb-13 text-center">
         <h1 class="mb-3">Add Category</h1>
       </div>
-      <VCategoryForm
-        ref="categoryForm"
-        @loading="onLoading()"
-        @saved="onSaved()"
-      />
+    </template>
+
+    <template v-slot:content>
+      <VBaseForm
+        :validation-schema="validationSchema"
+        @submit="onSubmit"
+        ref="form"
+      >
+        <div class="row mb-6">
+          <div class="col-12">
+            <VBaseInput
+              name="title"
+              label="Title"
+              placeholder="Electronics"
+              v-model="title"
+              label-style-classes="form-label required"
+            />
+          </div>
+        </div>
+
+        <div class="row mb-6">
+          <div class="col-12">
+            <VTinyMCE
+              @loaded="editorLoaded()"
+              :initial-value="description"
+              v-model="description"
+            />
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center mb-6">
+          <span
+            class="fw-bold me-3"
+            :class="{'text-gray-400': isPublic}"
+          > Private </span>
+          <VBaseCheckbox
+            :name="'isPublic'"
+            :wrapper-style-classes="'me-3 form-check form-switch form-check-custom form-check-solid form-check-success'"
+            v-model:checked="isPublic"
+          />
+          <span
+            class="me-3 fw-bold"
+            :class="{'text-gray-400': !isPublic}"
+          > Public </span>
+        </div>
+
+      </VBaseForm>
     </template>
 
     <template v-slot:footer>
-      <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-light" @click="hide()">Close</button>
       <!--TODO create a custom directive for loader v-load which watches a ref-->
       <button
         v-if="isLoading"
@@ -37,38 +78,67 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import VBootstrapModal from "resources/components/modals/VBootstrapModal.vue";
-import VCategoryForm from "resources/views/categories/components/forms/VCategoryForm.vue";
+import { computed, defineComponent, ref, defineAsyncComponent } from "vue";
+import VBaseForm from "resources/components/forms/VBaseForm.vue";
 import { Toast } from "resources/components/alerts/toast"
 import VBaseModal from "resources/components/modals/VBaseModal.vue";
+import { useStore } from "vuex";
+import validationSchema from "resources/views/categories/components/forms/ts/validationSchema";
+import VBaseInput from "resources/components/forms/inputs/VBaseInput.vue";
+import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox.vue";
 
 export default defineComponent({
   name: "VAddCategoryModal",
   components: {
     VBaseModal,
-    VCategoryForm,
-    VBootstrapModal,
+    VBaseForm,
+    VBaseInput,
+    VTinyMCE: defineAsyncComponent(() => import("resources/components/forms/inputs/VTinyMCE.vue")),
+    VBaseCheckbox,
   },
-  setup () {
-    const categoryForm = ref(null)
+  setup() {
     const isLoading = ref(false)
+    const isEditorLoaded = ref(false)
     const modal = ref(null)
+    const form = ref(null)
+    const store = useStore()
 
     return {
       modal,
-      categoryForm,
+      form,
+      validationSchema,
+      editorLoaded: () => {
+        console.log('editor')
+        isEditorLoaded.value = true
+      },
       submit: (): void => {
-        categoryForm.value.$el.dispatchEvent(new Event('submit'));
+        form.value.$el.dispatchEvent(new Event('submit'));
       },
       isLoading,
-      onLoading: (): void => {
-        isLoading.value = true
+      isEditorLoaded,
+      hide: () => {
+        store.commit('categories/hideAddCategoryModal')
       },
-      onSaved: (): void => {
-        isLoading.value = false
-        Toast.success('The category was added successfully.')
-        modal.value.hide()
+      title: computed({
+        get: (): string => store.getters["category/getTitle"],
+        set: (value: string) => store.commit('category/setTitle', value)
+      }),
+      description: computed({
+        get: (): string => store.getters["category/getDescription"],
+        set: (value: string) => store.commit("category/setDescription", value)
+      }),
+      isPublic: computed({
+        get: (): boolean => store.getters["category/getIsPublic"],
+        set: (value: boolean) => store.commit("category/setIsPublic", value)
+      }),
+      onSubmit: (data: object) => {
+        isLoading.value = true
+        store.dispatch('category/createCategory', data).then(() => {
+          isLoading.value = false
+          Toast.success('The category was added successfully.')
+          modal.value.hide()
+          store.dispatch('categories/readItems')
+        })
       }
     }
   }

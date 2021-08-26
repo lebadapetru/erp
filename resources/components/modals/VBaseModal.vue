@@ -1,52 +1,72 @@
 <template>
   <transition
-    enter-active-class="animate__animated animate__tada"
-    leave-active-class="animate__animated animate__bounceOutRight"
+    enter-active-class="animate__animated animate__fadeInDown"
+    leave-active-class="animate__animated animate__fadeOutUp"
   >
     <div
-      v-if="isVisible"
-      class="modal"
-      tabindex="-1"
-      aria-hidden="true"
-      ref="modal"
-    >
-      <!--begin::Modal dialog-->
-      <div class="modal-dialog modal-dialog-centered mw-650px">
-        <!--begin::Modal content-->
-        <div class="modal-content rounded">
-          <!--begin::Modal header-->
-          <div class="modal-header pb-0 border-0 justify-content-end">
-            <!--begin::Close-->
-            <div
-              class="btn btn-sm btn-icon btn-active-color-primary"
-            >
-            <span class="svg-icon svg-icon-1">
-              <inline-svg src="/build/media/icons/duotone/Navigation/Close.svg" />
-            </span>
+        @click="hide()"
+        v-if="isVisible"
+        class="modal"
+        tabindex="-1"
+        aria-hidden="true"
+        ref="modal"
+      >
+        <!--begin::Modal dialog-->
+        <div @click.stop class="modal-dialog modal-dialog-centered mw-650px">
+          <!--begin::Modal content-->
+          <div class="modal-content rounded">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+              <!--begin::Close-->
+              <div
+                class="btn btn-sm btn-icon btn-active-color-primary"
+              >
+                <span @click="hide()" class="svg-icon svg-icon-1">
+                  <inline-svg src="/build/media/icons/duotone/Navigation/Close.svg" />
+                </span>
+              </div>
+              <!--end::Close-->
             </div>
-            <!--end::Close-->
-          </div>
-          <!--begin::Modal header-->
+            <!--begin::Modal header-->
 
-          <!--begin::Modal body-->
-          <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
-            <slot name="body" />
-          </div>
-          <!--end::Modal body-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
+              <suspense>
+                <template #default>
+                  <slot name="body">
+                    <slot name="title" />
+                    <slot name="content" />
+                  </slot>
+                </template>
+                <template #fallback>
+                  <div class="d-flex justify-content-center">
+                    <div class="spinner-grow" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                </template>
+              </suspense>
+            </div>
+            <!--end::Modal body-->
 
-          <div class="modal-footer">
-            <slot
-              name="footer"
-            >
-              <button type="button" class="btn btn-light" @click="hide()">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </slot>
+            <div class="modal-footer">
+              <slot
+                name="footer"
+              >
+                <button type="button" class="btn btn-light" @click="hide()">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </slot>
+            </div>
           </div>
+          <!--end::Modal content-->
         </div>
-        <!--end::Modal content-->
+        <!--end::Modal dialog-->
       </div>
-      <!--end::Modal dialog-->
-    </div>
+  </transition>
+  <transition
+    name="fade"
+  >
+    <div class="modal-backdrop" v-if="isVisible"></div>
   </transition>
 </template>
 
@@ -61,10 +81,6 @@ export default defineComponent({
     InlineSvg,
   },
   props: {
-    showMutation: {
-      type: String,
-      required: true
-    },
     hideMutation: {
       type: String,
       required: true
@@ -80,9 +96,10 @@ export default defineComponent({
     return {
       modal,
       isVisible: computed(() => store.getters[props.visibilityGetter]),
-      show: () => {
-      },
       hide: () => {
+        console.log('hide')
+        console.log(props.hideMutation)
+        store.commit(props.hideMutation)
       }
     }
   }
@@ -92,5 +109,24 @@ export default defineComponent({
 <style scoped>
 .modal {
   display: block;
+}
+
+.modal-backdrop{
+  opacity: 0.3;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .15s linear;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.animate__animated.animate__fadeInDown,
+.animate__animated.animate__fadeOutUp {
+  --animate-duration: .3s;
 }
 </style>
