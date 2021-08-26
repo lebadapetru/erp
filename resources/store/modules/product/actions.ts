@@ -45,7 +45,7 @@ const actions = {
     })
   },
   readAndParseCategoryOptions: ({ commit }) => {
-    readCategories().then((response) => {
+    readCategories({}).then((response) => {
       let categoryOptions = response.data['hydra:member'].map(categoryOption => ({
         id: categoryOption['@id'],
         text: categoryOption.title,

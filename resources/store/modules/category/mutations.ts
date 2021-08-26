@@ -3,6 +3,14 @@ let mutations = {
   setTitle: (state, value) => state.title = value,
   setDescription: (state, value) => state.description = value,
   setIsPublic: (state, value) => state.isPublic = value,
+  setCategory: undefined,
+}
+
+mutations.setCategory = (state, data) => {
+  mutations.setId(state, data.id)
+  mutations.setTitle(state, data.title)
+  mutations.setDescription(state, data.description)
+  mutations.setIsPublic(state, data.isPublic)
 }
 
 export default mutations

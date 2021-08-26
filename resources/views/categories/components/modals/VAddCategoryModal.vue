@@ -1,8 +1,8 @@
 <template>
   <VBaseModal
     ref="modal"
-    hide-mutation="categories/hideAddCategoryModal"
-    visibility-getter="categories/isAddCategoryModalVisible"
+    hide-mutation="hideAddCategoryModal"
+    visibility-getter="isAddCategoryModalVisible"
   >
     <template v-slot:title>
       <div class="mb-13 text-center">
@@ -86,6 +86,7 @@ import { useStore } from "vuex";
 import validationSchema from "resources/views/categories/components/forms/ts/validationSchema";
 import VBaseInput from "resources/components/forms/inputs/VBaseInput.vue";
 import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox.vue";
+import VTinyMCE from "resources/components/forms/inputs/VTinyMCE.vue";
 
 export default defineComponent({
   name: "VAddCategoryModal",
@@ -93,7 +94,7 @@ export default defineComponent({
     VBaseModal,
     VBaseForm,
     VBaseInput,
-    VTinyMCE: defineAsyncComponent(() => import("resources/components/forms/inputs/VTinyMCE.vue")),
+    VTinyMCE,
     VBaseCheckbox,
   },
   setup() {
@@ -102,7 +103,7 @@ export default defineComponent({
     const modal = ref(null)
     const form = ref(null)
     const store = useStore()
-
+    console.log('add wtf')
     return {
       modal,
       form,

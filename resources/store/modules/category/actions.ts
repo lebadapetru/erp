@@ -1,11 +1,19 @@
-import { createCategory, deleteCategory } from "resources/js/api/Category";
+import { createCategory, deleteCategory, readCategory, updateCategory } from "resources/js/api/Category";
 
 const actions = {
-  createCategory: ({ }, data) => {
+  createItem: ({ }, data) => {
     return createCategory(data)
   },
-  deleteCategory: ({ }, id) => {
+  updateItem: ({ }, data) => {
+    return updateCategory(data)
+  },
+  deleteItem: ({ }, id: number) => {
     return deleteCategory(id)
+  },
+  readItem: ({ commit }, id: number) => {
+    return readCategory(id).then((response) => {
+      commit('setCategory', response.data)
+    })
   }
 }
 

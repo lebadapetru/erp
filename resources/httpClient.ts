@@ -3,7 +3,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import Swal from 'sweetalert2'
 
-let token = document.head.querySelector('meta[name="csrf-token"]')
+const token: HTMLMetaElement | null = document.head.querySelector('meta[name="csrf-token"]')
 
 const httpClient = axios.create({
   baseURL: app.url,

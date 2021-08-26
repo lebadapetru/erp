@@ -16,23 +16,26 @@
     />
 
     <VCategoriesToolbar />
-    <VAddCategoryModal />
+    <VAddCategoryModal v-if="isAddCategoryModalVisible" />
+    <VEditCategoryModal />
   </div>
   <router-view></router-view>
 </template>
 
 <script lang="ts">
-import VPagination from "resources/components/VPagination";
-import TableView from "resources/views/categories/components/lists/TableView";
+import VPagination from "resources/components/VPagination.vue";
+import TableView from "resources/views/categories/components/lists/TableView.vue";
 import { useRouter } from "vue-router";
 import { usePagination } from "resources/views/products/ts/pagination";
-import VCategoriesToolbar from "resources/views/categories/components/teleports/VCategoriesToolbar";
-import { defineAsyncComponent, defineComponent } from "vue";
+import VCategoriesToolbar from "resources/views/categories/components/teleports/VCategoriesToolbar.vue";
+import { computed, defineAsyncComponent, defineComponent } from "vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "TheCategories",
   components: {
-    VAddCategoryModal: defineAsyncComponent(() => import("resources/views/categories/components/modals/VAddCategoryModal")),
+    VAddCategoryModal: defineAsyncComponent(() => import("resources/views/categories/components/modals/VAddCategoryModal.vue")),
+    VEditCategoryModal: defineAsyncComponent(() => import("resources/views/categories/components/modals/VEditCategoryModal.vue")),
     TableView,
     VPagination,
     VCategoriesToolbar,
@@ -40,8 +43,12 @@ export default defineComponent({
   setup () {
     const router = useRouter()
     const pagination = usePagination('categories')
+    const store = useStore()
+
+
 
     return {
+      isAddCategoryModalVisible: computed(() => store.getters['modals/isAddCategoryModalVisible']),
       currentRoute: router.currentRoute,
       totalCategories: pagination.totalItems,
     }

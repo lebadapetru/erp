@@ -86,10 +86,11 @@ export default defineComponent({
         console.log(itemId)
       },
       editCategory: (itemId) => {
-        store.commit('category/setId', itemId)
+        store.commit('category/setId', categories.value[itemId].id)
+        store.commit('modals/showEditCategoryModal')
       },
       deleteCategory: (itemId) => {
-        store.dispatch('category/deleteCategory', categories.value[itemId].id).then(() => {
+        store.dispatch('category/deleteItem', categories.value[itemId].id).then(() => {
           store.dispatch('categories/readItems')
         })
       }

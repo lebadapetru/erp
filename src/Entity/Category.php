@@ -29,6 +29,7 @@ class Category
      * @ORM\Column(type="integer")
      * @Groups({"category:read"})
      */
+    //TODO change this to UUID
     private int $id;
 
     /**

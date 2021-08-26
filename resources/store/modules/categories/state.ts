@@ -15,10 +15,6 @@ const state = {
     ],
     itemsPerPage: 16,
   },
-  modals: {
-    addCategory: false,
-    editCategory: false,
-  }
 }
 
 export default state

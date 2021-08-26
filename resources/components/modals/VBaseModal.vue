@@ -4,64 +4,65 @@
     leave-active-class="animate__animated animate__fadeOutUp"
   >
     <div
-        @click="hide()"
-        v-if="isVisible"
-        class="modal"
-        tabindex="-1"
-        aria-hidden="true"
-        ref="modal"
-      >
-        <!--begin::Modal dialog-->
-        <div @click.stop class="modal-dialog modal-dialog-centered mw-650px">
-          <!--begin::Modal content-->
-          <div class="modal-content rounded">
-            <!--begin::Modal header-->
-            <div class="modal-header pb-0 border-0 justify-content-end">
-              <!--begin::Close-->
-              <div
-                class="btn btn-sm btn-icon btn-active-color-primary"
-              >
+      @click="hide()"
+      v-if="isVisible"
+      class="modal"
+      tabindex="-1"
+      aria-hidden="true"
+      ref="modal"
+    >
+      <!--begin::Modal dialog-->
+      <div @click.stop class="modal-dialog modal-dialog-centered mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content rounded">
+          <!--begin::Modal header-->
+          <div class="modal-header border-0 mb-7s">
+            <slot name="header" />
+            <!--begin::Close-->
+            <div
+              class="btn btn-sm btn-icon btn-active-color-primary ms-auto"
+            >
                 <span @click="hide()" class="svg-icon svg-icon-1">
                   <inline-svg src="/build/media/icons/duotone/Navigation/Close.svg" />
                 </span>
-              </div>
-              <!--end::Close-->
             </div>
-            <!--begin::Modal header-->
-
-            <!--begin::Modal body-->
-            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
-              <suspense>
-                <template #default>
-                  <slot name="body">
-                    <slot name="title" />
-                    <slot name="content" />
-                  </slot>
-                </template>
-                <template #fallback>
-                  <div class="d-flex justify-content-center">
-                    <div class="spinner-grow" role="status">
-                      <span class="sr-only">Loading...</span>
-                    </div>
-                  </div>
-                </template>
-              </suspense>
-            </div>
-            <!--end::Modal body-->
-
-            <div class="modal-footer">
-              <slot
-                name="footer"
-              >
-                <button type="button" class="btn btn-light" @click="hide()">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-              </slot>
-            </div>
+            <!--end::Close-->
           </div>
-          <!--end::Modal content-->
+          <!--begin::Modal header-->
+
+          <!--begin::Modal body-->
+          <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
+            <suspense>
+              <template #default>
+                <slot name="body">
+                  <slot name="title" />
+                  <slot name="content" />
+                </slot>
+              </template>
+              <template #fallback>
+                <div class="d-flex justify-content-center">
+                  <div class="spinner-grow" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+              </template>
+            </suspense>
+          </div>
+          <!--end::Modal body-->
+
+          <div class="modal-footer">
+            <slot
+              name="footer"
+            >
+              <button type="button" class="btn btn-light" @click="hide()">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </slot>
+          </div>
         </div>
-        <!--end::Modal dialog-->
+        <!--end::Modal content-->
       </div>
+      <!--end::Modal dialog-->
+    </div>
   </transition>
   <transition
     name="fade"
@@ -95,11 +96,9 @@ export default defineComponent({
     const store = useStore()
     return {
       modal,
-      isVisible: computed(() => store.getters[props.visibilityGetter]),
+      isVisible: computed(() => store.getters['modals/' + props.visibilityGetter]),
       hide: () => {
-        console.log('hide')
-        console.log(props.hideMutation)
-        store.commit(props.hideMutation)
+        store.commit('modals/' + props.hideMutation)
       }
     }
   }
@@ -111,7 +110,7 @@ export default defineComponent({
   display: block;
 }
 
-.modal-backdrop{
+.modal-backdrop {
   opacity: 0.3;
 }
 
