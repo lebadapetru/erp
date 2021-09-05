@@ -26,28 +26,28 @@
   <!--end::AddProductForm-->
 </template>
 
-<script>
-import { ref, provide } from 'vue'
+<script lang="ts">
+import { ref, provide ,defineComponent } from 'vue'
 import validationSchema from "./validationSchema"
-import VBaseForm from "resources/components/forms/VBaseForm";
-import VProductFormToolbarActions from "resources/views/products/components/teleports/VProductFormToolbar";
+import VBaseForm from "resources/components/forms/VBaseForm.vue";
+import VProductFormToolbarActions from "resources/views/products/components/teleports/VProductFormToolbar.vue";
 import VTitleAndDescriptionSection
-  from "resources/views/products/components/forms/product/sections/VTitleAndDescriptionSection";
-import VMediaSection from "resources/views/products/components/forms/product/sections/VMediaSection";
-import VPriceSection from "resources/views/products/components/forms/product/sections/VPriceSection";
-import VInventorySection from "resources/views/products/components/forms/product/sections/VInventorySection";
-import VShippingSection from "resources/views/products/components/forms/product/sections/VShippingSection";
-import VVariantsSection from "resources/views/products/components/forms/product/sections/VVariantsSection";
+  from "resources/views/products/components/forms/product/sections/VTitleAndDescriptionSection.vue";
+import VMediaSection from "resources/views/products/components/forms/product/sections/VMediaSection.vue";
+import VPriceSection from "resources/views/products/components/forms/product/sections/VPriceSection.vue";
+import VInventorySection from "resources/views/products/components/forms/product/sections/VInventorySection.vue";
+import VShippingSection from "resources/views/products/components/forms/product/sections/VShippingSection.vue";
+import VVariantsSection from "resources/views/products/components/forms/product/sections/VVariantsSection.vue";
 import VProductStatusAndVisibilitySection
-  from "resources/views/products/components/forms/product/sections/VProductStatusAndVisibilitySection";
-import VOrganizationSection from "resources/views/products/components/forms/product/sections/VOrganizationSection";
+  from "resources/views/products/components/forms/product/sections/VProductStatusAndVisibilitySection.vue";
+import VOrganizationSection from "resources/views/products/components/forms/product/sections/VOrganizationSection.vue";
 import Swal from "sweetalert2";
 import { useStore } from "vuex";
 import isEqual from 'lodash/isEqual'
 import clone from 'lodash/clone'
 import { onBeforeRouteLeave } from 'vue-router'
 
-export default {
+export default defineComponent({
   name: "VProductForm",
   components: {
     VBaseForm,
@@ -127,7 +127,7 @@ export default {
       validationSchema,
     }
   }
-}
+})
 </script>
 
 <style scoped>

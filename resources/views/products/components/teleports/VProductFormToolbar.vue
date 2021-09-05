@@ -65,11 +65,10 @@
   </teleport>
 </template>
 
-<script>
+<script lang="ts">
+import { onMounted, ref, defineComponent } from "vue";
 
-import { onMounted, ref } from "vue";
-
-export default {
+export default defineComponent({
   name: "VProductFormToolbarActions",
   props: {
     targetForm: {
@@ -93,7 +92,7 @@ export default {
       onSave
     }
   }
-}
+})
 </script>
 
 <style scoped>

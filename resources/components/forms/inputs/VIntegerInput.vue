@@ -25,13 +25,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { useField } from 'vee-validate'
-import { watch } from 'vue'
+import { watch, defineComponent } from 'vue'
 import capitalize from 'lodash/capitalize'
 import { integerFilter } from "resources/js/helpers/inputFilters";
 
-export default {
+export default defineComponent({
   name: "VIntegerInput",
   props: {
     label: {
@@ -109,7 +109,7 @@ export default {
       integerFilter,
     }
   },
-}
+})
 </script>
 
 <style scoped>

@@ -30,14 +30,14 @@
   </div>
 </template>
 
-<script>
-import { onMounted, ref, watch } from 'vue'
+<script lang="ts">
+import { onMounted, ref, watch, defineComponent } from 'vue'
 import Dropzone from 'dropzone'
 import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
 import Swal from "sweetalert2";
 
-export default {
+export default defineComponent({
   name: "VDropZone",
   emits: ['removedFile', 'update:modelValue'],
   props: {
@@ -243,7 +243,7 @@ export default {
       errorMessage,
     }
   }
-}
+})
 </script>
 
 <style scoped>

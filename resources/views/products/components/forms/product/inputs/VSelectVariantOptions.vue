@@ -1,5 +1,5 @@
 <template>
-  <VSelect2
+<!--  <VSelect2
     v-if="variantOptions"
     :name="'variantOptions'"
     :label="'Option 1'"
@@ -9,21 +9,21 @@
     :item-title="`variantOption`"
     :add-item-callback="parseAndCreateVariantOption"
     @item-added="readAndParseVariantOptions()"
-  />
+  />-->
 <!-- TODO  @variant-option-added might not need a custom event emit since only the parent listen to it -->
 <!-- TODO  @variant-option-added renders the component and the new added item it's no longer selected -->
 <!-- TODO  save the selected item in vuex -->
 </template>
 
-<script>
-import VSelect2 from "resources/components/forms/inputs/VSelect2";
-import { computed } from "vue";
+<script lang="ts">
+//import VSelect2 from "resources/components/forms/inputs/VSelect2.vue";
+import { computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 
-export default {
+export default defineComponent({
   name: "VSelectVariantOptions",
   components: {
-    VSelect2
+    //VSelect2
   },
   setup() {
     const store = useStore()
@@ -45,7 +45,7 @@ export default {
       parseAndCreateVariantOption
     }
   }
-}
+})
 </script>
 
 <style scoped>

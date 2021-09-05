@@ -55,19 +55,20 @@
   <!--end::Header-->
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from "vue";
 import InlineSvg from "vue-inline-svg";
-import Menu from "resources/themes/base/header/Menu";
-import TopBar from "resources/themes/base/header/TopBar";
+import Menu from "resources/themes/base/header/Menu.vue";
+import TopBar from "resources/themes/base/header/TopBar.vue";
 
-export default {
+export default defineComponent({
   name: "Header",
   components: {
     InlineSvg,
     Menu,
     TopBar,
   }
-}
+})
 </script>
 
 <style scoped>

@@ -41,14 +41,14 @@
   <!--end::Organization-->
 </template>
 
-<script>
-import VBaseSelect from "resources/components/forms/inputs/VBaseSelect";
-import VSelectCategories from "resources/views/products/components/forms/product/inputs/VSelectCategories";
-import VSelectTags from "resources/views/products/components/forms/product/inputs/VSelectTags";
+<script lang="ts">
+import VBaseSelect from "resources/components/forms/inputs/VBaseSelect.vue";
+import VSelectCategories from "resources/views/products/components/forms/product/inputs/VSelectCategories.vue";
+import VSelectTags from "resources/views/products/components/forms/product/inputs/VSelectTags.vue";
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "VOrganizationSection",
   components: {
     VBaseSelect,
@@ -68,7 +68,7 @@ export default {
       }),
     }
   }
-}
+})
 </script>
 
 <style scoped>

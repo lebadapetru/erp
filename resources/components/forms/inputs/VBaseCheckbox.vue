@@ -27,7 +27,7 @@
 <script lang="ts">
 import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
-import { defineComponent, watch } from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   props: {
@@ -81,10 +81,6 @@ export default defineComponent({
       handleChange(event.target.checked)
       emit('update:checked', event.target.checked)
     }
-
-    watch(() => props.checked, value => {
-      checkboxValue.value = value
-    })
 
     return {
       onChange,

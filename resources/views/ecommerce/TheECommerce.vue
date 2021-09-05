@@ -5,9 +5,11 @@
   <router-view></router-view>
 </template>
 
-<script>
-import { useRouter } from 'vue-router'
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+import { useRouter } from 'vue-router';
+
+export default defineComponent({
   name: "TheECommerce",
   setup() {
     const router = useRouter()
@@ -16,7 +18,7 @@ export default {
       currentRoute: router.currentRoute
     }
   }
-}
+})
 </script>
 
 <style scoped>

@@ -28,12 +28,12 @@
   <!--end::Media-->
 </template>
 
-<script>
-import VDropZone from "resources/components/forms/inputs/VDropZone";
-import { computed, inject } from "vue";
+<script lang="ts">
+import VDropZone from "resources/components/forms/inputs/VDropZone.vue";
+import { computed, inject, defineComponent } from "vue";
 import { useStore } from "vuex";
 
-export default {
+export default defineComponent({
   name: "VMediaSection",
   components: {
     VDropZone,
@@ -58,7 +58,7 @@ export default {
       deleteFile
     }
   }
-}
+})
 </script>
 
 <style scoped>

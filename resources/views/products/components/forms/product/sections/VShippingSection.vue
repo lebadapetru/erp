@@ -58,14 +58,14 @@
   <!--end::Shipping-->
 </template>
 
-<script>
-import VBaseInput from "resources/components/forms/inputs/VBaseInput";
-import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox";
-import VBaseSelect from "resources/components/forms/inputs/VBaseSelect";
-import { computed } from "vue";
+<script lang="ts">
+import VBaseInput from "resources/components/forms/inputs/VBaseInput.vue";
+import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox.vue";
+import VBaseSelect from "resources/components/forms/inputs/VBaseSelect.vue";
+import { computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 
-export default {
+export default defineComponent({
   name: "VShippingSection",
   components: {
     VBaseInput,
@@ -86,7 +86,7 @@ export default {
       }),
     }
   }
-}
+})
 </script>
 
 <style scoped>

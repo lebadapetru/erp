@@ -4,8 +4,8 @@ const actions = {
   createItem: ({ }, data) => {
     return createCategory(data)
   },
-  updateItem: ({ }, data) => {
-    return updateCategory(data)
+  updateItem: ({ }, {id, data}) => {
+    return updateCategory(id, data)
   },
   deleteItem: ({ }, id: number) => {
     return deleteCategory(id)

@@ -1,7 +1,7 @@
 <template>
   <div
     class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed"
-    style="background-image: url('build/media/svg/illustrations/progress.svg')"
+    style="background-image: url('/build/media/svg/illustrations/progress.svg')"
   >
     <!--begin::Content-->
     <div class="d-flex flex-column flex-column-fluid text-center p-10 py-lg-20">
@@ -52,8 +52,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "Error404",
-}
+})
 </script>

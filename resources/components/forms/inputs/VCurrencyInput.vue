@@ -22,12 +22,12 @@
   </div>
 </template>
 
-<script>
-import { onMounted, ref, watch } from "vue";
+<script lang="ts">
+import { onMounted, ref, watch, defineComponent } from "vue";
 import Inputmask from "inputmask";
 import { useField } from "vee-validate";
 
-export default {
+export default defineComponent({
   name: "VCurrencyInput",
   props: {
     label: {
@@ -94,7 +94,7 @@ export default {
         placeholder: '0.00',
         digits: 2,
         clearMaskOnLostFocus: false,
-        colorMask: true,
+        //colorMask: true,
       }).mask(el.value);
     })
 
@@ -105,7 +105,7 @@ export default {
       el,
     }
   }
-}
+})
 </script>
 
 <style scoped>

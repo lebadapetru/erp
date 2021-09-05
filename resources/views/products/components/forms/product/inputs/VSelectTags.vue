@@ -13,16 +13,14 @@
   <VMultiSelect />
 </template>
 
-<script>
-import VSelect2 from "resources/components/forms/inputs/VSelect2";
-import VMultiSelect from "resources/components/forms/inputs/VMultiSelect";
-import { computed } from 'vue'
+<script lang="ts">
+import VMultiSelect from "resources/components/forms/inputs/VMultiSelect.vue";
+import { computed, defineComponent } from 'vue'
 import { useStore } from "vuex";
 
-export default {
+export default defineComponent({
   name: "VSelectTags",
   components: {
-    VSelect2,
     VMultiSelect,
   },
   setup() {
@@ -47,7 +45,7 @@ export default {
       parseAndCreateTagOption,
     }
   }
-}
+})
 </script>
 
 <style scoped>

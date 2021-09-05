@@ -12,16 +12,14 @@
   <VMultiSelect />
 </template>
 
-<script>
-import VSelect2 from "resources/components/forms/inputs/VSelect2";
-import VMultiSelect from "resources/components/forms/inputs/VMultiSelect";
+<script lang="ts">
+import VMultiSelect from "resources/components/forms/inputs/VMultiSelect.vue";
 import { useStore } from "vuex";
 import { computed } from "vue";
 
 export default {
   name: "VSelectCategories",
   components: {
-    VSelect2,
     VMultiSelect,
   },
   setup() {

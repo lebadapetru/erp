@@ -17,7 +17,7 @@
 
     <VCategoriesToolbar />
     <VAddCategoryModal v-if="isAddCategoryModalVisible" />
-    <VEditCategoryModal />
+    <VEditCategoryModal v-if="isEditCategoryModalVisible" />
   </div>
   <router-view></router-view>
 </template>
@@ -49,6 +49,7 @@ export default defineComponent({
 
     return {
       isAddCategoryModalVisible: computed(() => store.getters['modals/isAddCategoryModalVisible']),
+      isEditCategoryModalVisible: computed(() => store.getters['modals/isEditCategoryModalVisible']),
       currentRoute: router.currentRoute,
       totalCategories: pagination.totalItems,
     }

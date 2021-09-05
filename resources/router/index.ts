@@ -4,7 +4,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('resources/views/login/TheLogin'),
+    component: () => import('resources/views/login/TheLogin.vue'),
     meta: {
       title: 'Login',
       isSystem: true,
@@ -14,12 +14,12 @@ const routes = [
     path: '/',
     name: 'home',
     redirect: "/dashboard",
-    component: () => import('resources/themes/base/Layout'),
+    component: () => import('resources/themes/base/Layout.vue'),
     children: [
       {
         path: '/dashboard',
         name: 'dashboard',
-        component: () => import('resources/views/dashboard/TheDashboard'),
+        component: () => import('resources/views/dashboard/TheDashboard.vue'),
         meta: {
           title: 'Dashboard',
           svgIcon: "/build/media/icons/duotone/Design/PenAndRuller.svg",
@@ -28,17 +28,17 @@ const routes = [
       {
         path: '/ecommerce',
         name: 'ecommerce',
-        component: () => import('resources/views/ecommerce/TheECommerce'),
+        component: () => import('resources/views/ecommerce/TheECommerce.vue'),
         children: [
           {
             path: '/products',
             name: 'products',
-            component: () => import('resources/views/products/TheProducts'),
+            component: () => import('resources/views/products/TheProducts.vue'),
             children: [
               {
                 path: '/products/new',
                 name: 'addProduct',
-                component: () => import('resources/views/products/components/forms/product/VProductForm'),
+                component: () => import('resources/views/products/components/forms/product/VProductForm.vue'),
                 meta: {
                   title: 'Add product',
                 }
@@ -46,7 +46,7 @@ const routes = [
               {
                 path: '/products/:id/edit',
                 name: 'editProduct',
-                component: () => import('resources/views/products/components/forms/product/VProductForm'),
+                component: () => import('resources/views/products/components/forms/product/VProductForm.vue'),
                 props: true,
                 meta: {
                   title: 'Edit product',
@@ -60,25 +60,8 @@ const routes = [
           {
             path: '/categories',
             name: 'categories',
-            component: () => import('../views/categories/TheCategories'),
-            children: [
-              {
-                path: '/categories/new',
-                name: 'addCategory',
-                component: () => import('../views/categories/TheCategories'),
-                meta: {
-                  title: 'Add category',
-                }
-              },
-              {
-                path: '/categories/:id/edit',
-                name: 'editCategory',
-                component: () => import('../views/categories/TheCategories'),
-                meta: {
-                  title: 'Edit category',
-                }
-              },
-            ],
+            component: () => import('resources/views/categories/TheCategories.vue'),
+            children: [],
             meta: {
               title: 'Categories',
             }
@@ -98,7 +81,7 @@ const routes = [
     //    path: "/:pathMatch(.*)*",
     path: "/:catchAll(.*)",
     name: "404",
-    component: () => import("resources/themes/base/error/Error404"),
+    component: () => import("resources/themes/base/error/Error404.vue"),
     meta: {
       isSystem: true,
     }
@@ -106,7 +89,7 @@ const routes = [
   {
     path: "/500",
     name: "500",
-    component: () => import("resources/themes/base/error/Error500"),
+    component: () => import("resources/themes/base/error/Error500.vue"),
     meta: {
       isSystem: true,
     }

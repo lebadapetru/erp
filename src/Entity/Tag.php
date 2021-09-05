@@ -4,13 +4,19 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\TagRepository;
+use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"tag:read"}},
+ *     denormalizationContext={"groups"={"tag:write"}},
+ *     attributes={}
+ * )
  * @ORM\Entity(repositoryClass=TagRepository::class)
  * @ORM\Table("`tags`")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=true, hardDelete=true)
@@ -21,30 +27,35 @@ class Tag
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * TODO uuid
      */
     private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"tag:read", "tag:write"})
      */
     private string $name;
 
     /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
+     * @Groups({"tag:read"})
      */
     private ?\DateTimeInterface $deletedAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
+     * @Groups({"tag:read"})
      */
-    private ?\DateTimeInterface $updatedAt;
+    private \DateTimeInterface $updatedAt;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
+     * @Groups({"tag:read"})
      */
-    private ?\DateTimeInterface $createdAt;
+    private \DateTimeInterface $createdAt;
 
     /**
      * @ORM\ManyToMany(targetEntity=Product::class, mappedBy="tags")
@@ -85,7 +96,7 @@ class Tag
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): \DateTimeInterface
     {
         return $this->updatedAt;
     }
@@ -97,7 +108,7 @@ class Tag
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
@@ -134,5 +145,21 @@ class Tag
         }
 
         return $this;
+    }
+
+    /**
+     * @Groups({"tag:read"})
+     */
+    public function getUpdatedAtForHumans(): string
+    {
+        return Carbon::instance($this->createdAt)->format('Y M d, g:i a');
+    }
+
+    /**
+     * @Groups({"tag:read"})
+     */
+    public function getCreatedAtForHumans(): string
+    {
+        return Carbon::instance($this->createdAt)->format('Y M d, g:i a');
     }
 }

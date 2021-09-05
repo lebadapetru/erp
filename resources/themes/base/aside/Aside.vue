@@ -38,17 +38,18 @@
   <!--end::Aside-->
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from "vue";
 import InlineSvg from "vue-inline-svg";
-import Menu from "resources/themes/base/aside/Menu";
+import Menu from "resources/themes/base/aside/Menu.vue";
 
-export default {
+export default defineComponent({
   name: "Aside",
   components: {
     InlineSvg,
     Menu,
   }
-}
+})
 </script>
 
 <style scoped>

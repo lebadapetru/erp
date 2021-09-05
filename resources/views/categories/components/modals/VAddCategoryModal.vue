@@ -2,6 +2,7 @@
   <VBaseModal
     hide-mutation="hideAddCategoryModal"
     visibility-getter="isAddCategoryModalVisible"
+    ref="modal"
   >
     <template v-slot:title>
       <div class="mb-13 text-center">
@@ -30,7 +31,7 @@
         <div class="row mb-6">
           <div class="col-12">
             <VTinyMCE
-              @loaded="editorLoaded()"
+              @loaded="onEditorLoaded()"
               v-model="description"
             />
           </div>
@@ -55,11 +56,10 @@
       </VBaseForm>
     </template>
 
-    <template v-slot:footer>
-      <button type="button" class="btn btn-light" @click="hide()">Close</button>
-      <!--TODO create a custom directive for loader v-load which watches a ref-->
+    <template v-slot:saveButton>
+      <!--TODO create a custom directive for loader v-load who watches a ref-->
       <button
-        v-if="isLoading"
+        v-if="isSaving"
         type="button"
         class="btn btn-primary"
         disabled
@@ -96,21 +96,20 @@ export default defineComponent({
     VBaseCheckbox,
   },
   setup() {
-    const isLoading = ref(false)
-    const isEditorLoaded = ref(false)
+    const isSaving = ref(false)
+    const hasEditorLoaded = ref(false)
     const form = ref(null)
+    const modal = ref(null)
     const store = useStore()
-    const hide = () => {
-        store.commit('modals/hideAddCategoryModal')
-    }
 
     store.commit('category/resetState')
 
     return {
       form,
+      modal,
       validationSchema,
-      isLoading,
-      isEditorLoaded,
+      isSaving,
+      hasEditorLoaded,
       title: computed({
         get: (): string => store.getters["category/getTitle"],
         set: (value: string) => store.commit('category/setTitle', value)
@@ -123,19 +122,19 @@ export default defineComponent({
         get: (): boolean => store.getters["category/getIsPublic"],
         set: (value: boolean) => store.commit("category/setIsPublic", value)
       }),
-      editorLoaded: () => {
+      onEditorLoaded: () => {
         console.log('editor')
-        isEditorLoaded.value = true
+        hasEditorLoaded.value = true
       },
       save: (): void => {
         form.value.$el.dispatchEvent(new Event('submit'));
       },
       onSubmit: (data: object) => {
-        isLoading.value = true
+        isSaving.value = true
         store.dispatch('category/createItem', data).then(() => {
-          isLoading.value = false
+          isSaving.value = false
           Toast.success('The category was added successfully.')
-          hide()
+          modal.value.hide()
           store.dispatch('categories/readItems')
         })
       }

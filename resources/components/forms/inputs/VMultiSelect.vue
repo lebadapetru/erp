@@ -9,11 +9,11 @@
   />
 </template>
 
-<script>
+<script lang="ts">
 import Multiselect from '@vueform/multiselect'
-import { ref } from "vue";
+import { ref, defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "VMultiSelect",
   components: {
     Multiselect,
@@ -28,7 +28,7 @@ export default {
       ]
     }
   }
-}
+})
 </script>
 
 <style scoped>

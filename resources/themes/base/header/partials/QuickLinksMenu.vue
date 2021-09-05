@@ -100,13 +100,14 @@
   <!--end::Menu-->
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from "vue";
 import InlineSvg from "vue-inline-svg";
 
-export default {
+export default defineComponent({
   name: "QuickLinksMenu",
   components: {
     InlineSvg,
   },
-}
+})
 </script>

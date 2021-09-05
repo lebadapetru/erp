@@ -2,7 +2,7 @@ import { apiUrl } from "resources/js/api/index";
 
 const url = apiUrl + '/categories'
 
-const createCategory = (data) => {
+const createCategory = (data: object) => {
   return httpClient.post(url, data)
 }
 
@@ -16,8 +16,8 @@ const readCategory = (id: number) => {
   return httpClient.get(url + '/' + id)
 }
 
-const updateCategory = (data) => {
-  return httpClient.patch(url, data)
+const updateCategory = (id: number, data: object) => {
+  return httpClient.patch(url + '/' + id, data)
 }
 
 const deleteCategory = (id: number) => {

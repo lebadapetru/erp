@@ -101,13 +101,14 @@
   <!--end::Toolbar wrapper-->
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from "vue";
 import InlineSvg from "vue-inline-svg";
-import NotificationsMenu from "resources/themes/base/header/partials/NotificationsMenu";
-import QuickLinksMenu from "resources/themes/base/header/partials/QuickLinksMenu";
-import UserMenu from "resources/themes/base/header/partials/UserMenu";
+import NotificationsMenu from "resources/themes/base/header/partials/NotificationsMenu.vue";
+import QuickLinksMenu from "resources/themes/base/header/partials/QuickLinksMenu.vue";
+import UserMenu from "resources/themes/base/header/partials/UserMenu.vue";
 
-export default {
+export default defineComponent({
   name: "TopBar",
   components: {
     NotificationsMenu,
@@ -115,7 +116,7 @@ export default {
     UserMenu,
     InlineSvg,
   },
-}
+})
 </script>
 
 <style scoped>

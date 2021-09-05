@@ -44,13 +44,13 @@
   <!--end::Product status & visibility-->
 </template>
 
-<script>
-import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox";
-import VBaseSelect from "resources/components/forms/inputs/VBaseSelect";
+<script lang="ts">
+import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox.vue";
+import VBaseSelect from "resources/components/forms/inputs/VBaseSelect.vue";
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "VProductStatusAndVisibilitySection",
   components: {
     VBaseCheckbox,
@@ -75,7 +75,7 @@ export default {
       }),
     }
   }
-}
+})
 </script>
 
 <style scoped>

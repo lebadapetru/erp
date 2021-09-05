@@ -72,13 +72,14 @@
   </Form>
 </template>
 
-<script>
+<script lang="ts">
 import { Form, Field } from 'vee-validate'
-import VBaseInput from "./inputs/VBaseInput";
+import VBaseInput from "./inputs/VBaseInput.vue";
 import { object, string } from 'yup'
 import { useRouter } from "vue-router";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "VLoginForm",
   components: {
     Form,
@@ -110,7 +111,7 @@ export default {
       onSubmit,
     }
   }
-}
+})
 </script>
 
 <style scoped>

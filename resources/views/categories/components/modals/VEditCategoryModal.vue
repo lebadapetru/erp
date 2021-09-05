@@ -2,6 +2,8 @@
   <VBaseModal
     hide-mutation="hideEditCategoryModal"
     visibility-getter="isEditCategoryModalVisible"
+    ref="modal"
+    v-if="hasLoaded"
   >
     <template v-slot:title>
       <div class="mb-13 text-center">
@@ -30,7 +32,7 @@
         <div class="row mb-6">
           <div class="col-12">
             <VTinyMCE
-              @loaded="editorLoaded()"
+              @loaded="onEditorLoaded()"
               v-model="description"
             />
           </div>
@@ -55,11 +57,10 @@
       </VBaseForm>
     </template>
 
-    <template v-slot:footer>
-      <button type="button" class="btn btn-light" @click="hide()">Close</button>
-      <!--TODO create a custom directive for loader v-load which watches a ref-->
+    <template v-slot:saveButton>
+      <!--TODO create a custom directive for loader v-load who watches a ref-->
       <button
-        v-if="isLoading"
+        v-if="isSaving"
         type="button"
         class="btn btn-primary"
         disabled
@@ -81,10 +82,10 @@ import VBaseForm from "resources/components/forms/VBaseForm.vue";
 import { Toast } from "resources/components/alerts/toast"
 import VBaseModal from "resources/components/modals/VBaseModal.vue";
 import { useStore } from "vuex";
+import validationSchema from "resources/views/categories/components/forms/ts/validationSchema";
 import VBaseInput from "resources/components/forms/inputs/VBaseInput.vue";
 import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox.vue";
 import VTinyMCE from "resources/components/forms/inputs/VTinyMCE.vue";
-import validationSchema from "resources/views/categories/components/forms/ts/validationSchema";
 
 export default defineComponent({
   name: "VEditCategoryModal",
@@ -96,58 +97,55 @@ export default defineComponent({
     VBaseCheckbox,
   },
   setup() {
-    const isLoading = ref(false)
-    const isEditorLoaded = ref(false)
+    const isSaving = ref(false)
+    const hasLoaded = ref(false)
+    const hasEditorLoaded = ref(false)
+    const form = ref(null)
+    const modal = ref(null)
     const store = useStore()
     const id = computed(() => store.getters['category/getId'])
-    const form = ref(null)
 
-    watch(id, (newValue, oldValue) => {
+    watch(id, newValue => {
       if (!newValue) {
         return
       }
-      store.dispatch('category/readItem', newValue)
+      store.dispatch('category/readItem', newValue).then(() => {
+        hasLoaded.value = true
+      })
     }, { immediate: true })
 
-    const title = computed({
-      get: (): string => store.getters["category/getTitle"],
-      set: (value: string) => store.commit('category/setTitle', value)
-    })
-    const description = computed({
-      get: (): string => store.getters["category/getDescription"],
-      set: (value: string) => store.commit("category/setDescription", value)
-    })
-    const isPublic = computed({
-      get: (): boolean => store.getters["category/getIsPublic"],
-      set: (value: boolean) => store.commit("category/setIsPublic", value)
-    })
-
-    const hide = () => {
-      store.commit('modals/hideEditCategoryModal')
-    }
-
     return {
-      validationSchema,
-      editorLoaded: () => {
-        console.log('editor')
-        isEditorLoaded.value = true
-      },
-      isLoading,
-      isEditorLoaded,
-      title,
-      description,
-      isPublic,
+      hasLoaded,
       form,
-      hide,
+      modal,
+      validationSchema,
+      isSaving,
+      hasEditorLoaded,
+      title: computed({
+        get: (): string => store.getters["category/getTitle"],
+        set: (value: string) => store.commit('category/setTitle', value)
+      }),
+      description: computed({
+        get: (): string => store.getters["category/getDescription"],
+        set: (value: string) => store.commit("category/setDescription", value)
+      }),
+      isPublic: computed({
+        get: (): boolean => store.getters["category/getIsPublic"],
+        set: (value: boolean) => store.commit("category/setIsPublic", value)
+      }),
+      onEditorLoaded: () => {
+        console.log('editor')
+        hasEditorLoaded.value = true
+      },
       save: (): void => {
         form.value.$el.dispatchEvent(new Event('submit'));
       },
       onSubmit: (data: object) => {
-        isLoading.value = true
-        store.dispatch('category/updateItem', data).then(() => {
-          isLoading.value = false
-          Toast.success('The category was added successfully.')
-          hide()
+        isSaving.value = true
+        store.dispatch('category/updateItem', {id: id.value, data}).then(() => {
+          isSaving.value = false
+          Toast.success('The category was edited successfully.')
+          modal.value.hide()
           store.dispatch('categories/readItems')
         })
       }

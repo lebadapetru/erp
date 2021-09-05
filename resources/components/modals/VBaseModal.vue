@@ -53,20 +53,12 @@
             <slot
               name="footer"
             >
-              <button type="button" class="btn btn-light" @click="hide()">Close</button>
-              <!--TODO create a custom directive for loader v-load which watches a ref-->
-              <button
-                v-if="isLoading"
-                type="button"
-                class="btn btn-primary"
-                disabled
-              >
-                Saving ...
-                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-              </button>
-              <button v-else type="button" class="btn btn-primary" @click="save()">
-                Save
-              </button>
+              <slot name="cancelButton" >
+               <button type="button" class="btn btn-light" @click="hide()">Close</button>
+              </slot>
+              <slot name="saveButton">
+               <button type="button" class="btn btn-primary">Save changes</button>
+              </slot>
             </slot>
           </div>
         </div>

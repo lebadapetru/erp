@@ -41,18 +41,16 @@
   <!--end::Variants-->
 </template>
 
-<script>
-import { computed } from "vue";
-import VSelectVariantOptions from "resources/views/products/components/forms/product/inputs/VSelectVariantOptions";
-import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox";
-import VSelect2 from "resources/components/forms/inputs/VSelect2";
+<script lang="ts">
+import { computed, defineComponent } from "vue";
+import VSelectVariantOptions from "resources/views/products/components/forms/product/inputs/VSelectVariantOptions.vue";
+import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox.vue";
 import { useStore } from "vuex";
 
-export default {
+export default defineComponent({
   name: "VVariantsSection",
   components: {
     VBaseCheckbox,
-    VSelect2,
     VSelectVariantOptions,
   },
   setup() {
@@ -65,7 +63,7 @@ export default {
       }),
     }
   }
-}
+})
 </script>
 
 <style scoped>

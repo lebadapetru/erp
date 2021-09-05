@@ -48,20 +48,20 @@
   <!--end::Page title-->
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from "vue";
 import { useRouter } from 'vue-router'
 
-export default {
+export default defineComponent({
   name: "Breadcrumbs",
   setup() {
     const router = useRouter()
-    console.log('here')
-    console.log(router.currentRoute)
+
     return {
       currentRoute: router.currentRoute
     }
   }
-}
+})
 </script>
 
 <style scoped>

@@ -59,13 +59,13 @@
   <!--end::Pricing-->
 </template>
 
-<script>
-import VBaseInput from "resources/components/forms/inputs/VBaseInput";
-import VCurrencyInput from "resources/components/forms/inputs/VCurrencyInput";
+<script lang="ts">
+import VBaseInput from "resources/components/forms/inputs/VBaseInput.vue";
+import VCurrencyInput from "resources/components/forms/inputs/VCurrencyInput.vue";
 import { useStore } from "vuex";
-import { computed} from "vue";
+import { computed, defineComponent } from "vue";
 
-export default {
+export default  defineComponent({
   name: "VPriceSection",
   components: {
     VBaseInput,
@@ -107,7 +107,7 @@ export default {
       discount,
     }
   }
-}
+})
 </script>
 
 <style scoped>

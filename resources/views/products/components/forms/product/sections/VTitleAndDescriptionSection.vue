@@ -25,13 +25,13 @@
   <!--end::Title&Description-->
 </template>
 
-<script>
-import VBaseInput from "resources/components/forms/inputs/VBaseInput";
-import VTinyMCE from "resources/components/forms/inputs/VTinyMCE";
+<script lang="ts">
+import VBaseInput from "resources/components/forms/inputs/VBaseInput.vue";
+import VTinyMCE from "resources/components/forms/inputs/VTinyMCE.vue";
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "VTitleAndDescriptionSection",
   components: {
     VBaseInput,
@@ -51,7 +51,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 
 <style scoped>

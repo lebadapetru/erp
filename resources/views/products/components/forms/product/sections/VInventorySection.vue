@@ -73,15 +73,15 @@
   </div>
 </template>
 
-<script>
-import VBaseInput from "resources/components/forms/inputs/VBaseInput";
-import VIntegerInput from "resources/components/forms/inputs/VIntegerInput";
-import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox";
+<script lang="ts">
+import VBaseInput from "resources/components/forms/inputs/VBaseInput.vue";
+import VIntegerInput from "resources/components/forms/inputs/VIntegerInput.vue";
+import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox.vue";
 import { integerFilter } from "resources/js/helpers/inputFilters";
-import { computed } from "vue";
+import { computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 
-export default {
+export default defineComponent({
   name: "VInventorySection",
   components: {
     VBaseInput,
@@ -115,7 +115,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 
 <style scoped>

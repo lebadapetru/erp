@@ -15,19 +15,20 @@
   <!--end::Toolbar-->
 </template>
 
-<script>
-import Breadcrumbs from "resources/themes/base/Breadcrumbs";
+<script lang="ts">
+import { defineComponent } from "vue";
 import InlineSvg from "vue-inline-svg";
-import Dropdown1 from "resources/themes/base/dropdown/Dropdown1";
+import Breadcrumbs from "resources/themes/base/Breadcrumbs.vue";
+import Dropdown1 from "resources/themes/base/dropdown/Dropdown1.vue";
 
-export default {
+export default defineComponent({
   name: "Toolbar",
   components: {
     Breadcrumbs,
     InlineSvg,
     Dropdown1,
   }
-}
+})
 </script>
 
 <style scoped>

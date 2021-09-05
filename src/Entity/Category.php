@@ -33,7 +33,7 @@ class Category
     private int $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Groups({"category:read", "category:write", "product:read"})
      */
     private string $title;
@@ -61,14 +61,14 @@ class Category
      * @ORM\Column(type="datetime")
      * @Groups({"category:read"})
      */
-    private ?\DateTimeInterface $updatedAt;
+    private \DateTimeInterface $updatedAt;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      * @Groups({"category:read"})
      */
-    private ?\DateTimeInterface $createdAt;
+    private \DateTimeInterface $createdAt;
 
     /**
      * @ORM\ManyToMany(targetEntity=Product::class, mappedBy="categories")

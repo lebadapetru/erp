@@ -31,23 +31,24 @@
   <!-- end:: Body -->
 </template>
 
-<script>
-import Aside from "resources/themes/base/aside/Aside";
-import Header from "resources/themes/base/header/Header";
-import ToolBar from "resources/themes/base/toolbar/ToolBar";
-import Footer from "resources/themes/base/footer/Footer";
+<script lang="ts">
+import { defineComponent } from "vue";
+import Aside from "resources/themes/base/aside/Aside.vue";
+import Header from "resources/themes/base/header/Header.vue";
+import Toolbar from "resources/themes/base/toolbar/Toolbar.vue";
+import Footer from "resources/themes/base/footer/Footer.vue";
 
-export default {
+export default defineComponent({
   name: "Layout",
   components: {
     Aside,
     Header,
-    ToolBar,
+    Toolbar,
     Footer,
   },
   setup() {}
 
-}
+})
 </script>
 
 <style scoped>

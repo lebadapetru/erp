@@ -1,6 +1,8 @@
 <template>
   <!--begin::Authentication - Sign-in -->
-  <div class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed" style="background-size: 100% 50%; background-image: url(build/media/misc/outdoor.png)">
+  <div
+    class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed"
+    style="background-size: 100% 50%; background-image: url(build/media/misc/outdoor.png)">
     <!--begin::Content-->
     <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
       <!--begin::Logo-->
@@ -32,15 +34,16 @@
   <!--end::Authentication - Sign-in-->
 </template>
 
-<script>
-import VLoginForm from "resources/components/forms/VLoginForm";
+<script lang="ts">
+import VLoginForm from "resources/components/forms/VLoginForm.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "TheLogin",
   components: {
     VLoginForm,
   }
-}
+})
 </script>
 
 <style lang="scss">
