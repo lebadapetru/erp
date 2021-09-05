@@ -54,7 +54,7 @@ export default defineComponent({
     return {
       isMounted,
       totalCategories: computed(() => store.getters['categories/getTotalItems']),
-      showAddCategoryModal: () => store.commit('categories/showAddCategoryModal'),
+      showAddCategoryModal: () => store.commit('modals/showAddCategoryModal'),
     }
   }
 })

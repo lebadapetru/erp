@@ -9,14 +9,13 @@
       class="modal"
       tabindex="-1"
       aria-hidden="true"
-      ref="modal"
     >
       <!--begin::Modal dialog-->
       <div @click.stop class="modal-dialog modal-dialog-centered mw-650px">
         <!--begin::Modal content-->
         <div class="modal-content rounded">
           <!--begin::Modal header-->
-          <div class="modal-header border-0 mb-7s">
+          <div class="modal-header border-0 mb-7">
             <slot name="header" />
             <!--begin::Close-->
             <div
@@ -55,7 +54,19 @@
               name="footer"
             >
               <button type="button" class="btn btn-light" @click="hide()">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+              <!--TODO create a custom directive for loader v-load which watches a ref-->
+              <button
+                v-if="isLoading"
+                type="button"
+                class="btn btn-primary"
+                disabled
+              >
+                Saving ...
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+              </button>
+              <button v-else type="button" class="btn btn-primary" @click="save()">
+                Save
+              </button>
             </slot>
           </div>
         </div>
@@ -92,10 +103,8 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const modal = ref(null)
     const store = useStore()
     return {
-      modal,
       isVisible: computed(() => store.getters['modals/' + props.visibilityGetter]),
       hide: () => {
         store.commit('modals/' + props.hideMutation)

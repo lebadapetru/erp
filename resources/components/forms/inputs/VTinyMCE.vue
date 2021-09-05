@@ -2,7 +2,7 @@
   <editor
     :api-key="apiKey"
     :init="config"
-    v-model="modelValue"
+    v-model="inputValue"
     @init="onInit"
   />
   <div
@@ -17,7 +17,7 @@
 import Editor from '@tinymce/tinymce-vue'
 import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
-import { watch, defineComponent, onMounted, ref } from "vue";
+import { watch, defineComponent, onMounted, ref, computed } from "vue";
 
 export default defineComponent({
   name: "VTinyMCE",
@@ -25,10 +25,6 @@ export default defineComponent({
     editor: Editor
   },
   props: {
-    initialValue: {
-      type: String,
-      required: false
-    },
     modelValue: {
       type: String,
       default: ''
@@ -70,7 +66,7 @@ export default defineComponent({
       handleChange,
       errorMessage,
       capitalize,
-      apiKey: globalThis.app.tinymceApiKey,
+      apiKey: app.tinymceApiKey,
       config: {
         branding: false,
         menubar: true,
@@ -88,11 +84,11 @@ export default defineComponent({
           'table | subscript superscript | charmap | visualchars visualblocks nonbreaking | template | helloworld'
         ],
         setup: (editor) => {
-          console.log(editor.isDirty())
           editor.on('change input', () => {
-            console.log('input: ', editor.getContent());
-            handleChange(editor.getContent())
-            emit('update:modelValue', editor.getContent())
+            if (editor.getContent() !== props.modelValue) {
+              handleChange(editor.getContent())
+              emit('update:modelValue', editor.getContent())
+            }
           })
         }
       }

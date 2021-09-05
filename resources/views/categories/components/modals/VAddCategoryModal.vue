@@ -1,6 +1,5 @@
 <template>
   <VBaseModal
-    ref="modal"
     hide-mutation="hideAddCategoryModal"
     visibility-getter="isAddCategoryModalVisible"
   >
@@ -32,7 +31,6 @@
           <div class="col-12">
             <VTinyMCE
               @loaded="editorLoaded()"
-              :initial-value="description"
               v-model="description"
             />
           </div>
@@ -69,7 +67,7 @@
         Saving ...
         <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
       </button>
-      <button v-else type="button" class="btn btn-primary" @click="submit()">
+      <button v-else type="button" class="btn btn-primary" @click="save()">
         Save
       </button>
     </template>
@@ -78,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, defineAsyncComponent } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import VBaseForm from "resources/components/forms/VBaseForm.vue";
 import { Toast } from "resources/components/alerts/toast"
 import VBaseModal from "resources/components/modals/VBaseModal.vue";
@@ -100,26 +98,19 @@ export default defineComponent({
   setup() {
     const isLoading = ref(false)
     const isEditorLoaded = ref(false)
-    const modal = ref(null)
     const form = ref(null)
     const store = useStore()
-    console.log('add wtf')
+    const hide = () => {
+        store.commit('modals/hideAddCategoryModal')
+    }
+
+    store.commit('category/resetState')
+
     return {
-      modal,
       form,
       validationSchema,
-      editorLoaded: () => {
-        console.log('editor')
-        isEditorLoaded.value = true
-      },
-      submit: (): void => {
-        form.value.$el.dispatchEvent(new Event('submit'));
-      },
       isLoading,
       isEditorLoaded,
-      hide: () => {
-        store.commit('categories/hideAddCategoryModal')
-      },
       title: computed({
         get: (): string => store.getters["category/getTitle"],
         set: (value: string) => store.commit('category/setTitle', value)
@@ -132,12 +123,19 @@ export default defineComponent({
         get: (): boolean => store.getters["category/getIsPublic"],
         set: (value: boolean) => store.commit("category/setIsPublic", value)
       }),
+      editorLoaded: () => {
+        console.log('editor')
+        isEditorLoaded.value = true
+      },
+      save: (): void => {
+        form.value.$el.dispatchEvent(new Event('submit'));
+      },
       onSubmit: (data: object) => {
         isLoading.value = true
-        store.dispatch('category/createCategory', data).then(() => {
+        store.dispatch('category/createItem', data).then(() => {
           isLoading.value = false
           Toast.success('The category was added successfully.')
-          modal.value.hide()
+          hide()
           store.dispatch('categories/readItems')
         })
       }
