@@ -31,11 +31,22 @@
 </template>
 
 <script lang="ts">
-import { onMounted, ref, watch, defineComponent } from 'vue'
+import { onMounted, ref, watch, defineComponent, PropType } from 'vue'
 import Dropzone from 'dropzone'
 import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
 import Swal from "sweetalert2";
+interface File {
+  id: number,
+  fullRealName: string,
+  mimeType: string,
+  url: string,
+  size: number,
+}
+interface ProductFile {
+  file: File,
+  position: number|null
+}
 
 export default defineComponent({
   name: "VDropZone",
@@ -50,16 +61,16 @@ export default defineComponent({
       default: true
     },
     modelValue: {
-      type: Array,
+      type: Array as PropType<ProductFile[]>,
       default: []
     }
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     const el = ref(null)
     const files = ref([])
     const productFiles = ref([])
 
-    const mimeTypes = Object.values(app.fileConfiguration.mimeTypes).map(type=> {
+    const mimeTypes = Object.values(app.fileConfiguration.mimeTypes).map(type => {
       return Object.values(type)
     }).flat().join(',')
 
@@ -98,8 +109,8 @@ export default defineComponent({
             id: file[0].upload.uuid
           }
         },
-        success: (file, response) => {
-          console.log('success')
+        success: (file) => {
+          /*console.log('success')
           console.log(response)
           productFiles.value.push({
             file: JSON.parse(response)['@id'],
@@ -107,14 +118,14 @@ export default defineComponent({
           })
           handleInput(productFiles)
           files.value.push(response)
-          emit('update:modelValue', files)
+          emit('update:modelValue', files)*/
         },
         error: (file, error) => {
           console.log('error')
           console.log(file)
           console.log(error)
         },
-        dictRemoveFileConfirmation: true,
+        dictRemoveFileConfirmation: 'Bla?',//TODO
         addedfiles: (dropzoneFiles) => {
           let dropzoneFile = dropzoneFiles[0]
           // Create the remove button
@@ -128,7 +139,7 @@ export default defineComponent({
 
             Swal.fire({
               title: 'Are you sure?',
-              html: `You are about to remove the file <b>${dropzoneFile.name}</b>  from the current product!`,
+              html: `You are about to remove the file <b>${ dropzoneFile.name }</b>  from the current product!`,
               icon: 'warning',
               showCancelButton: true,
               buttonsStyling: false,
@@ -174,7 +185,7 @@ export default defineComponent({
           // Add the button to the file preview element.
           dropzoneFile.previewElement.appendChild(removeButton);
         },
-        init: function() {
+        /*init: function () {
           console.log('dropzone init')
 
           this.on("removedfile", (file) => {
@@ -197,7 +208,7 @@ export default defineComponent({
           // Add status complete to file
           this.emit("complete", file);
 
-        }
+        }*/
       });
 
       console.log(el.value.dropzone)
