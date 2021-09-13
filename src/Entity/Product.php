@@ -260,12 +260,12 @@ class Product
         return $this;
     }
 
-    public function getOriginalPrice(): float
+    public function getOriginalPrice(): string
     {
         return $this->originalPrice;
     }
 
-    public function setOriginalPrice(float $originalPrice): self
+    public function setOriginalPrice(string $originalPrice): self
     {
         $this->originalPrice = $originalPrice;
 

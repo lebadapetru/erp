@@ -5,23 +5,12 @@
     ref="el"
   >
     <div class="dropzone-msg dz-message needsclick">
-      <svg class="mb-4" width="50px" height="50px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
-           xmlns:xlink="http://www.w3.org/1999/xlink">
-        <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
-        <title>Stockholm-icons / Files / Upload</title>
-        <desc>Created with Sketch.</desc>
-        <defs></defs>
-        <g id="Stockholm-icons-/-Files-/-Upload" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-          <rect id="bound" x="0" y="0" width="24" height="24"></rect>
-          <path
-            d="M2,13 C2,12.5 2.5,12 3,12 C3.5,12 4,12.5 4,13 C4,13.3333333 4,15 4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,13 C20,12.4477153 20.4477153,12 21,12 C21.5522847,12 22,12.4477153 22,13 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 C2,15 2,13.3333333 2,13 Z"
-            id="Path-57" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-          <rect id="Rectangle" fill="#000000" opacity="0.3" x="11" y="2" width="2" height="14" rx="1"></rect>
-          <path
-            d="M12.0362375,3.37797611 L7.70710678,7.70710678 C7.31658249,8.09763107 6.68341751,8.09763107 6.29289322,7.70710678 C5.90236893,7.31658249 5.90236893,6.68341751 6.29289322,6.29289322 L11.2928932,1.29289322 C11.6689749,0.916811528 12.2736364,0.900910387 12.6689647,1.25670585 L17.6689647,5.75670585 C18.0794748,6.12616487 18.1127532,6.75845471 17.7432941,7.16896473 C17.3738351,7.57947475 16.7415453,7.61275317 16.3310353,7.24329415 L12.0362375,3.37797611 Z"
-            id="Path-102" fill="#000000" fill-rule="nonzero"></path>
-        </g>
-      </svg>
+      <inline-svg
+        src="/build/media/icons/duotone/Files/Upload.svg"
+        width="40"
+        height="40"
+        class="mb-5"
+      />
       <h3 class="dropzone-msg-title">Drop files here or click to upload.</h3>
     </div>
   </div>
@@ -35,7 +24,9 @@ import { onMounted, ref, watch, defineComponent, PropType } from 'vue'
 import Dropzone from 'dropzone'
 import { useField } from 'vee-validate'
 import capitalize from 'lodash/capitalize'
-import Swal from "sweetalert2";
+import Swal from "sweetalert2"
+import InlineSvg from "vue-inline-svg"
+
 interface File {
   id: number,
   fullRealName: string,
@@ -43,13 +34,17 @@ interface File {
   url: string,
   size: number,
 }
+
 interface ProductFile {
   file: File,
-  position: number|null
+  position: number | null
 }
 
 export default defineComponent({
   name: "VDropZone",
+  components: {
+    InlineSvg,
+  },
   emits: ['removedFile', 'update:modelValue'],
   props: {
     name: {
@@ -67,7 +62,9 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const el = ref(null)
+    //here we keep the actual file data
     const files = ref([])
+    //this is used to assign Files to Product by @id URI
     const productFiles = ref([])
 
     const mimeTypes = Object.values(app.fileConfiguration.mimeTypes).map(type => {
@@ -101,45 +98,49 @@ export default defineComponent({
         autoQueue: true,
         autoProcessQueue: true,
         acceptedFiles: mimeTypes,
-        params: (file, xhr) => { //send additional params beside the file object
-          console.log(file)
-          console.log(xhr)
+        //set files on initial load,
+        //deferred to watcher for now
+        init: function () {
+          //console.log('dropzone init')
+          this.on("removedfile", (file) => {
 
-          return {
-            id: file[0].upload.uuid
-          }
+          });
+
+          return
+          /*let file = {}
+          let thumbnail_url = ''
+          // Push file to collection
+          this.files.push(file);
+          // Emulate event to create interface
+          this.emit("addedfile", file);
+          // Add thumbnail url
+          this.emit("thumbnail", file, thumbnail_url);
+          // Add status processing to file
+          this.emit("processing", file);
+          // Add status success to file AND RUN EVENT success from response
+          this.emit("success", file, Dropzone.SUCCESS, false);
+          // Add status complete to file
+          this.emit("complete", file);*/
+
         },
-        success: (file) => {
-          /*console.log('success')
-          console.log(response)
-          productFiles.value.push({
-            file: JSON.parse(response)['@id'],
-            position: null
-          })
-          handleInput(productFiles)
-          files.value.push(response)
-          emit('update:modelValue', files)*/
-        },
-        error: (file, error) => {
-          console.log('error')
-          console.log(file)
-          console.log(error)
-        },
-        dictRemoveFileConfirmation: 'Bla?',//TODO
-        addedfiles: (dropzoneFiles) => {
-          let dropzoneFile = dropzoneFiles[0]
+        //construct dropzone file component and events
+        addedfiles: (clientFiles) => {
+          console.log('addedFiles')
+          const clientFile = clientFiles[0]
+          console.log(clientFile)
           // Create the remove button
-          let removeButton = Dropzone.createElement('<a class="dz-remove">Remove file</a>');
+          const removeButton = Dropzone.createElement('<a class="dz-remove">Removez file</a>');
 
           // Listen to the click event
           removeButton.addEventListener("click", (e) => {
+            console.log('remove')
             // Make sure the button click doesn't submit the form:
             e.preventDefault();
             e.stopPropagation();
 
             Swal.fire({
               title: 'Are you sure?',
-              html: `You are about to remove the file <b>${ dropzoneFile.name }</b>  from the current product!`,
+              html: `You are about to remove the file <b>${ clientFile.name }</b>  from the current product!`,
               icon: 'warning',
               showCancelButton: true,
               buttonsStyling: false,
@@ -156,18 +157,13 @@ export default defineComponent({
                 'Also, delete it!',
               heightAuto: false
             }).then((result) => {
-              console.log(result)
               if (result.isConfirmed) {
                 // Remove the file preview.
-                console.log('removed file')
-                console.log(dropzoneFile)
-                const index = files.value.findIndex(item => item.id === dropzoneFile.upload.uuid)
+                const index = files.value.findIndex(item => item.id === clientFile.upload.uuid)
                 files.value.splice(index, 1)
-                console.log(files)
-                console.log(dropzoneFile)
 
                 if (result.value) {
-                  emit('removedFile', dropzoneFile.upload.uuid)
+                  emit('removedFile', clientFile.upload.uuid)
 
                   Swal.fire(
                     'Deleted!',
@@ -176,42 +172,39 @@ export default defineComponent({
                   )
                 }
 
-                el.value.dropzone.removeFile(dropzoneFile);
+                el.value.dropzone.removeFile(clientFile);
               }
             })
           })
-
-          dropzoneFile.previewElement.lastElementChild.remove()
+          // remove the old button
+          clientFile.previewElement.lastElementChild.remove()
           // Add the button to the file preview element.
-          dropzoneFile.previewElement.appendChild(removeButton);
+          clientFile.previewElement.appendChild(removeButton);
+          console.log(clientFile.previewElement)
         },
-        /*init: function () {
-          console.log('dropzone init')
-
-          this.on("removedfile", (file) => {
-
-          });
-
-          return
-          let file = {}
-          let thumbnail_url = ''
-          // Push file to collection
-          this.files.push(file);
-          // Emulate event to create interface
-          this.emit("addedfile", file);
-          // Add thumbnail url
-          this.emit("thumbnail", file, thumbnail_url);
-          // Add status processing to file
-          this.emit("processing", file);
-          // Add status success to file AND RUN EVENT success from response
-          this.emit("success", file, Dropzone.SUCCESS, false);
-          // Add status complete to file
-          this.emit("complete", file);
-
-        }*/
+        //send additional params beside the file object,
+        //like the dropzone's generated uuid to BE
+        params: (file) => {
+          return { id: file[0].upload.uuid }
+        },
+        //after file's saved successfully,
+        //
+        success: (file) => {
+          const response = JSON.parse(file.xhr.response)
+          productFiles.value.push({
+            file: response['@id'],
+            position: null
+          })
+          handleInput(productFiles)
+          files.value.push(response)
+          emit('update:modelValue', files)
+        },
+        error: (file, error) => {
+          console.log('error')
+          console.log(file)
+          console.log(error)
+        },
       });
-
-      console.log(el.value.dropzone)
     })
 
     watch(() => props.modelValue, items => {
@@ -219,7 +212,7 @@ export default defineComponent({
       console.log(items)
 
       items.forEach(item => {
-        let dropzoneFile = {
+        const clientFile = {
           upload: {
             uuid: item.file.id,
           },
@@ -242,9 +235,10 @@ export default defineComponent({
           file: item.file['@id'],
           position: null
         })
+        files.value.push(item)
         handleInput(productFiles)
-
-        el.value.dropzone.displayExistingFile(dropzoneFile, dropzoneFile.url)
+        //TODO custom file theme and processing
+        el.value.dropzone.displayExistingFile(clientFile, clientFile.url)
       })
     })
 

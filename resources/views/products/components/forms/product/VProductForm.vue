@@ -20,6 +20,7 @@
       </div>
     </div>
     <VProductFormToolbarActions
+      v-if="productForm"
       :target-form="productForm"
     />
   </VBaseForm>
@@ -27,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { ref, provide ,defineComponent } from 'vue'
+import { ref ,defineComponent } from 'vue'
 import validationSchema from "./validationSchema"
 import VBaseForm from "resources/components/forms/VBaseForm.vue";
 import VProductFormToolbarActions from "resources/views/products/components/teleports/VProductFormToolbar.vue";
@@ -76,25 +77,28 @@ export default defineComponent({
     const store = useStore()
     const productForm = ref(null)
     if (props.id) {
-      console.log(props.id)
-      store.dispatch('product/readProduct', props.id)
+      store.dispatch('product/read', props.id)
     }
-    provide('id', props.id)
 
     const initialState = clone(store.getters['product/getProduct'])
 
     const onSubmit = (data) => {
       console.log(data)
-
-      return;
       if (props.id) {
-        store.dispatch('product/updateProduct', data)
+        store.dispatch('product/update', {
+          id: props.id,
+          data
+        })
       } else {
-        store.dispatch('product/createProduct', data)
+        store.dispatch('product/create', data)
       }
     }
 
     onBeforeRouteLeave((to, from, next) => {
+      console.log('route leave')
+      console.log(initialState)
+      console.log(store.getters['product/getProduct'])
+      console.log(isEqual(store.getters['product/getProduct'], initialState))
       if(!isEqual(store.getters['product/getProduct'], initialState)) {
         Swal.fire({
           title: 'You want to leave the page?',

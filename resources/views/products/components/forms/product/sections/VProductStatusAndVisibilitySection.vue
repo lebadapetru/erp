@@ -59,13 +59,12 @@ export default defineComponent({
   setup() {
     const store = useStore()
 
-    store.dispatch("product/readAndParseLookupProductStatus")
+    store.dispatch("product/readAndParseStatusOptions")
     let isPublic = computed({
       get: () => store.getters["product/getIsPublic"],
       set: (value) => store.commit("product/setIsPublic", value)
     })
-    console.log('wtf')
-    console.log(isPublic)
+
     return {
       isPublic,
       statusOptions: computed(() => store.getters["product/getStatusOptions"]),

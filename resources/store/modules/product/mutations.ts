@@ -45,7 +45,7 @@ mutations.setProduct = (state, value) => {
   mutations.setWeight(state, value.weight)
   mutations.setHasVariants(state, value.hasVariants)
   mutations.setIsPublic(state, value.isPublic)
-  mutations.setStatus(state, value.status)
+  mutations.setStatus(state, value.status['@id'])
   mutations.setVendor(state, value.vendor)
   mutations.setCategories(state, value.categories)
   mutations.setTags(state, value.tags)

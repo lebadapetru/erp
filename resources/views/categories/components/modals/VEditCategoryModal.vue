@@ -109,7 +109,7 @@ export default defineComponent({
       if (!newValue) {
         return
       }
-      store.dispatch('category/readItem', newValue).then(() => {
+      store.dispatch('category/read', newValue).then(() => {
         hasLoaded.value = true
       })
     }, { immediate: true })
@@ -142,11 +142,11 @@ export default defineComponent({
       },
       onSubmit: (data: object) => {
         isSaving.value = true
-        store.dispatch('category/updateItem', {id: id.value, data}).then(() => {
+        store.dispatch('category/update', { id: id.value, data }).then(() => {
           isSaving.value = false
-          Toast.success('The category was edited successfully.')
+          Toast.success({ title: 'The category was edited successfully.' })
           modal.value.hide()
-          store.dispatch('categories/readItems')
+          store.dispatch('categories/read')
         })
       }
     }

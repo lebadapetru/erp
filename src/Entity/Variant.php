@@ -32,7 +32,7 @@ class Variant
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
      */
-    private ?float $originalPrice;
+    private ?string $originalPrice;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -94,12 +94,12 @@ class Variant
         return $this;
     }
 
-    public function getOriginalPrice(): ?float
+    public function getOriginalPrice(): ?string
     {
         return $this->originalPrice;
     }
 
-    public function setOriginalPrice(?float $originalPrice): self
+    public function setOriginalPrice(?string $originalPrice): self
     {
         $this->originalPrice = $originalPrice;
 

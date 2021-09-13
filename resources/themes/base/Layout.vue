@@ -11,7 +11,7 @@
       <!-- begin:: Content -->
       <div id="kt_content" class="content d-flex flex-column flex-column-fluid">
         <!-- begin:: Content Head -->
-        <ToolBar />
+        <Toolbar />
         <!-- end:: Content Head -->
 
         <!-- begin:: Content Body -->

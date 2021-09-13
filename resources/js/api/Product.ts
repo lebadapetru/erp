@@ -16,8 +16,8 @@ export const readProduct = (id) => {
   return httpClient.get(url + '/' + id)
 }
 
-export const updateProduct = (product) => {
-  return httpClient.put(url, product)
+export const updateProduct = (id, data) => {
+  return httpClient.put(url + '/' + id, data)
 }
 
 export const deleteProduct = (id) => {

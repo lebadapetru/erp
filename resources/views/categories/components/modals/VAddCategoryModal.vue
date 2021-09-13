@@ -131,11 +131,11 @@ export default defineComponent({
       },
       onSubmit: (data: object) => {
         isSaving.value = true
-        store.dispatch('category/createItem', data).then(() => {
+        store.dispatch('category/create', data).then(() => {
           isSaving.value = false
-          Toast.success('The category was added successfully.')
+          Toast.success({ title: 'The category was added successfully.' })
           modal.value.hide()
-          store.dispatch('categories/readItems')
+          store.dispatch('categories/read')
         })
       }
     }

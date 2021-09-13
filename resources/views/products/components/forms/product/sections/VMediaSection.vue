@@ -40,22 +40,23 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const productId = inject('id')
+    const productId = store.getters['product/getId']
 
     const deleteFile = (fileId) => {
-      store.dispatch('product/deleteFile', fileId).then(() => {
+      store.dispatch('file/delete', fileId).then(() => {
 
         if (productId) {
-          store.dispatch('product/readProduct', fileId)
+          store.dispatch('product/read', fileId)
         }
       })
     }
+
     return {
       files: computed({
         get: () => store.getters['product/getFiles'],
         set: () => store.commit('product/setFiles')
       }),
-      deleteFile
+      deleteFile,
     }
   }
 })

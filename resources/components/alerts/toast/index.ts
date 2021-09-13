@@ -14,20 +14,24 @@ export const ToastMixin = Swal.mixin({
 })
 
 export const Toast = {
-  success: (title) => ToastMixin.fire({
+  success: ({ title, text }: { title: string, text?: string }) => ToastMixin.fire({
     icon: 'success',
-    title: title
+    title,
+    text
   }),
-  error: (title) => ToastMixin.fire({
+  error: ({ title, text }: { title: string, text?: string }) => ToastMixin.fire({
     icon: 'error',
-    title: title
+    title,
+    text
   }),
-  danger: (title) => ToastMixin.fire({
-    icon: 'danger',
-    title: title
+  warning: ({ title, text }: { title: string, text?: string }) => ToastMixin.fire({
+    icon: 'warning',
+    title,
+    text
   }),
-  info: (title) => ToastMixin.fire({
+  info: ({ title, text }: { title: string, text?: string }) => ToastMixin.fire({
     icon: 'info',
-    title: title
+    title,
+    text
   }),
 }

@@ -30,7 +30,7 @@
               :type="'text'"
               :name="'reducedPrice'"
               placeholder="0"
-              v-model:model-value="reducedPrice"
+              v-model="reducedPrice"
               disabled="disabled"
               :input-style-classes="'form-control text-muted text-end'"
             />
@@ -47,7 +47,7 @@
               :type="'number'"
               :name="'discount'"
               placeholder="0"
-              v-model:model-value="discount"
+              v-model="discount"
               :min="0"
               :max="100"
             />

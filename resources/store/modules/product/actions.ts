@@ -4,8 +4,8 @@ import { readVendors } from "resources/js/api/Vendor";
 import { createCategory, readCategories } from "resources/js/api/Category";
 import { createTag, readTags } from "resources/js/api/Tag";
 import { createProduct, readProduct, deleteProduct, updateProduct } from "resources/js/api/Product";
-import { deleteFile } from "resources/js/api/File";
 import Swal from "sweetalert2";
+import { Toast } from "resources/components/alerts/toast"
 
 const actions = {
   readAndParseVariantOptions: ({ commit }) => {
@@ -24,7 +24,7 @@ const actions = {
       name: variant.text
     })
   },
-  readAndParseLookupProductStatus: ({ commit }) => {
+  readAndParseStatusOptions: ({ commit }) => {
     return readLookupProductStatuses().then((response) => {
       let statusOptions = response.data['hydra:member'].map(statusOption => ({
         value: statusOption['@id'],
@@ -32,6 +32,8 @@ const actions = {
       }))
 
       commit('setStatusOptions', statusOptions)
+
+      return statusOptions
     })
   },
   readAndParseVendorOptions: ({ commit }) => {
@@ -76,49 +78,32 @@ const actions = {
       name: tag.text
     })
   },
-  readProduct: ({ state, commit }, id) => {
+  create: ({}, data) => {
+    createProduct(data).then(() => {
+      Toast
+        .success({ title: 'The product has been created.' })
+        .then(() => {
+          //TODO based on the submit type, redirect or do something else
+        })
+    })
+  },
+  read: ({ state, commit }, id) => {
     return readProduct(id).then((response) => {
       commit('setProduct', response.data)
     })
   },
-  createProduct: ({}, data) => {
-    createProduct(data).then(() => {
-      Swal.fire({
-        text: 'The product has been created!',
-        icon: "success",
-        buttonsStyling: false,
-        confirmButtonText: "Ok, got it!",
-        customClass: {
-          confirmButton: "btn font-weight-bold btn-light-primary"
-        },
-        heightAuto: false
-      }).then(() => {
-        //TODO based on the submit type, redirect or do something else
-      })
+  update: ({}, { id, data }) => {
+    updateProduct(id, data).then(() => {
+      Toast
+        .success({ title: 'The product has been updated.' })
+        .then(() => {
+          //TODO based on the submit type, redirect or do something else
+        })
     })
   },
-  updateProduct: ({}, data) => {
-    updateProduct(data).then(() => {
-      Swal.fire({
-        text: 'The product has been updated!',
-        icon: "success",
-        buttonsStyling: false,
-        confirmButtonText: "Ok, got it!",
-        customClass: {
-          confirmButton: "btn font-weight-bold btn-light-primary"
-        },
-        heightAuto: false
-      }).then(() => {
-        //TODO based on the submit type, redirect or do something else
-      })
-    })
-  },
-  deleteProduct: ({}, id) => {
+  delete: ({}, id) => {
     return deleteProduct(id)
   },
-  deleteFile: ({ state, commit }, id) => {
-    return deleteFile(id)
-  }
 }
 
 export default actions

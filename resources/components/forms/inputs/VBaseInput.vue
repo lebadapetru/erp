@@ -79,8 +79,10 @@ export default defineComponent({
     });
 
     const onInput = (event) => {
-      handleInput(event)
-      emit('update:modelValue', event.target.value)
+      //TODO maybe special component for number?
+      const value = (props.type === 'number') ? parseInt(event.target.value) : event.target.value
+      handleInput(value)
+      emit('update:modelValue', value)
     }
 
     watch(() => props.modelValue, value => {

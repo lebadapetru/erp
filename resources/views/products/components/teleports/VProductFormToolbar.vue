@@ -79,13 +79,13 @@ export default defineComponent({
   setup(props) {
     const isMounted = ref(false)
 
-    const onSave = () => {
-      props.targetForm.el.dispatchEvent(new Event('submit'));
-    }
-
     onMounted(() => {
       isMounted.value = true
     })
+
+    const onSave = () => {
+      props.targetForm.el.dispatchEvent(new Event('submit'));
+    }
 
     return {
       isMounted,

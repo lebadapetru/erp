@@ -90,8 +90,8 @@ export default defineComponent({
         store.commit('modals/showEditCategoryModal')
       },
       deleteCategory: (itemId) => {
-        store.dispatch('category/deleteItem', categories.value[itemId].id).then(() => {
-          store.dispatch('categories/readItems')
+        store.dispatch('category/delete', categories.value[itemId].id).then(() => {
+          store.dispatch('categories/read')
         })
       }
     }

@@ -1,4 +1,5 @@
 import { createStore, createLogger } from 'vuex'
+import file from './modules/file'
 import product from './modules/product'
 import products from './modules/products'
 import categories from './modules/categories'
@@ -9,6 +10,7 @@ const debug = process.env.NODE_ENV !== 'production'
 
 export default createStore({
   modules: {
+    file,
     product,
     products,
     categories,
