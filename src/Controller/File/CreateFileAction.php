@@ -7,6 +7,7 @@ namespace App\Controller\File;
 use App\Entity\File;
 use App\Request\UploadRequest;
 use App\Service\UploadService;
+use League\Flysystem\FilesystemException;
 
 class CreateFileAction
 {
@@ -16,10 +17,11 @@ class CreateFileAction
 
     /**
      * @throws \Throwable
-     * @throws \League\Flysystem\FilesystemException
+     * @throws FilesystemException
      */
     public function __invoke(UploadRequest $request): File
     {
+        //todo create processor
         return $this->uploadService->save($request->all());
     }
 }

@@ -13,7 +13,6 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\Uid\UuidV4;
 
 class UploadService
 {
@@ -31,12 +30,10 @@ class UploadService
     public function save(array $data): File
     {
         /**@var UploadedFile $temporaryFile */
-        $temporaryFile = $data['files'];
-        /**@var UuidV4 $id */
-        $id = $data['id'] ? UuidV4::fromString($data['id']) : UuidV4::v4();
+        $temporaryFile = $data['file'];
         $this->entityManager->getConnection()->beginTransaction();
         try {
-            $fileEntity = $this->createFileEntity($temporaryFile, $id);
+            $fileEntity = $this->createFileEntity($temporaryFile);
 
             /*TODO add support for videos, media urls, audios, vts*/
             if ($fileEntity->isImage()) {
@@ -79,6 +76,7 @@ class UploadService
 
         //set to processed
         $fileEntity->setStatus(
+        //todo files are internal things, keep statuses in constants
             $this->entityManager
                 ->getRepository(LookupFileStatus::class)
                 ->findOneBy([
@@ -90,12 +88,12 @@ class UploadService
         $this->entityManager->flush();
     }
 
-    private function createFileEntity(UploadedFile $temporaryFile, ?UuidV4 $id = null): File
+    private function createFileEntity(UploadedFile $temporaryFile): File
     {
         $originalFileName = pathinfo($temporaryFile->getClientOriginalName(), PATHINFO_FILENAME);
         //this one does strtolower, sanitization
         $fileName = $this->slugger->slug($originalFileName) . '-' . uniqid();
-        $file = new File($id);
+        $file = new File();
         $file->setRealName($fileName);
         $file->setDisplayName($fileName);
         $file->setExtension($temporaryFile->guessExtension());
@@ -110,6 +108,7 @@ class UploadService
 
         //set to processing
         $file->setStatus(
+            //todo files are internal things, keep statuses in constants
             $this->entityManager
                 ->getRepository(LookupFileStatus::class)
                 ->findOneBy([

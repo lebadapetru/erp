@@ -17,10 +17,11 @@
     <div class="card-body">
       <div class="row">
         <div class="col-12">
-          <VDropZone
+<!--          <VDropZone
             v-model="files"
             @removed-file="deleteFile"
-          />
+          />-->
+          <VUppy />
         </div>
       </div>
     </div>
@@ -30,12 +31,15 @@
 
 <script lang="ts">
 import VDropZone from "resources/components/forms/inputs/VDropZone.vue";
-import { computed, inject, defineComponent } from "vue";
+
+import { computed, defineComponent } from "vue";
 import { useStore } from "vuex";
+import VUppy from "resources/components/forms/inputs/VUppy.vue";
 
 export default defineComponent({
   name: "VMediaSection",
   components: {
+    VUppy,
     VDropZone,
   },
   setup() {

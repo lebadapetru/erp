@@ -101,7 +101,7 @@ export default defineComponent({
         //set files on initial load,
         //deferred to watcher for now
         init: function () {
-          //console.log('dropzone init')
+          console.log('dropzone init')
           this.on("removedfile", (file) => {
 
           });

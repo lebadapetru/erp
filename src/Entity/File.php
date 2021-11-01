@@ -171,8 +171,8 @@ class File
             'webp' => 'image/webp',
         ],
         'videos' => [
-            'video/mp4',
-            'video/quicktime'
+            'mp4' => 'video/mp4',
+            'qt' => 'video/quicktime'
         ],
     ];
 
@@ -448,5 +448,10 @@ class File
         }
 
         return $this;
+    }
+
+    public static function getAcceptedMimeTypes(): array
+    {
+        return array_merge(...array_values(self::ACCEPTED_MIME_TYPES));
     }
 }
