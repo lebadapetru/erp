@@ -21,7 +21,10 @@
             v-model="files"
             @removed-file="deleteFile"
           />-->
-          <VUppy />
+          <VUppy
+            v-model="files"
+            @removed-file="deleteFile"
+          />
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeUnmount, PropType } from "vue";
+import { defineComponent, onBeforeUnmount, PropType, watch } from "vue";
 import { v4 as uuidv4 } from 'uuid';
 import { Dashboard } from '@uppy/vue'
 import Uppy from '@uppy/core'
@@ -18,7 +18,7 @@ import XHRUpload from '@uppy/xhr-upload'
 import ImageEditor from "@uppy/image-editor";
 
 interface File {
-  id: number,
+  id: string, //uuid
   fullRealName: string,
   mimeType: string,
   url: string,
@@ -45,10 +45,6 @@ export default defineComponent({
       type: String,
       default: '/api/files'
     },
-    multiple: {
-      type: Boolean,
-      default: true
-    },
     modelValue: {
       type: Array as PropType<ProductFile[]>,
       default: []
@@ -59,14 +55,12 @@ export default defineComponent({
       return Object.values(type)
     }).flat()
 
-    console.log(httpClient.defaults)
-
     const uppy = new Uppy({
       debug: true,
       autoProceed: false,
       restrictions: {
-        maxFileSize: 30000000,
-        maxNumberOfFiles: 5,
+        maxFileSize: 10485760, //in bytes
+        maxNumberOfFiles: 10,
         allowedFileTypes: mimeTypes,
       },
       onBeforeFileAdded: (currentFile, files) => {
@@ -74,9 +68,15 @@ export default defineComponent({
         console.log(currentFile)
         console.log(files)
 
+        if (currentFile.meta.hasOwnProperty('id')) {
+          //bcuz uploadStarted is of type number || null, i have to set a timestamp in the past
+          //to tell uppy this file has been uploaded
+          currentFile.progress.uploadStarted = Date.now() - 5 * 60 * 1000
+          currentFile.progress.uploadComplete = true
+        }
+
         return {
-          ...currentFile,
-          id: uuidv4(),
+          ...currentFile
         }
       },
       onBeforeUpload: (files) => {
@@ -100,6 +100,39 @@ export default defineComponent({
         quality: 0.8,
       })
 
+    watch(() => props.modelValue, items => {
+      console.log('watch')
+      console.log(items)
+      items.forEach(item => {
+        httpClient.get(item.file.url.replace("{widthxheight}", 'x'), { responseType: 'blob' }).then((response) => {
+          uppy.addFile({
+            name: item.file.fullRealName,
+            type: item.file.mimeType,
+            data: response.data,
+            meta: { id: item.file.id },
+          });
+        })
+      })
+
+    })
+
+    uppy.on('upload-success', () => {
+      console.log('upload-success')
+      uppy.getFiles().forEach((file) => {
+        uppy.setFileState(file.id, {
+          progress: {
+            uploadComplete: false,
+            uploadStarted: null
+          }
+        })
+      })
+    })
+
+    uppy.on('upload-error', () => {
+      console.log('upload-error')
+
+    })
+
     onBeforeUnmount(() => {
       uppy.close()
     })
@@ -117,7 +150,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-  @import '~@uppy/core/dist/style.css';
-  @import '~@uppy/dashboard/dist/style.css';
-  @import '~@uppy/image-editor/dist/style.css';
+@import '~@uppy/core/dist/style.css';
+@import '~@uppy/dashboard/dist/style.css';
+@import '~@uppy/image-editor/dist/style.css';
 </style>
