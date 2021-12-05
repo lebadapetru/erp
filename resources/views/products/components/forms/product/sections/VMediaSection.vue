@@ -17,13 +17,11 @@
     <div class="card-body">
       <div class="row">
         <div class="col-12">
-<!--          <VDropZone
-            v-model="files"
-            @removed-file="deleteFile"
-          />-->
           <VUppy
-            v-model="files"
-            @removed-file="deleteFile"
+            v-model="productFiles"
+          />
+          <VFileGallery
+            v-model="productFiles"
           />
         </div>
       </div>
@@ -33,15 +31,20 @@
 </template>
 
 <script lang="ts">
-import VDropZone from "resources/components/forms/inputs/VDropZone.vue";
+import VDropZone from "resources/components/file-uploader/VDropZone.vue";
 
 import { computed, defineComponent } from "vue";
 import { useStore } from "vuex";
-import VUppy from "resources/components/forms/inputs/VUppy.vue";
+import VUppy from "resources/components/file-uploader/VUppy.vue";
+import VFilePond from "resources/components/file-uploader/VFilePond.vue";
+import VFileGallery from "resources/components/file-gallery/VFileGallery.vue";
+import { ProductFile } from "resources/ts/types";
 
 export default defineComponent({
   name: "VMediaSection",
   components: {
+    VFileGallery,
+    VFilePond,
     VUppy,
     VDropZone,
   },
@@ -59,9 +62,9 @@ export default defineComponent({
     }
 
     return {
-      files: computed({
-        get: () => store.getters['product/getFiles'],
-        set: () => store.commit('product/setFiles')
+      productFiles: computed({
+        get: () => store.getters['product/getProductFiles'],
+        set: (value: Array<ProductFile>) => store.commit('product/setProductFiles', value)
       }),
       deleteFile,
     }
@@ -70,5 +73,4 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 </style>

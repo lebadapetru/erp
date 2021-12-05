@@ -7,6 +7,7 @@ namespace App\Request;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -46,7 +47,7 @@ abstract class BaseRequest
     }
 
     /*see if there's a need for wrapper in the future*/
-    private function validate(array $data, array $rules): \Symfony\Component\Validator\ConstraintViolationListInterface
+    private function validate(array $data, array $rules): ConstraintViolationListInterface
     {
         return $this->validator->validate(
             $data,

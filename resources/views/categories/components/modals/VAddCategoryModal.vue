@@ -84,7 +84,7 @@ import { useStore } from "vuex";
 import validationSchema from "resources/views/categories/components/forms/ts/validationSchema";
 import VBaseInput from "resources/components/forms/inputs/VBaseInput.vue";
 import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox.vue";
-import VTinyMCE from "resources/components/forms/inputs/VTinyMCE.vue";
+import VTinyMCE from "resources/components/text-editor/VTinyMCE.vue";
 
 export default defineComponent({
   name: "VAddCategoryModal",

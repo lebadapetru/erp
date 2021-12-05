@@ -19,7 +19,7 @@ class ImageRequest extends BaseRequest
                     ]
                 ])
             ],
-            'size' => [
+            'dimensions' => [
                 new Assert\NotBlank(),
                 new Assert\Regex([
                     'pattern' => '/^(\d+)?x(\d+)?$/i'

@@ -30,7 +30,7 @@ const validationSchema = object().shape({
     .nullable()
     .min(0)
     .transform((v) => (v === '' || Number.isNaN(v) ? null : v)),
-  file: array().of(
+  files: array().of(
     object() //TODO maybe specify the .shape()
   )
 });

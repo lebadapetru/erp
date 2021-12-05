@@ -6,19 +6,25 @@ namespace App\Service;
 
 use App\Entity\File;
 use Liip\ImagineBundle\Service\FilterService;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
 
 class ImageService
 {
     public function __construct(
-        private FilterService $filterService,
-        private FileStorage $fileStorage,
-        private RouterInterface $routeCollection,
+        private FilterService         $filterService,
+        private FileStorage           $fileStorage,
+        private RouterInterface       $routeCollection,
+        private ParameterBagInterface $parameterBag
     )
-    {}
+    {
+    }
 
-    public function getPath(File $file, string $filter, array $config): string
+    /**
+     * This is used to generate the real path to the version of the file based on filter
+     */
+    public function generateRealPath(File $file, string $filter, array $config): string
     {
         $path = $this->filterService->getUrlOfFilteredImageWithRuntimeFilters(
             $this->fileStorage->getRealFileLocation($file, false),
@@ -35,12 +41,17 @@ class ImageService
         );
     }
 
-    public function getUrl(File $file)
+    /**
+     * This is used to generate the url mask for the consumers
+     */
+    public function generateUrl(File $file): string
     {
-        return str_replace(
-            ['{id}', '{size}', '{name}'],
-            [$file->getId(), '{widthxheight}', $file->getFullDisplayName()],
-            $this->routeCollection->getRouteCollection()->get('image')->getPath()
-        );
+        return $this->parameterBag->get('app.url')
+            .
+            str_replace(
+                ['{id}', '{dimensions}', '{name}'],
+                [$file->getId(), '{widthxheight}', $file->getFullDisplayName()],
+                $this->routeCollection->getRouteCollection()->get('image')->getPath()
+            );
     }
 }

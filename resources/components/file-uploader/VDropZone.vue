@@ -49,7 +49,7 @@ export default defineComponent({
   props: {
     name: {
       type: String,
-      default: 'files'
+      default: 'file'
     },
     multiple: {
       type: Boolean,
@@ -185,7 +185,9 @@ export default defineComponent({
         //send additional params beside the file object,
         //like the dropzone's generated uuid to BE
         params: (file) => {
-          return { id: file[0].upload.uuid }
+          /*return {
+            id: file[0].upload.uuid
+          }*/
         },
         //after file's saved successfully,
         //

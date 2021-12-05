@@ -17,7 +17,6 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
-use Symfony\Component\Serializer\Annotation\SerializedName;
 use function Symfony\Component\String\b;
 use Symfony\Component\Uid\UuidV4;
 
@@ -81,7 +80,7 @@ class Product
     private int $quantity = 0;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
+     * @ORM\Column(type="decimal", precision=10, scale=2, options={"default": "0.00"})
      * @Groups({"product:read", "product:write"})
      */
     private string $originalPrice = '0.00';
@@ -166,13 +165,12 @@ class Product
     /**
      * @ORM\OneToMany(targetEntity=ProductFile::class, mappedBy="products", cascade={"persist"})
      * @Groups({"product:read", "product:write"})
-     * @SerializedName("files")
      */
     private $productFiles;
 
     public function __construct(UuidV4 $id = null)
     {
-        $this->id = $id ?:UuidV4::v4();
+        $this->id = $id ?: UuidV4::v4();
         $this->categories = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->variants = new ArrayCollection();
@@ -267,7 +265,8 @@ class Product
 
     public function setOriginalPrice(string $originalPrice): self
     {
-        $this->originalPrice = $originalPrice;
+        //default value doesn't work when empty string so use this fix
+        $this->originalPrice = !empty($originalPrice) ?: '0.00';
 
         return $this;
     }

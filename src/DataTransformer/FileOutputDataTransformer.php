@@ -14,7 +14,6 @@ class FileOutputDataTransformer implements DataTransformerInterface
 {
     public function __construct(
         private ImageService $imageService,
-        private ParameterBagInterface $parameterBag,
     )
     {}
 
@@ -33,7 +32,7 @@ class FileOutputDataTransformer implements DataTransformerInterface
         $output->fullDisplayName = $object->getFullDisplayName();
         $output->size = $object->getSize();
         $output->mimeType = $object->getMimeType();
-        $output->url = $this->parameterBag->get('app.url') . $this->imageService->getUrl($object);
+        $output->url = $this->imageService->generateUrl($object);
 
         return $output;
     }

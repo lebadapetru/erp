@@ -3,7 +3,7 @@ let mutations = {
   setId: (state, value) => state.id = value,
   setTitle: (state, value) => state.title = value,
   setDescription: (state, value) => state.description = value,
-  setFiles: (state, value) => state.files = value,
+  setProductFiles: (state, value) => state.productFiles = value,
   setOriginalPrice: (state, value) => state.originalPrice = value,
   setReducedPrice: (state, value) => state.reducedPrice = value,
   setDiscount: (state, value) => state.discount = value,
@@ -33,7 +33,7 @@ mutations.setProduct = (state, value) => {
   mutations.setTitle(state, value.title)
   mutations.setDescription(state, value.description)
   //TODO media
-  mutations.setFiles(state, value.files)
+  mutations.setProductFiles(state, value.productFiles)
   mutations.setOriginalPrice(state, value.originalPrice)
   mutations.setReducedPrice(state, value.reducedPrice)
   mutations.setDiscount(state, value.discount)

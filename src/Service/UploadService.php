@@ -3,49 +3,42 @@
 
 namespace App\Service;
 
+use App\Dao\FileDao;
 use App\Entity\File;
-use App\Entity\LookupFileStatus;
 use Doctrine\ORM\EntityManagerInterface;
+use ImagickException;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToDeleteFile;
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Throwable;
 
 class UploadService
 {
     public function __construct(
-        private SluggerInterface $slugger,
+        private SluggerInterface       $slugger,
         private EntityManagerInterface $entityManager,
-        private FileStorage $fileStorage,
-        private ParameterBagInterface $parameterBag,
-        private ImageService $imageService,
-        private CacheManager $cacheManager,
+        private FileStorage            $fileStorage,
+        private ParameterBagInterface  $parameterBag,
+        private ImageService           $imageService,
     )
     {
     }
 
-    public function save(array $data): File
+    public function save(File $fileEntity, UploadedFile $uploadedFile): File
     {
-        /**@var UploadedFile $temporaryFile */
-        $temporaryFile = $data['file'];
-        $this->entityManager->getConnection()->beginTransaction();
         try {
-            $fileEntity = $this->createFileEntity($temporaryFile);
-
             /*TODO add support for videos, media urls, audios, vts*/
             if ($fileEntity->isImage()) {
-                $this->saveImage($fileEntity);
+                $this->saveImage($fileEntity, $uploadedFile);
             } elseif ($fileEntity->isVideo()) {
                 //} elseif (Helpers::isMediaUrl($uploadedFileMimeType)) {
             } else {
                 throw new BadRequestHttpException('Invalid file.');
             }
-            $this->entityManager->getConnection()->commit();
-
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             if (isset($fileEntity)) {
                 try {
                     $this->fileStorage->delete($fileEntity);
@@ -53,18 +46,25 @@ class UploadService
                     //this is a behind the scene action, if it fails log it and let it pass
                 }
             }
-            $this->entityManager->getConnection()->rollBack();
-            throw $exception;
+
+            throw $exception; //TODO custom exception
         }
 
         return $fileEntity;
     }
 
-    private function saveImage(File $fileEntity)
+    /**
+     * @throws ImagickException
+     * @throws FilesystemException
+     */
+    private function saveImage(File $fileEntity, UploadedFile $uploadedFile)
     {
+        //TODO this should be in a queue
         $this->fileStorage->write(
-            $fileEntity
+            $fileEntity,
+            $uploadedFile
         );
+        //maybe we wanna do some processing on the original file
         $image = new \Imagick(
             $this->fileStorage->getRealFileLocation($fileEntity)
         );
@@ -74,52 +74,10 @@ class UploadService
             $this->fileStorage->getFileLocation($fileEntity, false, false)
         );
 
-        //set to processed
-        $fileEntity->setStatus(
-        //todo files are internal things, keep statuses in constants
-            $this->entityManager
-                ->getRepository(LookupFileStatus::class)
-                ->findOneBy([
-                    'label' => LookupFileStatus::STATUSES[2]
-                ])
-        );
+        $fileEntity->setStatus(File::STATUS_PROCESSED);
 
         $this->entityManager->persist($fileEntity);
         $this->entityManager->flush();
-    }
-
-    private function createFileEntity(UploadedFile $temporaryFile): File
-    {
-        $originalFileName = pathinfo($temporaryFile->getClientOriginalName(), PATHINFO_FILENAME);
-        //this one does strtolower, sanitization
-        $fileName = $this->slugger->slug($originalFileName) . '-' . uniqid();
-        $file = new File();
-        $file->setRealName($fileName);
-        $file->setDisplayName($fileName);
-        $file->setExtension($temporaryFile->guessExtension());
-        $file->setMimeType($temporaryFile->getMimeType());
-        $file->setSize($temporaryFile->getSize());
-        $file->setUploadedFile($temporaryFile);
-
-        $url = $this->imageService->getUrl($file);
-        $file->setUrl(
-            $this->parameterBag->get('app.url') . $url
-        );
-
-        //set to processing
-        $file->setStatus(
-            //todo files are internal things, keep statuses in constants
-            $this->entityManager
-                ->getRepository(LookupFileStatus::class)
-                ->findOneBy([
-                    'label' => LookupFileStatus::STATUSES[1]
-                ])
-        );
-
-        $this->entityManager->persist($file);
-        $this->entityManager->flush();
-
-        return $file;
     }
 
     public function delete(File $fileEntity): void
@@ -132,7 +90,7 @@ class UploadService
             $this->entityManager->flush();
 
             $this->entityManager->getConnection()->commit();
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $this->entityManager->getConnection()->rollBack();
             throw $exception;
         }

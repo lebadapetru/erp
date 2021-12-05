@@ -18,7 +18,6 @@ class FileDataProvider implements ContextAwareCollectionDataProviderInterface, R
     public function __construct(
         private CollectionDataProviderInterface $collectionDataProvider,
         private ItemDataProviderInterface $itemDataProvider,
-        private ParameterBagInterface $parameterBag,
         private ImageService $imageService,
     ) {}
     
@@ -27,10 +26,8 @@ class FileDataProvider implements ContextAwareCollectionDataProviderInterface, R
         /**@var File[] $files*/
         $files = $this->collectionDataProvider->getCollection($resourceClass, $operationName, $context);
         foreach ($files as $file) {
-            $url = $this->imageService->getUrl($file);
-            $file->setUrl(
-              $this->parameterBag->get('app.url') . $url
-            );
+            $url = $this->imageService->generateUrl($file);
+            $file->setUrl($url);
         }
 
         return $files;
@@ -46,9 +43,7 @@ class FileDataProvider implements ContextAwareCollectionDataProviderInterface, R
         }
 
         $url = $this->imageService->getUrl($file);
-        $file->setUrl(
-            $this->parameterBag->get('app.url') . $url
-        );
+        $file->setUrl($url);
 
         return $file;
     }

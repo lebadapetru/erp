@@ -3,6 +3,7 @@
 
 namespace App\Request;
 
+use App\Controller\File\CreateFileAction;
 use App\Entity\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -19,21 +20,21 @@ class UploadRequest extends BaseRequest
     protected function rules(): array
     {
         return [
-            'relativePath' => [
+            CreateFileAction::PARAM_KEY_RELATIVE_PATH => [
                 new Assert\NotBlank([
                     'allowNull' => true,
                 ]),
             ],
-            'name' => [
+            CreateFileAction::PARAM_KEY_NAME => [
                 new Assert\NotBlank(),
             ],
-            'type' => [
+            CreateFileAction::PARAM_KEY_TYPE => [
                 new Assert\NotBlank(),
                 new Assert\Choice([
                     'choices' => File::getAcceptedMimeTypes()
                 ])
             ],
-            'file' => [
+            CreateFileAction::PARAM_KEY_FILE => [
                 new Assert\NotBlank(),
                 new Assert\File([
                     'maxSize' => '5M',

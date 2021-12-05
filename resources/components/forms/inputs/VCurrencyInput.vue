@@ -89,12 +89,13 @@ export default defineComponent({
 
     onMounted(() => {
       Inputmask({
+        min: '0.00',
+        max: '9999999999.99',
         radixPoint: '.',
-        alias: "decimal",
+        alias: 'decimal',
         placeholder: '0.00',
         digits: 2,
         clearMaskOnLostFocus: false,
-        //colorMask: true,
       }).mask(el.value);
     })
 

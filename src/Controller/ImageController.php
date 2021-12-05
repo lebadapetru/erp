@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ImageController extends AbstractController
 {
     /**
-     * @Route("/image/{id}/scale/{size}/{name}", name="image", methods={"GET"})
+     * @Route("/image/{id}/scale/{dimensions}/{name}", name="image", methods={"GET"})
      */
     public function scale(
         ImageRequest $request,
@@ -37,22 +37,22 @@ class ImageController extends AbstractController
             default => throw new BadRequestHttpException('The image format is not supported.'),
         };
 
-        preg_match('/^(\d+)?x(\d+)?$/i', $data['size'], $size);
-        unset($size[0]);
+        preg_match('/^(\d+)?x(\d+)?$/i', $data['dimensions'], $dimensions);
+        unset($dimensions[0]);
         $entityManager = $this->getDoctrine()->getManager();
         $file = $entityManager->getRepository(File::class)->find($data['id']);
-        if (empty($size)) {
-            $size[] = $file->getWidth();
-            $size[] = $file->getHeight();
+        if (empty($dimensions)) {
+            $dimensions[] = $file->getWidth();
+            $dimensions[] = $file->getHeight();
         }
 
         $config = [
             'scale' => [
-                'dim' => $size
+                'dim' => $dimensions
             ],
         ];
 
-        $path = $imageService->getPath($file, $filter, $config);
+        $path = $imageService->generateRealPath($file, $filter, $config);
 
         return new StreamedResponse(
             function () use ($path, $file, $fileStorage) {

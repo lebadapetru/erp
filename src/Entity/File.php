@@ -61,6 +61,45 @@ use App\Dto\FileOutput;
  */
 class File
 {
+
+    const ACCEPTED_MIME_TYPES = [
+        'images' => [
+            'jpg'  => 'image/jpg',
+            'jpeg' => 'image/jpeg',
+            'png'  => 'image/png',
+            'gif'  => 'image/gif',
+            'svg'  => 'image/svg+xml',
+            'webp' => 'image/webp',
+        ],
+        'videos' => [
+            'mp4' => 'video/mp4',
+            'qt'  => 'video/quicktime'
+        ],
+    ];
+
+    const ACCEPTED_EXTENSIONS = [
+        'images' => [
+            'jpg',
+            'jpeg',
+            'png',
+            'gif',
+            'svg',
+            'webp'
+        ],
+        'videos' => [
+            'mp4',
+            'mov',
+        ],
+    ];
+
+    const STATUS_PROCESSING = 'processing';
+    const STATUS_PROCESSED  = 'processed';
+
+    const STATUSES = [
+        self::STATUS_PROCESSING,
+        self::STATUS_PROCESSED,
+    ];
+
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -124,6 +163,12 @@ class File
     private ?string $mediaUrl;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     * @Groups({"file:read", "file:write", "product:read"})
+     */
+    private string $status;
+
+    /**
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
      * @Groups({"file:read", "product:read"})
      */
@@ -146,12 +191,6 @@ class File
     private mixed $uploadedFile = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity=LookupFileStatus::class, inversedBy="files")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $status;
-
-    /**
      * @Groups({"file:read", "product:read"})
      */
     private ?string $url = null;
@@ -161,39 +200,11 @@ class File
      */
     private $productFiles;
 
-    const ACCEPTED_MIME_TYPES = [
-        'images' => [
-            'jpg' => 'image/jpg',
-            'jpeg' => 'image/jpeg',
-            'png' => 'image/png',
-            'gif' => 'image/gif',
-            'svg' => 'image/svg+xml',
-            'webp' => 'image/webp',
-        ],
-        'videos' => [
-            'mp4' => 'video/mp4',
-            'qt' => 'video/quicktime'
-        ],
-    ];
-
-    const ACCEPTED_EXTENSIONS = [
-        'images' => [
-            'jpg',
-            'jpeg',
-            'png',
-            'gif',
-            'svg',
-            'webp'
-        ],
-        'videos' => [
-            'mp4',
-            'mov',
-        ],
-    ];
-
     public function __construct(UuidV4 $id = null)
     {
-        $this->id = $id ?: UuidV4::v4();
+        //TODO Abstract Entity for uuid, in house timestampable & soft delete
+        $this->id           = $id ?: UuidV4::v4();
+        $this->status       = self::STATUS_PROCESSING;
         $this->productFiles = new ArrayCollection();
     }
 
@@ -385,14 +396,17 @@ class File
         return $this->uploadedFile;
     }
 
-    public function getStatus(): ?LookupFileStatus
+    public function getStatus(): string
     {
         return $this->status;
     }
 
-    public function setStatus(?LookupFileStatus $status): self
+    public function setStatus(string $status): self
     {
-        //TODO on creation set to default
+        if (!in_array($status, self::STATUSES)) {
+            throw new \InvalidArgumentException("Invalid status");
+        }
+
         $this->status = $status;
 
         return $this;

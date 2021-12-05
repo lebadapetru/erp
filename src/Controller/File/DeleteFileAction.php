@@ -6,6 +6,7 @@ namespace App\Controller\File;
 
 use App\Entity\File;
 use App\Service\UploadService;
+use Throwable;
 
 class DeleteFileAction
 {
@@ -14,7 +15,7 @@ class DeleteFileAction
     ) {}
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function __invoke(File $file): void
     {

@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import VBaseInput from "resources/components/forms/inputs/VBaseInput.vue";
-import VTinyMCE from "resources/components/forms/inputs/VTinyMCE.vue";
+import VTinyMCE from "resources/components/text-editor/VTinyMCE.vue";
 import { useStore } from "vuex";
 import { computed, defineComponent } from "vue";
 

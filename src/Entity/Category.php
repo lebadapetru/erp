@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @ApiResource(
@@ -25,12 +26,10 @@ class Category
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true)
      * @Groups({"category:read"})
      */
-    //TODO change this to UUID
-    private int $id;
+    private UuidV4 $id;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
@@ -76,12 +75,13 @@ class Category
      */
     private $products;
 
-    public function __construct()
+    public function __construct(UuidV4 $id = null)
     {
+        $this->id = $id ?: UuidV4::v4();
         $this->products = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): UuidV4
     {
         return $this->id;
     }

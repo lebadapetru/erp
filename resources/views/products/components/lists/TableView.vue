@@ -96,9 +96,9 @@ export default defineComponent({
       actions,
       getAvatar: (itemId) => {
         let url = getImagePlaceholderPath();
-        if (products.value[itemId].files.length > 0) {
+        /*if (products.value[itemId].files.length > 0) {
           url = products.value[itemId].files[0].file.url //first image
-        }
+        }*/
 
         return setImageSize(url)
       },

@@ -2,8 +2,8 @@ const defaultState = {
   id: null,
   title: '',
   description: '',
-  originalPrice: '',
-  reducedPrice: '',
+  originalPrice: '0.00',
+  reducedPrice: '0.00',
   discount: 0,
   sku: '',
   barcode: '',
@@ -19,7 +19,7 @@ const defaultState = {
   vendor: '/api/vendors/1',
   categories: [],
   tags: [],
-  files: [],
+  productFiles: [],
 }
 const state = {
   defaultState: Object.freeze(defaultState),

@@ -46,7 +46,7 @@ import VBaseForm from "resources/components/forms/VBaseForm.vue";
 import validationSchema from "./ts/validationSchema"
 import VBaseInput from "resources/components/forms/inputs/VBaseInput.vue";
 import { useStore } from "vuex";
-import VTinyMCE from "resources/components/forms/inputs/VTinyMCE.vue";
+import VTinyMCE from "resources/components/text-editor/VTinyMCE.vue";
 import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox.vue";
 
 export default defineComponent({

@@ -26,11 +26,10 @@ class FileStorage
     {
     }
 
-    public function write(File $fileEntity): void
+    public function write(File $fileEntity, UploadedFile $uploadedFile): void
     {
         $fileLocation = $this->getRealFileLocation($fileEntity, false);
-        /**@var UploadedFile $uploadedFile*/
-        $uploadedFile = $fileEntity->getUploadedFile();
+
         try {
             /*TODO move files to s3*/
             $stream = fopen($uploadedFile->getRealPath(), 'r');
@@ -113,7 +112,7 @@ class FileStorage
             if ($this->defaultStorage->fileExists($path)) {
                 $result = $this->defaultStorage->readStream($path);
                 if ($result === false) {
-                    throw new UnableToDeleteFile(sprintf('Couldn\'t read the "%s" file!', $fileLocation));
+                    throw new UnableToDeleteFile(sprintf('Couldn\'t read the "%s" file!', $path));
                 }
 
                 return $result;
@@ -121,7 +120,12 @@ class FileStorage
 
             return null;
         } catch (FileNotFoundException $exception) {
-            $this->logger->alert(sprintf('The file "%s" is missing!', $fileLocation));
+            $this->logger->alert(
+                sprintf('The file "%s" is missing!', $path),
+                [
+                    'exception' => $exception
+                ]
+            );
         } catch (FilesystemException | UnableToReadFile $exception) {
             throw $exception;
         }
