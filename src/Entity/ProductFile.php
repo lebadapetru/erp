@@ -6,7 +6,6 @@ use App\Repository\ProductFileRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
  * @ORM\Entity(repositoryClass=ProductFileRepository::class)
@@ -24,21 +23,20 @@ class ProductFile
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="productFiles")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $products;
+    private $product;
 
     /**
      * @ORM\ManyToOne(targetEntity=File::class, inversedBy="productFiles")
      * @ORM\JoinColumn(nullable=false)
      * @Groups("product:read", "product:write")
-     * @SerializedName("file")
      */
-    private $files;
+    private $file;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      * @Groups("product:read", "product:write")
      */
-    private ?int $position;
+    private ?int $position = null;
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -52,26 +50,26 @@ class ProductFile
         return $this->id;
     }
 
-    public function getProducts(): ?Product
+    public function getProduct(): ?Product
     {
-        return $this->products;
+        return $this->product;
     }
 
-    public function setProducts(?Product $products): self
+    public function setProduct(?Product $product): self
     {
-        $this->products = $products;
+        $this->product = $product;
 
         return $this;
     }
 
-    public function getFiles(): ?File
+    public function getFile(): ?File
     {
-        return $this->files;
+        return $this->file;
     }
 
-    public function setFiles(?File $files): self
+    public function setFile(?File $file): self
     {
-        $this->files = $files;
+        $this->file = $file;
 
         return $this;
     }

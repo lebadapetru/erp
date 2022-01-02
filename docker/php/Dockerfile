@@ -88,6 +88,6 @@ COPY ./docker/php/php-fpm.conf /usr/local/etc/php-fpm.conf
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 ####################
-#Composer targer
+#Composer target
 ####################
 FROM base as composer

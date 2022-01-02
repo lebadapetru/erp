@@ -163,7 +163,7 @@ class Product
     private bool $isPhysicalProduct = true;
 
     /**
-     * @ORM\OneToMany(targetEntity=ProductFile::class, mappedBy="products", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=ProductFile::class, mappedBy="product", cascade={"persist"})
      * @Groups({"product:read", "product:write"})
      */
     private $productFiles;
@@ -469,7 +469,7 @@ class Product
     {
         if (!$this->productFiles->contains($productFile)) {
             $this->productFiles[] = $productFile;
-            $productFile->setProducts($this);
+            $productFile->setProduct($this);
         }
 
         return $this;
@@ -479,8 +479,8 @@ class Product
     {
         if ($this->productFiles->removeElement($productFile)) {
             // set the owning side to null (unless already changed)
-            if ($productFile->getProducts() === $this) {
-                $productFile->setProducts(null);
+            if ($productFile->getProduct() === $this) {
+                $productFile->setProduct(null);
             }
         }
 

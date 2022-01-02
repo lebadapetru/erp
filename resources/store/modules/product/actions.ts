@@ -4,7 +4,6 @@ import { readVendors } from "resources/js/api/Vendor";
 import { createCategory, readCategories } from "resources/js/api/Category";
 import { createTag, readTags } from "resources/js/api/Tag";
 import { createProduct, readProduct, deleteProduct, updateProduct } from "resources/js/api/Product";
-import Swal from "sweetalert2";
 import { Toast } from "resources/components/alerts/toast"
 
 const actions = {

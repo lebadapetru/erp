@@ -42,7 +42,7 @@ class FileDataProvider implements ContextAwareCollectionDataProviderInterface, R
             return null;
         }
 
-        $url = $this->imageService->getUrl($file);
+        $url = $this->imageService->generateUrl($file);
         $file->setUrl($url);
 
         return $file;

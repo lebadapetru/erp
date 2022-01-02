@@ -4,9 +4,6 @@
       :uppy="uppy"
       :props="props"
     />
-    <div v-if="errorMessage" class="error-message">
-      {{ capitalize(errorMessage) }}
-    </div>
   </div>
 </template>
 
@@ -16,9 +13,7 @@ import { DragDrop } from '@uppy/vue'
 import Uppy from '@uppy/core'
 import XHRUpload from '@uppy/xhr-upload'
 import { ProductFile } from "resources/ts/types";
-import { useField } from "vee-validate";
 import VFileGallery from "resources/components/file-gallery/VFileGallery.vue";
-import capitalize from 'lodash/capitalize'
 
 export default defineComponent({
   name: 'VUppy',
@@ -42,15 +37,10 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-    const productFiles = ref([])
+    const files = ref([])
     const mimeTypes = Object.values(app.fileConfiguration.mimeTypes).map(type => {
       return Object.values(type)
     }).flat()
-
-    const {
-      errorMessage,
-      handleInput,
-    } = useField('productFiles', null);
 
     const uppy = new Uppy({
       debug: true,
@@ -80,12 +70,12 @@ export default defineComponent({
       console.log('upload-success')
       console.log(file)
       console.log(response.body)
-      productFiles.value.push({
+      files.value.push({
         file: response.body,
         position: null
       })
-      handleInput(productFiles.value)
-      emit('update:modelValue', productFiles.value)
+
+      emit('update:modelValue', files.value)
     })
 
     uppy.on('upload-error', (file, error, response) => {
@@ -101,9 +91,9 @@ export default defineComponent({
     watch(() => props.modelValue, items => {
       console.log('watch')
       console.log(items)
-      productFiles.value = []
+      files.value = []
       items.forEach(item => {
-        productFiles.value.push(item)
+        files.value.push(item)
       })
     })
 
@@ -117,9 +107,6 @@ export default defineComponent({
         note: null,
         locale: {},
       },
-      productFiles,
-      capitalize,
-      errorMessage
     }
   }
 })

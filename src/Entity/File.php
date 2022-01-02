@@ -196,7 +196,7 @@ class File
     private ?string $url = null;
 
     /**
-     * @ORM\OneToMany(targetEntity=ProductFile::class, mappedBy="files", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity=ProductFile::class, mappedBy="file", cascade={"persist", "remove"})
      */
     private $productFiles;
 
@@ -206,6 +206,11 @@ class File
         $this->id           = $id ?: UuidV4::v4();
         $this->status       = self::STATUS_PROCESSING;
         $this->productFiles = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return 'wtf';
     }
 
     public function getId(): UuidV4
@@ -446,7 +451,7 @@ class File
     {
         if (!$this->productFiles->contains($productFile)) {
             $this->productFiles[] = $productFile;
-            $productFile->setFiles($this);
+            $productFile->setFile($this);
         }
 
         return $this;
@@ -456,8 +461,8 @@ class File
     {
         if ($this->productFiles->removeElement($productFile)) {
             // set the owning side to null (unless already changed)
-            if ($productFile->getFiles() === $this) {
-                $productFile->setFiles(null);
+            if ($productFile->getFile() === $this) {
+                $productFile->setFile(null);
             }
         }
 

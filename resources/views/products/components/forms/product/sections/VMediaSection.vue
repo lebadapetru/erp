@@ -18,10 +18,10 @@
       <div class="row">
         <div class="col-12">
           <VUppy
-            v-model="productFiles"
+            v-model="files"
           />
           <VFileGallery
-            v-model="productFiles"
+            v-model="files"
           />
         </div>
       </div>
@@ -31,26 +31,28 @@
 </template>
 
 <script lang="ts">
-import VDropZone from "resources/components/file-uploader/VDropZone.vue";
-
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, watch } from "vue";
 import { useStore } from "vuex";
 import VUppy from "resources/components/file-uploader/VUppy.vue";
-import VFilePond from "resources/components/file-uploader/VFilePond.vue";
 import VFileGallery from "resources/components/file-gallery/VFileGallery.vue";
-import { ProductFile } from "resources/ts/types";
+import { ProductFile, File } from "resources/ts/types";
+import { useField } from "vee-validate";
 
 export default defineComponent({
   name: "VMediaSection",
   components: {
     VFileGallery,
-    VFilePond,
     VUppy,
-    VDropZone,
   },
   setup() {
     const store = useStore()
     const productId = store.getters['product/getId']
+
+    const {
+      errorMessage,
+      handleInput,
+    } = useField('productFiles', null);
+
 
     const deleteFile = (fileId) => {
       store.dispatch('file/delete', fileId).then(() => {
@@ -61,11 +63,34 @@ export default defineComponent({
       })
     }
 
+    const productFiles = computed({
+      get: () => store.getters['product/getProductFiles'],
+      set: (value: Array<ProductFile>) => store.commit('product/setProductFiles', value)
+    })
+
+    const files = computed({
+      get: () => store.getters['product/getFiles'],
+      set: (value: Array<ProductFile>) => store.commit('product/setFiles', value)
+    })
+
+    watch(files, (first,second) => {
+      console.log('watch files')
+      console.log(first)
+      console.log(second)
+      const localProductFiles = []
+      first.forEach(productFile => {
+        localProductFiles.push({
+          file: productFile.file['@id'],
+          position: productFile.position
+        })
+      })
+
+      productFiles.value = localProductFiles
+      handleInput(localProductFiles)
+    })
+
     return {
-      productFiles: computed({
-        get: () => store.getters['product/getProductFiles'],
-        set: (value: Array<ProductFile>) => store.commit('product/setProductFiles', value)
-      }),
+      files,
       deleteFile,
     }
   }

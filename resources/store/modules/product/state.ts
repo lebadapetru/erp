@@ -21,14 +21,16 @@ const defaultState = {
   tags: [],
   productFiles: [],
 }
+
 const state = {
+  entity: {...defaultState},
   defaultState: Object.freeze(defaultState),
-  ...defaultState,
   variantOptions: [],
   statusOptions: [],
   vendorOptions: [],
   categoryOptions: [],
   tagOptions: [],
+  files: []
 }
 
 export default state
