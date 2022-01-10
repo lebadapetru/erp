@@ -12,7 +12,7 @@ import { defineComponent, onBeforeUnmount, PropType, ref, watch } from "vue";
 import { DragDrop } from '@uppy/vue'
 import Uppy from '@uppy/core'
 import XHRUpload from '@uppy/xhr-upload'
-import { ProductFile } from "resources/ts/types";
+import { ProductFileInterface } from "resources/ts/types";
 import VFileGallery from "resources/components/file-gallery/VFileGallery.vue";
 
 export default defineComponent({
@@ -32,7 +32,7 @@ export default defineComponent({
       default: '/api/files'
     },
     modelValue: {
-      type: Array as PropType<ProductFile[]>,
+      type: Array as PropType<ProductFileInterface[]>,
       default: []
     }
   },

@@ -6,7 +6,7 @@
       class="me-5 position-relative"
     >
       <!--begin::Avatar-->
-      <div class="symbol symbol-45px symbol-square">
+      <div class="symbol symbol-50px">
         <img alt="Pic" :src="avatarPath" />
       </div>
       <!--end::Avatar-->
@@ -14,7 +14,13 @@
     <!--end::Wrapper-->
     <!--begin::Info-->
     <div class="d-flex flex-column justify-content-center">
-      <a href="" class="mb-1 text-gray-800 text-hover-primary">{{ title }}</a>
+      <a
+        href="javascript:;"
+        class="mb-1 text-gray-800 text-hover-primary"
+        @click="editItem"
+      >
+        {{ title }}
+      </a>
     </div>
     <!--end::Info-->
   </div>
@@ -26,6 +32,10 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "VTitleCell",
   props: {
+    itemId: {
+      type: Number,
+      required: true
+    },
     title: {
       type: String,
       required: true
@@ -35,8 +45,11 @@ export default defineComponent({
       required: false
     }
   },
-  setup(props) {
+  setup(props, { emit }) {
     return {
+      editItem: () => {
+        emit('editItem', props.itemId)
+      }
     }
   }
 })

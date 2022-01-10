@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { ref ,defineComponent } from 'vue'
+import { ref, defineComponent, onUnmounted } from 'vue'
 import validationSchema from "./validationSchema"
 import VBaseForm from "resources/components/forms/VBaseForm.vue";
 import VProductFormToolbarActions from "resources/views/products/components/teleports/VProductFormToolbar.vue";
@@ -42,11 +42,16 @@ import VVariantsSection from "resources/views/products/components/forms/product/
 import VProductStatusAndVisibilitySection
   from "resources/views/products/components/forms/product/sections/VProductStatusAndVisibilitySection.vue";
 import VOrganizationSection from "resources/views/products/components/forms/product/sections/VOrganizationSection.vue";
-import Swal from "sweetalert2";
 import { useStore } from "vuex";
 import isEqual from 'lodash/isEqual'
 import clone from 'lodash/clone'
 import { onBeforeRouteLeave } from 'vue-router'
+import { Popup } from 'resources/components/alerts/popup';
+import {
+  ALERT_CONFIRM_BUTTON_TEXT_LEAVE_PAGE,
+  ALERT_TEXT_LEAVE_PAGE,
+  ALERT_TITLE_LEAVE_PAGE
+} from 'resources/components/alerts/constants';
 
 export default defineComponent({
   name: "VProductForm",
@@ -76,11 +81,12 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
     const productForm = ref(null)
+    let initialState = clone((store.getters['product/getProduct']))
     if (props.id) {
-      store.dispatch('product/read', props.id)
+      store.dispatch('product/read', props.id).then(() => {
+        initialState = clone((store.getters['product/getProduct']))
+      })
     }
-
-    const initialState = clone(store.getters['product/getProduct'])
 
     const onSubmit = (data) => {
       console.log(data)
@@ -95,34 +101,23 @@ export default defineComponent({
     }
 
     onBeforeRouteLeave((to, from, next) => {
-      console.log('route leave')
-      console.log(initialState)
-      console.log(store.getters['product/getProduct'])
-      console.log(isEqual(store.getters['product/getProduct'], initialState))
-      if(!isEqual(store.getters['product/getProduct'], initialState)) {
-        Swal.fire({
-          title: 'You want to leave the page?',
-          text: `There are unsaved changes that will be lost!`,
-          icon: 'warning',
-          showCancelButton: true,
-          buttonsStyling: false,
-          cancelButtonColor: '#d33',
-          confirmButtonColor: '#3085d6',
-          confirmButtonText: 'Yes, leave!',
-          customClass: {
-            confirmButton: "btn font-weight-bold btn-light-primary",
-            cancelButton: "btn font-weight-bold btn-light-primary",
-          },
-          heightAuto: false
+      if (!isEqual((store.getters['product/getProduct']), initialState)) {
+        Popup.warning({
+          title: ALERT_TITLE_LEAVE_PAGE,
+          text: ALERT_TEXT_LEAVE_PAGE,
+          confirmButtonText: ALERT_CONFIRM_BUTTON_TEXT_LEAVE_PAGE
         }).then((result) => {
           if (result.isConfirmed) {
-            store.commit('product/resetState')
             next()
           }
         })
       } else {
         next()
       }
+    })
+
+    onUnmounted(() => {
+      store.commit('product/resetState')
     })
 
     return {

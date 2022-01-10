@@ -49,6 +49,7 @@ mutations.setProduct = (state, product) => {
   mutations.setCategories(state, product.categories)
   mutations.setTags(state, product.tags)
   mutations.setProductFiles(state, product.productFiles)
+  mutations.setFiles(state, product.productFiles)
 }
 
 export default mutations

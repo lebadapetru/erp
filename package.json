@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "@symfony/webpack-encore": "^1.5.0",
-    "@types/bootstrap": "^5.1.1",
+    "@types/bootstrap": "^5.1.3",
     "@types/dropzone": "^5.7.4",
     "@types/inputmask": "^5.0.1",
     "@types/jquery": "^3.5.5",

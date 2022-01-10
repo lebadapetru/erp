@@ -1,4 +1,11 @@
 import Swal from "sweetalert2";
+import {
+  ALERT_ICON_ERROR,
+  ALERT_ICON_INFO,
+  ALERT_ICON_SUCCESS,
+  ALERT_ICON_WARNING
+} from "resources/components/alerts/constants";
+import { ToastInterface } from "resources/ts/types";
 
 export const ToastMixin = Swal.mixin({
   toast: true,
@@ -14,23 +21,23 @@ export const ToastMixin = Swal.mixin({
 })
 
 export const Toast = {
-  success: ({ title, text }: { title: string, text?: string }) => ToastMixin.fire({
-    icon: 'success',
+  success: ({ title, text }: ToastInterface) => ToastMixin.fire({
+    icon: ALERT_ICON_SUCCESS,
     title,
     text
   }),
-  error: ({ title, text }: { title: string, text?: string }) => ToastMixin.fire({
-    icon: 'error',
+  error: ({ title, text }: ToastInterface) => ToastMixin.fire({
+    icon: ALERT_ICON_ERROR,
     title,
     text
   }),
-  warning: ({ title, text }: { title: string, text?: string }) => ToastMixin.fire({
-    icon: 'warning',
+  warning: ({ title, text }: ToastInterface) => ToastMixin.fire({
+    icon: ALERT_ICON_WARNING,
     title,
     text
   }),
-  info: ({ title, text }: { title: string, text?: string }) => ToastMixin.fire({
-    icon: 'info',
+  info: ({ title, text }: ToastInterface) => ToastMixin.fire({
+    icon: ALERT_ICON_INFO,
     title,
     text
   }),

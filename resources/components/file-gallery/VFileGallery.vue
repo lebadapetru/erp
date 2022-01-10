@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref, watch } from "vue";
-import { ProductFile } from "resources/ts/types";
+import { ProductFileInterface } from "resources/ts/types";
 import { thumbnail } from "resources/ts/helpers";
 import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox.vue";
 
@@ -43,7 +43,7 @@ export default defineComponent({
   components: { VBaseCheckbox },
   props: {
     modelValue: {
-      type: Array as PropType<ProductFile[]>,
+      type: Array as PropType<ProductFileInterface[]>,
       default: []
     },
   },

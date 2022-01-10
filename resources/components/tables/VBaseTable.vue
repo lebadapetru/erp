@@ -82,13 +82,7 @@
 <script lang="ts">
 import VActionsCell from "resources/components/tables/cells/VActionsCell.vue";
 import { computed, defineComponent, PropType, ref, watch } from "vue";
-
-interface TableColumn {
-  name: string,
-  key: string,
-  width?: number,
-  fieldParser: (any) => any,
-}
+import { TableColumnInterface } from "resources/ts/types";
 
 export default defineComponent({
   name: "VCustomTable",
@@ -97,7 +91,7 @@ export default defineComponent({
   },
   props: {
     columns: {
-      type: Array as PropType<TableColumn[]>,
+      type: Array as PropType<TableColumnInterface[]>,
       required: true
     },
     items: {
@@ -135,7 +129,8 @@ export default defineComponent({
         })
         items.push(obj)
       })
-
+      console.log('items')
+      console.log(items)
       return items
     })
 

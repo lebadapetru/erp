@@ -18,6 +18,7 @@ export default defineComponent({
 
 <style lang="scss">
 // Import Main styles for this application
+@import "assets/sass/plugins";
 @import "assets/sass/style";
 @import "./assets/fonts/poppins/poppins.css";
 @import "~@fortawesome/fontawesome-free/css/all.min.css";

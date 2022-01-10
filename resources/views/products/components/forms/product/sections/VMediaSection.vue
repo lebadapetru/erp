@@ -35,7 +35,7 @@ import { computed, defineComponent, watch } from "vue";
 import { useStore } from "vuex";
 import VUppy from "resources/components/file-uploader/VUppy.vue";
 import VFileGallery from "resources/components/file-gallery/VFileGallery.vue";
-import { ProductFile, File } from "resources/ts/types";
+import { ProductFileInterface } from "resources/ts/types";
 import { useField } from "vee-validate";
 
 export default defineComponent({
@@ -65,12 +65,12 @@ export default defineComponent({
 
     const productFiles = computed({
       get: () => store.getters['product/getProductFiles'],
-      set: (value: Array<ProductFile>) => store.commit('product/setProductFiles', value)
+      set: (value: Array<ProductFileInterface>) => store.commit('product/setProductFiles', value)
     })
 
     const files = computed({
       get: () => store.getters['product/getFiles'],
-      set: (value: Array<ProductFile>) => store.commit('product/setFiles', value)
+      set: (value: Array<ProductFileInterface>) => store.commit('product/setFiles', value)
     })
 
     watch(files, (first,second) => {

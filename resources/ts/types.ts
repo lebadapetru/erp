@@ -1,4 +1,4 @@
-export interface File {
+export interface FileInterface {
   id: string, //uuid
   fullRealName: string,
   mimeType: string,
@@ -6,7 +6,27 @@ export interface File {
   size: number,
 }
 
-export interface ProductFile {
-  file: File,
+export interface ProductFileInterface {
+  file: FileInterface,
   position: number | null
+}
+
+export interface AlertInterface {
+  title: string,
+  text?: string,
+}
+
+export interface ToastInterface extends AlertInterface {
+
+}
+
+export interface PopupInterface extends AlertInterface {
+  confirmButtonText?: string
+}
+
+export interface TableColumnInterface {
+  name: string,
+  key: string,
+  width?: number,
+  fieldParser: (any) => any,
 }

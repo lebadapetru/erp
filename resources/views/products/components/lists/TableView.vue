@@ -12,8 +12,15 @@
       >
         <template v-slot:shortTitleCell="props">
           <VTitleCell
+            :item-id="props.itemId"
             :title="props.value"
             :avatar-path="getAvatar(props.itemId)"
+            @editItem="editProduct"
+          />
+        </template>
+        <template v-slot:isPublicCell="props">
+          <VBadgeCell
+            :is-public="props.value"
           />
         </template>
         <template v-slot:actions="props">
@@ -37,10 +44,12 @@ import { setImageSize, getImagePlaceholderPath } from "resources/ts/helpers";
 import { useStore } from "vuex";
 import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
+import VBadgeCell from "resources/components/tables/cells/VBadgeCell.vue";
 
 export default defineComponent({
   name: "TableView",
   components: {
+    VBadgeCell,
     VActionsCell,
     VBaseTable,
     VTitleCell,
@@ -50,7 +59,7 @@ export default defineComponent({
     const router = useRouter()
     const columns = [
       {
-        name: 'Title',
+        name: 'Product',
         key: 'shortTitle',
         width: 300,
       },
@@ -68,19 +77,23 @@ export default defineComponent({
       {
         name: 'Visibility',
         key: 'isPublic',
-        fieldParser: (isPublic) => {
-          return isPublic ? 'Public' : 'Private'
+        fieldParser: (isPublic: boolean): object => {
+          return {
+            label: isPublic ? 'Public' : 'Private',
+            value: isPublic,
+            badge: true
+          }
         }
       },
       {
         name: 'Updated At',
         key: 'updatedAtForHumans',
-        width: 250,
+        width: 200,
       },
       {
         name: 'Created At',
         key: 'createdAtForHumans',
-        width: 250,
+        width: 200,
       },
     ]
     const products = computed(() => store.getters['products/getItems'])
@@ -96,9 +109,11 @@ export default defineComponent({
       actions,
       getAvatar: (itemId) => {
         let url = getImagePlaceholderPath();
-        /*if (products.value[itemId].files.length > 0) {
-          url = products.value[itemId].files[0].file.url //first image
-        }*/
+        console.log('getAvatar')
+        console.log(products)
+        if (products.value[itemId].productFiles.length > 0) {
+          url = products.value[itemId].productFiles[0].file.url //TODO get by first position
+        }
 
         return setImageSize(url)
       },
