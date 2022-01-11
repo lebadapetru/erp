@@ -52,6 +52,7 @@ import {
   ALERT_TEXT_LEAVE_PAGE,
   ALERT_TITLE_LEAVE_PAGE
 } from 'resources/components/alerts/constants';
+import { uuidValidator } from "resources/ts/validators";
 
 export default defineComponent({
   name: "VProductForm",
@@ -72,10 +73,7 @@ export default defineComponent({
       type: String,
       required: false,
       default: null,
-      validator: (id: string) => {
-        //match uuid syntax
-        return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)
-      }
+      validator: uuidValidator
     }
   },
   setup(props) {

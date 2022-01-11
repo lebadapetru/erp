@@ -8,10 +8,14 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "VBadgeCell",
   props: {
-    isPublic: {
+    label: {
       type: String,
       required: true
-    }
+    },
+    badge: {
+      type: String,
+      required: true
+    },
   },
   setup(props) {
     return {}

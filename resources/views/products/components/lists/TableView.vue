@@ -18,18 +18,6 @@
             @editItem="editProduct"
           />
         </template>
-        <template v-slot:isPublicCell="props">
-          <VBadgeCell
-            :is-public="props.value"
-          />
-        </template>
-        <template v-slot:actions="props">
-          <VActionsCell
-            :item-id="props.itemId"
-            @editItem="editProduct"
-            @deleteItem="deleteProduct"
-          />
-        </template>
       </VBaseTable>
     </div>
   </div>
@@ -81,7 +69,7 @@ export default defineComponent({
           return {
             label: isPublic ? 'Public' : 'Private',
             value: isPublic,
-            badge: true
+            badgeType: true
           }
         }
       },
@@ -100,6 +88,17 @@ export default defineComponent({
     const actions = [
       {
         name: 'Edit',
+        dispatchAction: (id: string): void => {
+          router.push({ name: 'editProduct', params: { id } })
+        }
+      },
+      {
+        name: 'Delete',
+        dispatchAction: (id: string): void => {
+          store.dispatch('product/deleteProduct', id).then(() => {
+            store.dispatch('products/read')
+          })
+        }
       }
     ]
 
@@ -109,8 +108,6 @@ export default defineComponent({
       actions,
       getAvatar: (itemId) => {
         let url = getImagePlaceholderPath();
-        console.log('getAvatar')
-        console.log(products)
         if (products.value[itemId].productFiles.length > 0) {
           url = products.value[itemId].productFiles[0].file.url //TODO get by first position
         }
@@ -122,7 +119,7 @@ export default defineComponent({
         console.log(itemId)
       },
       editProduct: (itemId) => {
-        router.push({ name: 'editProduct', params: {id: products.value[itemId].id}})
+        router.push({ name: 'editProduct', params: { id: products.value[itemId].id } })
       },
       deleteProduct: (itemId) => {
         store.dispatch('product/deleteProduct', products.value[itemId].id).then(() => {
