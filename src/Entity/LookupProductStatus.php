@@ -26,15 +26,10 @@ class LookupProductStatus
     private int $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Groups({"product:read"})
      */
     private string $name;
-
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     */
-    private string $label;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -45,24 +40,27 @@ class LookupProductStatus
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
-    private ?\DateTimeInterface $updatedAt;
+    private \DateTimeInterface $updatedAt;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
-    private ?\DateTimeInterface $createdAt;
+    private \DateTimeInterface $createdAt;
 
     /**
      * @ORM\OneToMany(targetEntity=Product::class, mappedBy="status")
      */
     private $products;
 
+    const STATUS_DRAFTED = 'drafted';
+    const STATUS_ACTIVE  = 'active';
+    const STATUS_ORDERED = 'ordered';
 
     const STATUSES = [
-        1 => 'draft', //Default & is_public can only be false
-        2 => 'order', //trigger an additional form to be completed before checkout
-        3 => 'active', //product ready
+        1 => self::STATUS_DRAFTED, //Default & is_public can only be false
+        2 => self::STATUS_ACTIVE, //trigger an additional form to be completed before checkout
+        3 => self::STATUS_ORDERED, //product ready
     ];
 
     public function __construct()
@@ -99,7 +97,7 @@ class LookupProductStatus
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): \DateTimeInterface
     {
         return $this->updatedAt;
     }
@@ -111,7 +109,7 @@ class LookupProductStatus
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
@@ -149,18 +147,6 @@ class LookupProductStatus
                 $product->setStatus(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getLabel(): ?string
-    {
-        return $this->label;
-    }
-
-    public function setLabel(string $label): self
-    {
-        $this->label = $label;
 
         return $this;
     }

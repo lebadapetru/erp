@@ -59,7 +59,7 @@ class Product
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"product:read", "product:write"})
      */
-    private ?string $description;
+    private ?string $description = null;
 
     /**
      * @ORM\Column(type="boolean")
@@ -68,10 +68,11 @@ class Product
     private bool $isPublic = true;
 
     /**
+     * //TODO this should be mandatory and unique
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"product:read", "product:write"})
      */
-    private ?string $sku;
+    private ?string $sku = null;
 
     /**
      * @ORM\Column(type="integer")
@@ -80,7 +81,7 @@ class Product
     private int $quantity = 0;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2, options={"default": "0.00"})
+     * @ORM\Column(type="decimal", precision=10, scale=2)
      * @Groups({"product:read", "product:write"})
      */
     private string $originalPrice = '0.00';
@@ -89,21 +90,21 @@ class Product
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
      * @Groups({"product:read"})
      */
-    private ?\DateTimeInterface $deletedAt;
+    private ?\DateTimeInterface $deletedAt = null;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      * @Groups({"product:read"})
      */
-    private ?\DateTimeInterface $updatedAt;
+    private \DateTimeInterface $updatedAt;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      * @Groups({"product:read"})
      */
-    private ?\DateTimeInterface $createdAt;
+    private \DateTimeInterface $createdAt;
 
     /**
      * @ORM\Column(type="smallint")
@@ -148,7 +149,7 @@ class Product
      * @ORM\Column(type="integer", nullable=true)
      * @Groups({"product:read", "product:write"})
      */
-    private ?int $weight;
+    private ?int $weight = null;
 
     /**
      * @ORM\Column(type="boolean")

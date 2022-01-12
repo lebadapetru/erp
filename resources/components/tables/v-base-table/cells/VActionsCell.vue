@@ -41,7 +41,7 @@
 import InlineSvg from "vue-inline-svg";
 import { defineComponent, PropType } from "vue";
 import { uuidValidator } from "resources/ts/validators"
-import { TableActionInterface } from "resources/ts/types";
+import { TableActionInterface } from "resources/components/tables/ts/types";
 
 export default defineComponent({
   name: "VActionsCell",

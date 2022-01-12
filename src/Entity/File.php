@@ -123,47 +123,47 @@ class File
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"file:read", "product:read"})
      */
-    private ?string $extension;
+    private ?string $extension = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"file:read", "product:read"})
      */
-    private ?string $mimeType;
+    private ?string $mimeType = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      * @Groups({"file:read", "product:read"})
      */
-    private ?int $size;
+    private ?int $size = null;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Groups({"file:read", "product:read"})
      */
-    private ?float $width;
+    private ?float $width = null;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      * @Groups({"file:read", "product:read"})
      */
-    private ?float $height;
+    private ?float $height = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"file:read", "product:read"})
      */
-    private ?string $path;
+    private ?string $path = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Url()
      * @Groups({"file:read", "file:write", "product:read"})
      */
-    private ?string $mediaUrl;
+    private ?string $mediaUrl = null;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255)
      * @Groups({"file:read", "file:write", "product:read"})
      */
     private string $status;
@@ -172,21 +172,21 @@ class File
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
      * @Groups({"file:read", "product:read"})
      */
-    private ?\DateTimeInterface $deletedAt;
+    private ?\DateTimeInterface $deletedAt = null;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      * @Groups({"file:read", "product:read"})
      */
-    private ?\DateTimeInterface $updatedAt;
+    private \DateTimeInterface $updatedAt;
 
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      * @Groups({"file:read", "product:read"})
      */
-    private ?\DateTimeInterface $createdAt;
+    private \DateTimeInterface $createdAt;
 
     private mixed $uploadedFile = null;
 
@@ -321,7 +321,7 @@ class File
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): \DateTimeInterface
     {
         return $this->updatedAt;
     }
@@ -333,7 +333,7 @@ class File
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }

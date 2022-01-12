@@ -35,7 +35,7 @@ import { computed, defineComponent, watch } from "vue";
 import { useStore } from "vuex";
 import VUppy from "resources/components/file-uploader/VUppy.vue";
 import VFileGallery from "resources/components/file-gallery/VFileGallery.vue";
-import { ProductFileInterface } from "resources/ts/types";
+import { ProductFileInterface } from "resources/views/products/ts/types";
 import { useField } from "vee-validate";
 
 export default defineComponent({

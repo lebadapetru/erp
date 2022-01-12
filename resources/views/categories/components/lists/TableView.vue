@@ -29,9 +29,9 @@
 </template>
 
 <script lang="ts">
-import VBaseTable from "resources/components/tables/VBaseTable.vue";
-import VTitleCell from "resources/components/tables/cells/VTitleCell.vue";
-import VActionsCell from "resources/components/tables/cells/VActionsCell.vue";
+import VBaseTable from "resources/components/tables/v-base-table/VBaseTable.vue";
+import VTitleCell from "resources/components/tables/v-base-table/cells/VTitleCell.vue";
+import VActionsCell from "resources/components/tables/v-base-table/cells/VActionsCell.vue";
 import { useStore } from "vuex";
 import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";

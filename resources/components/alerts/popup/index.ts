@@ -4,8 +4,8 @@ import {
   ALERT_ICON_INFO,
   ALERT_ICON_SUCCESS,
   ALERT_ICON_WARNING
-} from "resources/components/alerts/constants";
-import { PopupInterface } from "resources/ts/types";
+} from "resources/components/alerts/ts/constants";
+import { PopupInterface } from "resources/components/alerts/ts/types";
 
 export const PopupMixin = Swal.mixin({
   showCancelButton: true,

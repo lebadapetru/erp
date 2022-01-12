@@ -41,7 +41,7 @@ class Tag
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
      * @Groups({"tag:read"})
      */
-    private ?\DateTimeInterface $deletedAt;
+    private ?\DateTimeInterface $deletedAt = null;
 
     /**
      * @Gedmo\Timestampable(on="update")

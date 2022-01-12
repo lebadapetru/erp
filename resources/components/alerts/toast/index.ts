@@ -4,8 +4,8 @@ import {
   ALERT_ICON_INFO,
   ALERT_ICON_SUCCESS,
   ALERT_ICON_WARNING
-} from "resources/components/alerts/constants";
-import { ToastInterface } from "resources/ts/types";
+} from "resources/components/alerts/ts/constants";
+import { ToastInterface } from "resources/components/alerts/ts/types";
 
 export const ToastMixin = Swal.mixin({
   toast: true,

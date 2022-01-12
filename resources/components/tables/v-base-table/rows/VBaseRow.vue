@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import VActionsCell from "resources/components/tables/cells/VActionsCell";
+import VActionsCell from "resources/components/tables/v-base-table/cells/VActionsCell";
 
 export default {
   name: "VBaseRow",

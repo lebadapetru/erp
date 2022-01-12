@@ -51,7 +51,7 @@ import {
   ALERT_CONFIRM_BUTTON_TEXT_LEAVE_PAGE,
   ALERT_TEXT_LEAVE_PAGE,
   ALERT_TITLE_LEAVE_PAGE
-} from 'resources/components/alerts/constants';
+} from 'resources/components/alerts/ts/constants';
 import { uuidValidator } from "resources/ts/validators";
 
 export default defineComponent({

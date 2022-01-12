@@ -70,8 +70,7 @@
                   v-if="isBadge(cellValue)"
                 >
                   <VBadgeCell
-                    :label="cellValue.label"
-                    :badge="cellValue.badge"
+
                   />
                 </template>
                 <template v-else>
@@ -99,17 +98,17 @@
 </template>
 
 <script lang="ts">
-import VActionsCell from "resources/components/tables/cells/VActionsCell.vue";
+import VActionsCell from "resources/components/tables/v-base-table/cells/VActionsCell.vue";
 import { computed, defineComponent, PropType, ref, watch } from "vue";
-import { TableColumnInterface } from "resources/ts/types";
-import VBadgeCell from "resources/components/tables/cells/VBadgeCell.vue";
+import { TableColumnInterface } from "resources/components/tables/ts/types";
+import VStatusBadgeCell from "resources/components/tables/v-base-table/cells/VStatusBadgeCell.vue";
 import isObject from 'lodash/isObject'
 import isFunction from 'lodash/isFunction'
 
 export default defineComponent({
   name: "VCustomTable",
   components: {
-    VBadgeCell,
+    VStatusBadgeCell,
     VActionsCell,
   },
   props: {

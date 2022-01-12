@@ -87,7 +87,7 @@ class ProductFile
         return $this;
     }
 
-    public function getAddedAt(): ?\DateTimeInterface
+    public function getAddedAt(): \DateTimeInterface
     {
         return $this->addedAt;
     }

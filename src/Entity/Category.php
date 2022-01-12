@@ -41,7 +41,7 @@ class Category
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"category:read", "category:write"})
      */
-    private ?string $description;
+    private ?string $description = null;
 
     /**
      * @ORM\Column(type="boolean")
@@ -53,7 +53,7 @@ class Category
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
      * @Groups({"category:read"})
      */
-    private ?\DateTimeInterface $deletedAt;
+    private ?\DateTimeInterface $deletedAt = null;
 
     /**
      * @Gedmo\Timestampable(on="update")

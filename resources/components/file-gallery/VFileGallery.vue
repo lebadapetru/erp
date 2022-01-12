@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref, watch } from "vue";
-import { ProductFileInterface } from "resources/ts/types";
+import { ProductFileInterface } from "resources/views/products/ts/types";
 import { thumbnail } from "resources/ts/helpers";
 import VBaseCheckbox from "resources/components/forms/inputs/VBaseCheckbox.vue";
 
