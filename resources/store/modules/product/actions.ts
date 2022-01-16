@@ -5,6 +5,7 @@ import { createCategory, readCategories } from "resources/js/api/Category";
 import { createTag, readTags } from "resources/js/api/Tag";
 import { createProduct, readProduct, deleteProduct, updateProduct } from "resources/js/api/Product";
 import { Toast } from "resources/components/alerts/toast"
+import capitalize from "lodash/capitalize";
 
 const actions = {
   readAndParseVariantOptions: ({ commit }) => {
@@ -27,7 +28,7 @@ const actions = {
     return readLookupProductStatuses().then((response) => {
       let statusOptions = response.data['hydra:member'].map(statusOption => ({
         value: statusOption['@id'],
-        label: statusOption.name,
+        label: capitalize(statusOption.name),
       }))
 
       commit('setStatusOptions', statusOptions)

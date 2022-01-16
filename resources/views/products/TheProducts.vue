@@ -43,7 +43,7 @@ export default defineComponent ({
     const store = useStore()
     const router = useRouter()
     const pagination = usePagination('products')
-
+    console.log('the Products')
     const activeView = computed(() => store.getters['products/getActiveView'])
 
     return {
@@ -53,7 +53,7 @@ export default defineComponent ({
       isTableView: () => activeView.value === 'table',
       isGridView: () => activeView.value === 'grid',
     }
-  }
+  },
 })
 </script>
 

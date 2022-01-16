@@ -36,9 +36,6 @@ export default {
 
     let categoryOptions = computed(() => store.getters["product/getCategoryOptions"])
 
-    console.log('select categories')
-    console.log(categoryOptions)
-
     return {
       categories: computed({
         get: () => store.getters["product/getCategories"],

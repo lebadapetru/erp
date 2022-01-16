@@ -18,6 +18,16 @@
             @editItem="editProduct"
           />
         </template>
+        <template v-slot:statusCell="props">
+          <VStatusBadgeCell
+            :status="props.value"
+          />
+        </template>
+        <template v-slot:isPublicCell="props">
+          <VStatusBadgeCell
+            :status="props.value"
+          />
+        </template>
       </VBaseTable>
     </div>
   </div>
@@ -32,10 +42,12 @@ import { setImageSize, getImagePlaceholderPath } from "resources/ts/helpers";
 import { useStore } from "vuex";
 import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
+import VStatusBadgeCell from "resources/components/tables/v-base-table/cells/VStatusBadgeCell.vue";
 
 export default defineComponent({
   name: "TableView",
   components: {
+    VStatusBadgeCell,
     VActionsCell,
     VBaseTable,
     VTitleCell,

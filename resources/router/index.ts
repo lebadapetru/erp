@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+//TODO replace children structure with plain because the parents are rendered even when not visited
 const routes = [
   {
     path: '/login',
@@ -55,6 +56,7 @@ const routes = [
             ],
             meta: {
               title: 'Products',
+              isListing: true
             }
           },
           {

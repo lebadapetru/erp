@@ -66,16 +66,7 @@
                 :value="cellValue"
                 :item-id="rowIndex"
               >
-                <template
-                  v-if="isBadge(cellValue)"
-                >
-                  <VBadgeCell
-
-                  />
-                </template>
-                <template v-else>
-                  {{ cellValue }}
-                </template>
+                {{ cellValue }}
               </slot>
             </td>
           </template>
@@ -101,14 +92,11 @@
 import VActionsCell from "resources/components/tables/v-base-table/cells/VActionsCell.vue";
 import { computed, defineComponent, PropType, ref, watch } from "vue";
 import { TableColumnInterface } from "resources/components/tables/ts/types";
-import VStatusBadgeCell from "resources/components/tables/v-base-table/cells/VStatusBadgeCell.vue";
-import isObject from 'lodash/isObject'
 import isFunction from 'lodash/isFunction'
 
 export default defineComponent({
-  name: "VCustomTable",
+  name: "VBaseTable",
   components: {
-    VStatusBadgeCell,
     VActionsCell,
   },
   props: {
@@ -178,7 +166,6 @@ export default defineComponent({
       items,
       selectedItems,
       areAllItemsSelected,
-      isBadge: (cell) => (isObject(cell) && cell.hasOwnProperty('badge')),
       hasWidth: (column: TableColumnInterface) => (column.hasOwnProperty('width') && column.width),
       hasActions: () => props.actions.length > 0,
     }

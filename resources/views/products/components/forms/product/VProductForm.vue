@@ -92,9 +92,13 @@ export default defineComponent({
         store.dispatch('product/update', {
           id: props.id,
           data
+        }).then(() => {
+          initialState = clone((store.getters['product/getProduct']))
         })
       } else {
-        store.dispatch('product/create', data)
+        store.dispatch('product/create', data).then(() => {
+          initialState = clone((store.getters['product/getProduct']))
+        })
       }
     }
 
